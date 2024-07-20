@@ -19,7 +19,7 @@ module.exports = (env, argv) => {
 
     config.entry = "./src/index.tsx"
 
-    const outputDirecory = config.mode === modeDevelopment ? "../server/dist" : "../../docs/dist"
+    const outputDirecory = config.mode === modeDevelopment ? "../server/dist" : "../../docs/js/dist"
     config.output = {
         path: path.resolve(__dirname, outputDirecory),
         filename: "main.js",

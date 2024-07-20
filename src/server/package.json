@@ -5,9 +5,9 @@
   "scripts": {
     "start": "node ./src/server.js",
     "start-release": "node ./release/server.js",
-    "release": "ncc build src/server.js -o ../../docs -m && npm run rename && npm run version",
-    "rename": "node -e \"require('fs').rename('../../docs/index.js', '../../docs/server.js', function() {})\"",
-    "version": "node -e \"require('fs').writeFileSync('../../docs/server.js.VERSION.txt', new Date().getTime().toString())\"",
+    "release": "ncc build src/server.js -o ../../docs/js -m && npm run rename && npm run version",
+    "rename": "node -e \"require('fs').rename('../../docs/js/index.js', '../../docs/js/server.js', function() {})\"",
+    "version": "node -e \"require('fs').writeFileSync('../../docs/js/server.js.VERSION.txt', new Date().getTime().toString())\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
