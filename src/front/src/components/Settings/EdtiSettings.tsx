@@ -29,6 +29,13 @@ export const EdtiSettings = (props: Props) => {
                                 value={props.settings.notifications.telegramBotToken}
                                 onChange={handleChangeNotifications}
                             />
+                            <Form.Control
+                                type="text"
+                                name="telegramBotChatId"
+                                placeholder="Telegram Bot Chat Id"
+                                value={props.settings.notifications.telegramBotChatId}
+                                onChange={handleChangeNotifications}
+                            />
                         </InputGroup>
                     </Form.Group>
                 </Form>

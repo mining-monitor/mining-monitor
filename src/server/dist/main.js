@@ -20989,6 +20989,7 @@ const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_mod
 const ToastMessage_1 = __webpack_require__(/*! ../Common/ToastMessage */ "./src/components/Common/ToastMessage.tsx");
 const MinerRow_1 = __webpack_require__(/*! ./MinerRow */ "./src/components/Miners/MinerRow.tsx");
 const MinerEdit_1 = __webpack_require__(/*! ./MinerEdit */ "./src/components/Miners/MinerEdit.tsx");
+const Notifications_1 = __webpack_require__(/*! ../Notifications/Notifications */ "./src/components/Notifications/Notifications.tsx");
 const Miners = (props) => {
     const [message, setMessage] = React.useState({ head: "", text: "" });
     const [minerInfos, setMinerInfos] = React.useState(new Map());
@@ -21005,6 +21006,7 @@ const Miners = (props) => {
     return (React.createElement(React.Fragment, null,
         React.createElement(ToastMessage_1.ToastMessage, { message: message }),
         React.createElement(MinerEdit_1.MinerEdit, { minerSettings: edit, onClose: handleCloseEdit }),
+        React.createElement(Notifications_1.Notifications, Object.assign({}, props, { minerInfos: minerInfos })),
         React.createElement(react_bootstrap_1.Table, { hover: true, className: "my-3" },
             React.createElement("thead", null,
                 React.createElement("tr", null,
@@ -21111,6 +21113,87 @@ const compareMiners = (a, b) => {
 
 /***/ }),
 
+/***/ "./src/components/Notifications/Notifications.tsx":
+/*!********************************************************!*\
+  !*** ./src/components/Notifications/Notifications.tsx ***!
+  \********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Notifications = void 0;
+const React = __webpack_require__(/*! react */ "react");
+const telegram_1 = __webpack_require__(/*! ../../libs/telegram */ "./src/libs/telegram.ts");
+const date_1 = __webpack_require__(/*! ../../libs/date */ "./src/libs/date.ts");
+const Notifications = (props) => {
+    const [notificationsData, setNotificationsData] = React.useState(new Map());
+    React.useEffect(() => {
+        const newNotificationsData = new Map(notificationsData);
+        notificationsData.forEach((_, key) => {
+            const miner = props.settings.miners.find(x => x.ip === key);
+            if (!miner) {
+                newNotificationsData.delete(key);
+            }
+        });
+        setNotificationsData(newNotificationsData);
+        console.log("Notifications", "miners", newNotificationsData);
+    }, props.settings.miners);
+    React.useEffect(() => {
+        const newNotificationsData = new Map(notificationsData);
+        props.minerInfos.forEach((value, key) => {
+            if (!newNotificationsData.get(key)) {
+                newNotificationsData.set(key, { turnOffDate: null });
+            }
+            if (!value && !newNotificationsData.get(key).turnOffDate) {
+                newNotificationsData.set(key, { turnOffDate: new Date() });
+            }
+            if (value && newNotificationsData.get(key).turnOffDate) {
+                newNotificationsData.set(key, { turnOffDate: null });
+            }
+        });
+        setNotificationsData(newNotificationsData);
+        console.log("Notifications", "minerInfos", newNotificationsData);
+    }, [props.minerInfos]);
+    React.useEffect(() => {
+        const interval = setInterval(() => notifyIfNeed(), 5000);
+        return () => clearInterval(interval);
+    }, [notificationsData]);
+    const notifyIfNeed = () => __awaiter(void 0, void 0, void 0, function* () {
+        if (!props.settings.notifications.telegramBotToken
+            || !props.settings.notifications.telegramBotChatId) {
+            return;
+        }
+        notificationsData.forEach((value, key) => __awaiter(void 0, void 0, void 0, function* () {
+            if (!value.turnOffDate) {
+                return;
+            }
+            const diff = new Date().getTime() - value.turnOffDate.getTime();
+            if (diff > 900000) {
+                yield notify(key, value.turnOffDate);
+            }
+        }));
+    });
+    const notify = (ip, turnOffDate) => __awaiter(void 0, void 0, void 0, function* () {
+        const miner = props.settings.miners.find(x => x.ip === ip);
+        yield telegram_1.telegram.send(`Майнер ${miner.miner} с IP ${miner.ip} не доступен с ${date_1.date.format(turnOffDate)}`, props.settings.notifications.telegramBotToken, props.settings.notifications.telegramBotChatId);
+    });
+    return (React.createElement(React.Fragment, null));
+};
+exports.Notifications = Notifications;
+
+
+/***/ }),
+
 /***/ "./src/components/Settings/EdtiSettings.tsx":
 /*!**************************************************!*\
   !*** ./src/components/Settings/EdtiSettings.tsx ***!
@@ -21135,7 +21218,8 @@ const EdtiSettings = (props) => {
                 React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "login-and-password" },
                     React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
                         React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F"),
-                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotToken", placeholder: "Telegram Bot Token", value: props.settings.notifications.telegramBotToken, onChange: handleChangeNotifications })))))));
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotToken", placeholder: "Telegram Bot Token", value: props.settings.notifications.telegramBotToken, onChange: handleChangeNotifications }),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotChatId", placeholder: "Telegram Bot Chat Id", value: props.settings.notifications.telegramBotChatId, onChange: handleChangeNotifications })))))));
 };
 exports.EdtiSettings = EdtiSettings;
 
@@ -21212,6 +21296,27 @@ const getToken = () => localStorage.getItem(tokenKey);
 const setToken = (token) => localStorage.setItem(tokenKey, token);
 const isValidCredentials = (login, password) => login.length >= 4 && password.length >= 8;
 const getAuthorization = () => ({ Authorization: `Bearer ${getToken() || ""}` });
+
+
+/***/ }),
+
+/***/ "./src/libs/date.ts":
+/*!**************************!*\
+  !*** ./src/libs/date.ts ***!
+  \**************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.date = void 0;
+exports.date = {
+    format: (value) => {
+        return `${formatValue(value.getDate())}.${formatValue(value.getMonth())}.${value.getFullYear()}`
+            + ` ${formatValue(value.getHours())}:${formatValue(value.getMinutes())}`;
+    }
+};
+const formatValue = (value) => value < 10 ? `0${value}` : value.toString();
 
 
 /***/ }),
@@ -21515,6 +21620,34 @@ const get = (key) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return [result.ok, yield result.json()];
 });
+
+
+/***/ }),
+
+/***/ "./src/libs/telegram.ts":
+/*!******************************!*\
+  !*** ./src/libs/telegram.ts ***!
+  \******************************/
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.telegram = void 0;
+exports.telegram = {
+    send: (message, telegramBotToken, telegramBotChatId) => __awaiter(void 0, void 0, void 0, function* () {
+        yield fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramBotChatId}&text=${encodeURIComponent(message)}`);
+    })
+};
 
 
 /***/ }),
