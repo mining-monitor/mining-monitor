@@ -14,6 +14,7 @@ interface NotificationData {
 
 export const Notifications = (props: Props) => {
     const [notificationsData, setNotificationsData] = React.useState(new Map<string, NotificationData>())
+    const [lastNotify, setLastNotify] = React.useState<Date | null>(null)
 
     React.useEffect(() => {
         const newNotificationsData = new Map(notificationsData)
@@ -26,8 +27,6 @@ export const Notifications = (props: Props) => {
         })
 
         setNotificationsData(newNotificationsData)
-
-        console.log("Notifications", "miners", newNotificationsData)
     }, props.settings.miners)
 
     React.useEffect(() => {
@@ -48,8 +47,6 @@ export const Notifications = (props: Props) => {
         })
 
         setNotificationsData(newNotificationsData)
-
-        console.log("Notifications", "minerInfos", newNotificationsData)
     }, [props.minerInfos])
 
     React.useEffect(() => {
@@ -69,9 +66,15 @@ export const Notifications = (props: Props) => {
                 return
             }
 
-            const diff = new Date().getTime() - value.turnOffDate.getTime()
-            if (diff > 900000) {
+            const fromLastNotify = !!lastNotify
+                ? new Date().getTime() - lastNotify.getTime()
+                : Number.MAX_VALUE
+
+            const fromTurnOff = new Date().getTime() - value.turnOffDate.getTime()
+            if (fromTurnOff > 900000 && fromLastNotify > 900000) {
                 await notify(key, value.turnOffDate)
+                setLastNotify(new Date())
+                setNotificationsData(x => new Map(x))
             }
         })
     }

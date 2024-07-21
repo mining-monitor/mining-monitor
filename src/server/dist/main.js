@@ -21137,6 +21137,7 @@ const telegram_1 = __webpack_require__(/*! ../../libs/telegram */ "./src/libs/te
 const date_1 = __webpack_require__(/*! ../../libs/date */ "./src/libs/date.ts");
 const Notifications = (props) => {
     const [notificationsData, setNotificationsData] = React.useState(new Map());
+    const [lastNotify, setLastNotify] = React.useState(null);
     React.useEffect(() => {
         const newNotificationsData = new Map(notificationsData);
         notificationsData.forEach((_, key) => {
@@ -21146,7 +21147,6 @@ const Notifications = (props) => {
             }
         });
         setNotificationsData(newNotificationsData);
-        console.log("Notifications", "miners", newNotificationsData);
     }, props.settings.miners);
     React.useEffect(() => {
         const newNotificationsData = new Map(notificationsData);
@@ -21162,7 +21162,6 @@ const Notifications = (props) => {
             }
         });
         setNotificationsData(newNotificationsData);
-        console.log("Notifications", "minerInfos", newNotificationsData);
     }, [props.minerInfos]);
     React.useEffect(() => {
         const interval = setInterval(() => notifyIfNeed(), 5000);
@@ -21177,9 +21176,14 @@ const Notifications = (props) => {
             if (!value.turnOffDate) {
                 return;
             }
-            const diff = new Date().getTime() - value.turnOffDate.getTime();
-            if (diff > 900000) {
+            const fromLastNotify = !!lastNotify
+                ? new Date().getTime() - lastNotify.getTime()
+                : Number.MAX_VALUE;
+            const fromTurnOff = new Date().getTime() - value.turnOffDate.getTime();
+            if (fromTurnOff > 900000 && fromLastNotify > 900000) {
                 yield notify(key, value.turnOffDate);
+                setLastNotify(new Date());
+                setNotificationsData(x => new Map(x));
             }
         }));
     });
