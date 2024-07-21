@@ -2,7 +2,7 @@
 
 Бесплатное приложение для остлеживания состояния майнинг оборудования с открытым исходным кодом
 
-![Mining monitor](https://mining-monitor.github.io/mining-monitor/img/mining-monitor.jpg)
+![Майнинг монитор](https://mining-monitor.github.io/mining-monitor/img/mining-monitor.jpg)
 
 ## Возможности
 
