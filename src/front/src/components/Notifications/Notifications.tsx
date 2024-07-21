@@ -56,8 +56,7 @@ export const Notifications = (props: Props) => {
     }, [notificationsData])
 
     const notifyIfNeed = async () => {
-        if (!props.settings.notifications.telegramBotToken
-            || !props.settings.notifications.telegramBotChatId) {
+        if (!props.settings.notifications.enabled) {
             return
         }
 

@@ -21168,8 +21168,7 @@ const Notifications = (props) => {
         return () => clearInterval(interval);
     }, [notificationsData]);
     const notifyIfNeed = () => __awaiter(void 0, void 0, void 0, function* () {
-        if (!props.settings.notifications.telegramBotToken
-            || !props.settings.notifications.telegramBotChatId) {
+        if (!props.settings.notifications.enabled) {
             return;
         }
         notificationsData.forEach((value, key) => __awaiter(void 0, void 0, void 0, function* () {
@@ -21202,18 +21201,55 @@ exports.Notifications = Notifications;
 /*!**************************************************!*\
   !*** ./src/components/Settings/EdtiSettings.tsx ***!
   \**************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EdtiSettings = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+const telegram_1 = __webpack_require__(/*! ../../libs/telegram */ "./src/libs/telegram.ts");
 const EdtiSettings = (props) => {
+    const [error, setError] = React.useState(null);
     const handleChangeNotifications = (x) => {
-        props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { notifications: Object.assign(Object.assign({}, props.settings.notifications), { [x.target.name]: x.target.value }) }));
+        const telegramBotChatId = x.target.name === "telegramBotUsername"
+            ? ""
+            : props.settings.notifications.telegramBotChatId;
+        props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { notifications: Object.assign(Object.assign({}, props.settings.notifications), { [x.target.name]: x.target.value, telegramBotChatId }) }));
     };
+    const handleToogleNotifications = (x) => __awaiter(void 0, void 0, void 0, function* () {
+        setError(null);
+        if (!x.target.checked) {
+            props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { notifications: Object.assign(Object.assign({}, props.settings.notifications), { enabled: false }) }));
+            return;
+        }
+        if (!props.settings.notifications.telegramBotToken
+            || !props.settings.notifications.telegramBotUsername) {
+            setError("Укажите токен бота и имя пользователя");
+            return;
+        }
+        if (props.settings.notifications.telegramBotChatId) {
+            props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { notifications: Object.assign(Object.assign({}, props.settings.notifications), { enabled: true }) }));
+            return;
+        }
+        const telegramBotChatId = yield telegram_1.telegram.getChatId(props.settings.notifications.telegramBotUsername, props.settings.notifications.telegramBotToken);
+        if (!telegramBotChatId) {
+            setError(`Не удалось найти чат с пользователем ${props.settings.notifications.telegramBotUsername}.`
+                + " Попробуйте отправить сообщение боту и повторно включить уведомления");
+            return;
+        }
+        props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { notifications: Object.assign(Object.assign({}, props.settings.notifications), { enabled: true, telegramBotChatId }) }));
+    });
     return (React.createElement(react_bootstrap_1.Accordion.Item, { eventKey: props.index },
         React.createElement(react_bootstrap_1.Accordion.Header, null,
             React.createElement("h5", { className: "mb-0" }, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438")),
@@ -21222,8 +21258,10 @@ const EdtiSettings = (props) => {
                 React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "login-and-password" },
                     React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
                         React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F"),
-                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotToken", placeholder: "Telegram Bot Token", value: props.settings.notifications.telegramBotToken, onChange: handleChangeNotifications }),
-                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotChatId", placeholder: "Telegram Bot Chat Id", value: props.settings.notifications.telegramBotChatId, onChange: handleChangeNotifications })))))));
+                        React.createElement(react_bootstrap_1.InputGroup.Checkbox, { name: "enabled", checked: props.settings.notifications.enabled || false, onChange: handleToogleNotifications }),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotToken", placeholder: "Telegram Bot Token", value: props.settings.notifications.telegramBotToken, disabled: props.settings.notifications.enabled, onChange: handleChangeNotifications }),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotUsername", placeholder: "Telegram Bot Username", value: props.settings.notifications.telegramBotUsername, disabled: props.settings.notifications.enabled, onChange: handleChangeNotifications })),
+                    !!error && (React.createElement("div", { className: "text-danger" }, error)))))));
 };
 exports.EdtiSettings = EdtiSettings;
 
@@ -21648,9 +21686,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.telegram = void 0;
 exports.telegram = {
-    send: (message, telegramBotToken, telegramBotChatId) => __awaiter(void 0, void 0, void 0, function* () {
-        yield fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramBotChatId}&text=${encodeURIComponent(message)}`);
-    })
+    send: (message, token, chatId) => __awaiter(void 0, void 0, void 0, function* () {
+        yield fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
+    }),
+    getChatId: (username, token) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a, _b, _c;
+        const response = yield fetch(`https://api.telegram.org/bot${token}/getUpdates`);
+        const result = yield response.json();
+        const messages = result === null || result === void 0 ? void 0 : result.result;
+        if (!messages || messages.length === 0) {
+            return "";
+        }
+        const message = messages.find(x => x.message.chat.username === username);
+        return ((_c = (_b = (_a = message === null || message === void 0 ? void 0 : message.message) === null || _a === void 0 ? void 0 : _a.chat) === null || _b === void 0 ? void 0 : _b.id) === null || _c === void 0 ? void 0 : _c.toString()) || "";
+    }),
 };
 
 

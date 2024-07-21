@@ -18,7 +18,9 @@ export interface MinerSettings {
 }
 
 export interface NotificationsSettings {
+    enabled?: boolean,
     telegramBotToken?: string,
+    telegramBotUsername?: string,
     telegramBotChatId?: string,
 }
 
