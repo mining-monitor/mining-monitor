@@ -2,6 +2,8 @@
 
 Бесплатное приложение для остлеживания состояния майнинг оборудования
 
+![Mining monitor](https://mining-monitor.github.io/mining-monitor/img/mining-monitor.jpg)
+
 ## Возможности
 
 * Мониторинг различных майнеров на одной странице
