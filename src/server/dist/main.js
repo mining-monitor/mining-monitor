@@ -20502,6 +20502,8 @@ const Miners_1 = __webpack_require__(/*! ./Miners/Miners */ "./src/components/Mi
 const Head_1 = __webpack_require__(/*! ./Head */ "./src/components/Head.tsx");
 const Auth_1 = __webpack_require__(/*! ./Auth/Auth */ "./src/components/Auth/Auth.tsx");
 const MinersSearch_1 = __webpack_require__(/*! ./Miners/MinersSearch */ "./src/components/Miners/MinersSearch.tsx");
+const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+const EdtiSettings_1 = __webpack_require__(/*! ./Settings/EdtiSettings */ "./src/components/Settings/EdtiSettings.tsx");
 const App = () => {
     const [isAuth, setIsAuth] = React.useState(false);
     if (!isAuth) {
@@ -20526,7 +20528,9 @@ const Body = () => {
     }
     return (React.createElement(Master_1.Master, null,
         React.createElement(Head_1.Head, null),
-        React.createElement(MinersSearch_1.MinersSearch, { settings: settings, onChangeSettings: handleChangeSettings }),
+        React.createElement(react_bootstrap_1.Accordion, null,
+            React.createElement(EdtiSettings_1.EdtiSettings, { settings: settings, onChangeSettings: handleChangeSettings, index: "0" }),
+            React.createElement(MinersSearch_1.MinersSearch, { settings: settings, onChangeSettings: handleChangeSettings, index: "1" })),
         React.createElement(Miners_1.Miners, { settings: settings, onChangeSettings: handleChangeSettings })));
 };
 
@@ -21069,30 +21073,29 @@ const MinersSearch = (props) => {
         }
         setSearchState("None");
     });
-    return (React.createElement(react_bootstrap_1.Accordion, null,
-        React.createElement(react_bootstrap_1.Accordion.Item, { eventKey: "0" },
-            React.createElement(react_bootstrap_1.Accordion.Header, null,
-                React.createElement("h5", { className: "mb-0" }, "\u041F\u043E\u0438\u0441\u043A \u043C\u0430\u0439\u043D\u0435\u0440\u043E\u0432")),
-            React.createElement(react_bootstrap_1.Accordion.Body, null,
-                React.createElement(react_bootstrap_1.Form, null,
-                    React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "login-and-password" },
-                        React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
-                            React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F \u043D\u0430 \u043C\u0430\u0439\u043D\u0435\u0440\u0435"),
-                            React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "login", placeholder: "\u041B\u043E\u0433\u0438\u043D", value: search.login, onChange: handleChange }),
-                            React.createElement(react_bootstrap_1.Form.Control, { type: "password", name: "password", placeholder: "\u041F\u0430\u0440\u043E\u043B\u044C", value: search.password, onChange: handleChange }))),
-                    React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "ip" },
-                        React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
-                            React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u0421\u043A\u0430\u043D\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435 IP \u0430\u0434\u0440\u0435\u0441\u043E\u0432"),
-                            React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "ipStart", placeholder: "\u0421\u0442\u0430\u0440\u0442", value: search.ipStart, onChange: handleChange }),
-                            React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "ipEnd", placeholder: "\u0424\u0438\u043D\u0438\u0448", value: search.ipEnd, onChange: handleChange }))),
-                    React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "miner" },
-                        React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
-                            React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u041E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430"),
-                            React.createElement(react_bootstrap_1.Form.Select, { name: "miner", value: search.miner, onChange: handleChange },
-                                React.createElement("option", { value: "" }, "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043C\u0430\u0439\u043D\u0435\u0440"),
-                                (0, miners_1.minerNames)().map(minerName => (React.createElement("option", { value: minerName, key: minerName }, minerName)))))),
-                    searchResultState === "Error" && (React.createElement("div", { className: "my-3 text-danger" }, "\u041F\u0440\u0438 \u043F\u043E\u0438\u0441\u043A\u0435 \u043C\u0430\u0439\u043D\u0435\u0440\u043E\u0432 \u043F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u0430 \u043E\u0448\u0438\u0431\u043A\u0430")),
-                    React.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: handleSearch, disabled: searchState === "Searching", className: "px-5" }, searchState === "Searching" ? "Поиск..." : "Поиск"))))));
+    return (React.createElement(react_bootstrap_1.Accordion.Item, { eventKey: props.index },
+        React.createElement(react_bootstrap_1.Accordion.Header, null,
+            React.createElement("h5", { className: "mb-0" }, "\u041F\u043E\u0438\u0441\u043A \u043C\u0430\u0439\u043D\u0435\u0440\u043E\u0432")),
+        React.createElement(react_bootstrap_1.Accordion.Body, null,
+            React.createElement(react_bootstrap_1.Form, null,
+                React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "login-and-password" },
+                    React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
+                        React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F \u043D\u0430 \u043C\u0430\u0439\u043D\u0435\u0440\u0435"),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "login", placeholder: "\u041B\u043E\u0433\u0438\u043D", value: search.login, onChange: handleChange }),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "password", name: "password", placeholder: "\u041F\u0430\u0440\u043E\u043B\u044C", value: search.password, onChange: handleChange }))),
+                React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "ip" },
+                    React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
+                        React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u0421\u043A\u0430\u043D\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435 IP \u0430\u0434\u0440\u0435\u0441\u043E\u0432"),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "ipStart", placeholder: "\u0421\u0442\u0430\u0440\u0442", value: search.ipStart, onChange: handleChange }),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "ipEnd", placeholder: "\u0424\u0438\u043D\u0438\u0448", value: search.ipEnd, onChange: handleChange }))),
+                React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "miner" },
+                    React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
+                        React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u041E\u0431\u043E\u0440\u0443\u0434\u043E\u0432\u0430\u043D\u0438\u0435 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430"),
+                        React.createElement(react_bootstrap_1.Form.Select, { name: "miner", value: search.miner, onChange: handleChange },
+                            React.createElement("option", { value: "" }, "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043C\u0430\u0439\u043D\u0435\u0440"),
+                            (0, miners_1.minerNames)().map(minerName => (React.createElement("option", { value: minerName, key: minerName }, minerName)))))),
+                searchResultState === "Error" && (React.createElement("div", { className: "my-3 text-danger" }, "\u041F\u0440\u0438 \u043F\u043E\u0438\u0441\u043A\u0435 \u043C\u0430\u0439\u043D\u0435\u0440\u043E\u0432 \u043F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u0430 \u043E\u0448\u0438\u0431\u043A\u0430")),
+                React.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: handleSearch, disabled: searchState === "Searching", className: "px-5" }, searchState === "Searching" ? "Поиск..." : "Поиск")))));
 };
 exports.MinersSearch = MinersSearch;
 const compareMiners = (a, b) => {
@@ -21104,6 +21107,37 @@ const compareMiners = (a, b) => {
     }
     return 0;
 };
+
+
+/***/ }),
+
+/***/ "./src/components/Settings/EdtiSettings.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/Settings/EdtiSettings.tsx ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EdtiSettings = void 0;
+const React = __webpack_require__(/*! react */ "react");
+const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+const EdtiSettings = (props) => {
+    const handleChangeNotifications = (x) => {
+        props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { notifications: Object.assign(Object.assign({}, props.settings.notifications), { [x.target.name]: x.target.value }) }));
+    };
+    return (React.createElement(react_bootstrap_1.Accordion.Item, { eventKey: props.index },
+        React.createElement(react_bootstrap_1.Accordion.Header, null,
+            React.createElement("h5", { className: "mb-0" }, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438")),
+        React.createElement(react_bootstrap_1.Accordion.Body, null,
+            React.createElement(react_bootstrap_1.Form, null,
+                React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "login-and-password" },
+                    React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
+                        React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F"),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotToken", placeholder: "Telegram Bot Token", value: props.settings.notifications.telegramBotToken, onChange: handleChangeNotifications })))))));
+};
+exports.EdtiSettings = EdtiSettings;
 
 
 /***/ }),
@@ -21443,7 +21477,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsContainer = void 0;
 const auth_1 = __webpack_require__(/*! ./auth */ "./src/libs/auth.ts");
 const settingsKey = "settings";
-const defaultSettings = { miners: [], };
+const defaultSettings = { miners: [], notifications: {} };
 exports.SettingsContainer = {
     save: (settings) => __awaiter(void 0, void 0, void 0, function* () { return yield set(settingsKey, settings); }),
     get: () => __awaiter(void 0, void 0, void 0, function* () {
@@ -21452,6 +21486,10 @@ exports.SettingsContainer = {
             if (!isOk) {
                 return Object.assign({}, defaultSettings);
             }
+            if (!settings.miners)
+                settings.miners = [];
+            if (!settings.notifications)
+                settings.notifications = {};
             return settings;
         }
         catch (error) {

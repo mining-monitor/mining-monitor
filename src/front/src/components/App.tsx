@@ -5,6 +5,8 @@ import { Miners } from "./Miners/Miners";
 import { Head } from "./Head";
 import { Auth } from "./Auth/Auth";
 import { MinersSearch } from "./Miners/MinersSearch";
+import { Accordion } from "react-bootstrap";
+import { EdtiSettings } from "./Settings/EdtiSettings";
 
 export const App = () => {
   const [isAuth, setIsAuth] = React.useState(false)
@@ -38,7 +40,10 @@ const Body = () => {
   return (
     <Master>
       <Head />
-      <MinersSearch settings={settings} onChangeSettings={handleChangeSettings} />
+      <Accordion>
+        <EdtiSettings settings={settings} onChangeSettings={handleChangeSettings} index="0" />
+        <MinersSearch settings={settings} onChangeSettings={handleChangeSettings} index="1" />
+      </Accordion>
       <Miners settings={settings} onChangeSettings={handleChangeSettings} />
     </Master>
   )

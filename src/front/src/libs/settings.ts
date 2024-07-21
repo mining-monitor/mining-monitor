@@ -2,6 +2,7 @@ import { auth } from "./auth"
 
 export interface Settings {
     miners: MinerSettings[],
+    notifications: NotificationsSettings,
 }
 
 export interface Credentials {
@@ -16,13 +17,17 @@ export interface MinerSettings {
     credentials: Credentials,
 }
 
+export interface NotificationsSettings {
+    telegramBotToken?: string,
+}
+
 export interface SettingsProps {
     settings: Settings,
     onChangeSettings: (settings: Settings) => void,
 }
 
 const settingsKey = "settings"
-const defaultSettings: Settings = { miners: [], }
+const defaultSettings: Settings = { miners: [], notifications: {} }
 
 export const SettingsContainer = {
     save: async (settings: Settings) => await set(settingsKey, settings),
@@ -32,6 +37,9 @@ export const SettingsContainer = {
             if (!isOk) {
                 return { ...defaultSettings }
             }
+
+            if (!settings.miners) settings.miners = []
+            if (!settings.notifications) settings.notifications = {}
 
             return settings
         } catch (error) {
