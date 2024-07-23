@@ -21097,7 +21097,14 @@ const MinersSearch = (props) => {
                             React.createElement("option", { value: "" }, "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043C\u0430\u0439\u043D\u0435\u0440"),
                             (0, miners_1.minerNames)().map(minerName => (React.createElement("option", { value: minerName, key: minerName }, minerName)))))),
                 searchResultState === "Error" && (React.createElement("div", { className: "my-3 text-danger" }, "\u041F\u0440\u0438 \u043F\u043E\u0438\u0441\u043A\u0435 \u043C\u0430\u0439\u043D\u0435\u0440\u043E\u0432 \u043F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u0430 \u043E\u0448\u0438\u0431\u043A\u0430")),
-                React.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: handleSearch, disabled: searchState === "Searching", className: "px-5" }, searchState === "Searching" ? "Поиск..." : "Поиск")))));
+                React.createElement(react_bootstrap_1.Row, null,
+                    React.createElement(react_bootstrap_1.Col, { lg: "3" },
+                        React.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: handleSearch, disabled: searchState === "Searching", className: "px-5" }, searchState === "Searching" ? "Поиск..." : "Поиск")),
+                    React.createElement(react_bootstrap_1.Col, { lg: "9" },
+                        React.createElement("div", { className: "my-2 text-end" },
+                            "\u041D\u0435\u0442 \u0432\u0430\u0448\u0435\u0433\u043E \u043C\u0430\u0439\u043D\u0435\u0440\u0430? \u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043D\u0430\u043C \u0432 Telegram ",
+                            React.createElement("a", { href: "https://t.me/FreeMiningMonitor", target: "_blank" }, "@FreeMiningMonitor"),
+                            " \u0438 \u043C\u044B \u0434\u043E\u0431\u0430\u0432\u0438\u043C \u0435\u0433\u043E")))))));
 };
 exports.MinersSearch = MinersSearch;
 const compareMiners = (a, b) => {

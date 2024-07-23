@@ -1,6 +1,6 @@
 import * as React from "react"
 import { MinerSettings, SettingsProps } from "../../libs/settings"
-import { Form, Button, InputGroup, Accordion } from "react-bootstrap"
+import { Form, Button, InputGroup, Accordion, Row, Col } from "react-bootstrap"
 import { minersSearcher } from "../../libs/miners/minersSearcher"
 import { minerNames as getMinerNames } from "../../libs/miners/miners"
 
@@ -115,9 +115,18 @@ export const MinersSearch = (props: Props) => {
                         </div>
                     )}
 
-                    <Button variant="primary" onClick={handleSearch} disabled={searchState === "Searching"} className="px-5">
-                        {searchState === "Searching" ? "Поиск..." : "Поиск"}
-                    </Button>
+                    <Row>
+                        <Col lg="3">
+                            <Button variant="primary" onClick={handleSearch} disabled={searchState === "Searching"} className="px-5">
+                                {searchState === "Searching" ? "Поиск..." : "Поиск"}
+                            </Button>
+                        </Col>
+                        <Col lg="9">
+                            <div className="my-2 text-end">
+                                Нет вашего майнера? Напишите нам в Telegram <a href="https://t.me/FreeMiningMonitor" target="_blank">@FreeMiningMonitor</a> и мы добавим его
+                            </div>
+                        </Col>
+                    </Row>
                 </Form>
             </Accordion.Body>
         </Accordion.Item>
