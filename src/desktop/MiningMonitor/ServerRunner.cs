@@ -9,6 +9,7 @@ namespace MiningMonitor
         private static bool _isNodeInstalled;
         private static bool _isSupervisorInstalled;
         private static bool _isRunning;
+        private static bool _isOpen;
 
         private static string _serverJsVersion = "";
         private static string _mainJsVersion = "";
@@ -25,8 +26,8 @@ namespace MiningMonitor
                     return;
                 }
 
-                CheckUpdate();
-                Run();
+                CheckUpdateAndRun();
+                Open();
             });
         }
 
@@ -37,17 +38,18 @@ namespace MiningMonitor
                 return;
             }
 
+            _isRunning = false;
+
+            Log.Add("Завершаем работу приложения");
             CommandLine.Close(_runningTask);
         }
 
         private static bool InstallNode()
         {
-            if (_isNodeInstalled)
+            if (IsAlreadyWork(ref _isNodeInstalled))
             {
                 return true;
             }
-
-            _isNodeInstalled = true;
 
             Log.Add("Начало проверки установки среды выполнения Node.js");
             if (IsInstalled())
@@ -108,12 +110,10 @@ namespace MiningMonitor
 
         private static bool InstallSupervisor()
         {
-            if (_isSupervisorInstalled)
+            if (IsAlreadyWork(ref _isSupervisorInstalled))
             {
                 return true;
             }
-
-            _isSupervisorInstalled = true;
 
             Log.Add("Начало поверки установки менеджера приложения");
             if (IsInstalled())
@@ -149,14 +149,12 @@ namespace MiningMonitor
             }
         }
 
-        private static void CheckUpdate()
+        private static void CheckUpdateAndRun()
         {
-            if (DateTime.Now - _lastCheckUpdate < TimeSpan.FromMinutes(15))
+            if (IsAlreadyWork(ref _lastCheckUpdate, TimeSpan.FromMinutes(5)))
             {
                 return;
             }
-
-            _lastCheckUpdate = DateTime.Now;
 
             Log.Add("Начало проверки обновления приложения");
             Prepare();
@@ -167,9 +165,13 @@ namespace MiningMonitor
                 return;
             }
 
+            Stop();
+
             Log.Add("Начинаем обновление приложения");
             Update();
             Log.Add("Приложение обновлено успешно");
+
+            Run();
 
             bool NeedUpdate()
             {
@@ -185,7 +187,7 @@ namespace MiningMonitor
                 var serverJsVersion = File.ReadAllText(
                     Path.Combine(CommandLine.GetWorkDirectory("web-server"), "server.js.VERSION.txt")
                 ).Trim();
-              
+
                 var mainJsVersion = File.ReadAllText(
                     Path.Combine(CommandLine.GetWorkDirectory(@"web-server\dist"), "main.js.VERSION.txt")
                 ).Trim();
@@ -243,20 +245,27 @@ namespace MiningMonitor
 
         private static void Run()
         {
-            if (_isRunning)
+            if (IsAlreadyWork(ref _isRunning))
             {
                 return;
             }
 
-            _isRunning = true;
-
             Log.Add("Запускаем приложение");
 
-            _runningTask = CommandLine.Run("supervisor -w server.js server.js", "web-server");
-            CommandLine.Execute("start http://localhost:4000");
+            _runningTask = CommandLine.Run("supervisor server.js", "web-server");
 
             Task.Delay(TimeSpan.FromSeconds(1)).GetAwaiter().GetResult(); // Ждем запуска веб сервера
             Log.Add("Приложение успешно запущено");
+        }
+
+        private static void Open()
+        {
+            if (IsAlreadyWork(ref _isOpen))
+            {
+                return;
+            }
+
+            CommandLine.Execute("start http://localhost:4000");
             Log.Add("Откройте в браузере http://localhost:4000");
         }
 
@@ -285,6 +294,28 @@ namespace MiningMonitor
                     _isExecute = false;
                 }
             }
+        }
+
+        private static bool IsAlreadyWork(ref bool isWork)
+        {
+            if (isWork)
+            {
+                return true;
+            }
+
+            isWork = true;
+            return false;
+        }
+
+        private static bool IsAlreadyWork(ref DateTime lastWork, TimeSpan interval)
+        {
+            if (DateTime.Now - lastWork < interval)
+            {
+                return true;
+            }
+
+            lastWork = DateTime.Now;
+            return false;
         }
     }
 }
