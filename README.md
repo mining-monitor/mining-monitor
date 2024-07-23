@@ -20,7 +20,7 @@
 
 ### Установка
 
-* Скачайте файл установки для Windows
+* Скачайте файл установки для [Windows](https://mining-monitor.github.io/mining-monitor/desktop/MiningMonitor.v1.0.0.zip)
 * Установите и запустите приложения
 * После запуска приложения откройте в браузере адрес http://localhost:4000
 
