@@ -123,7 +123,7 @@ export const MinersSearch = (props: Props) => {
                         </Col>
                         <Col lg="9">
                             <div className="my-2 text-end">
-                                Нет вашего майнера? Напишите нам в Telegram <a href="https://t.me/FreeMiningMonitor" target="_blank">@FreeMiningMonitor</a> и мы добавим его
+                                Нет вашего майнера? Напишите нам в Telegram <a href="https://t.me/FreeMiningMonitor" target="_blank">@FreeMiningMonitor</a> и мы добавим его.
                             </div>
                         </Col>
                     </Row>
