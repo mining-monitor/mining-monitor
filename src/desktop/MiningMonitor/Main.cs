@@ -11,8 +11,8 @@ namespace MiningMonitor
 
         private void Main_Load(object sender, EventArgs e)
         {
-            openToolStripMenuItem.Click += HandleOpen;
-            closeToolStripMenuItem.Click += HandleClose;
+            openToolStripMenuItem.Click += HandleOpen!;
+            closeToolStripMenuItem.Click += HandleClose!;
             Log.Add("Начало запуска приложения");
         }
 

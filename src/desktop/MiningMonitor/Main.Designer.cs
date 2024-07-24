@@ -92,8 +92,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 453);
             Controls.Add(textBoxLog);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Main";
-            Text = "Майнинг монитор";
+            Text = "Майнинг монитор v1.0.1";
             FormClosing += Main_FormClosing;
             Load += Main_Load;
             Resize += Main_Resize;
