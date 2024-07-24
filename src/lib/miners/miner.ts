@@ -1,5 +1,8 @@
+import { MinerRequestsSender } from "./minerRequestsSender";
+
 export interface Miner {
     name: string,
+    setSender: (sender: MinerRequestsSender) => void,
     getInfo: (ip: string, login: string, password: string) => Promise<MinerInfo | null>,
     reboot: (ip: string, login: string, password: string) => Promise<boolean>,
 }

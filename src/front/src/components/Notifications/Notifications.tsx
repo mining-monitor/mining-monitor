@@ -1,6 +1,6 @@
 import * as React from "react"
 import { SettingsProps } from "../../lib/settings"
-import { MinerInfo } from "../../lib/miners/miner"
+import { MinerInfo } from "../../../../lib/miners/miner"
 import { telegram } from "../../lib/telegram"
 import { date } from "../../lib/date"
 

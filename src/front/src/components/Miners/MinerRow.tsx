@@ -1,7 +1,7 @@
 import * as React from "react"
 import { MinerSettings, SettingsProps } from "../../lib/settings"
 import { Button } from "react-bootstrap"
-import { MinerInfo } from "../../lib/miners/miner"
+import { MinerInfo } from "../../../../lib/miners/miner"
 import { miners } from "../../lib/miners/miners"
 import { Message } from "../Common/ToastMessage"
 import { sleep } from "../../lib/utils"

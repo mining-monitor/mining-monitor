@@ -20734,7 +20734,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MinerJasminerEdit = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-const jasminer_1 = __webpack_require__(/*! ../../../lib/miners/jasminer */ "./src/lib/miners/jasminer.ts");
+const jasminer_1 = __webpack_require__(/*! ../../../../../lib/miners/jasminer */ "../lib/miners/jasminer.ts");
 const utils_1 = __webpack_require__(/*! ../../../lib/utils */ "./src/lib/utils.ts");
 const MinerJasminerEdit = (props) => {
     const [editData, setEditData] = React.useState(null);
@@ -21374,124 +21374,16 @@ const formatValue = (value) => value < 10 ? `0${value}` : value.toString();
 /*!************************************!*\
   !*** ./src/lib/miners/jasminer.ts ***!
   \************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.jasminer = void 0;
-const minerRequestsSender_1 = __webpack_require__(/*! ../../../../lib/miners/minerRequestsSender */ "../lib/miners/minerRequestsSender.ts");
-exports.jasminer = {
-    name: "Jasminer",
-    getInfo: (ip, login, password) => __awaiter(void 0, void 0, void 0, function* () {
-        const [isOk, result] = yield get(`http://${ip}/cgi-bin/minerStatus_all.cgi`, login, password);
-        if (!isOk) {
-            return null;
-        }
-        return {
-            ip,
-            name: "Jasminer",
-            miner: result.summary.miner,
-            sn: result.summary.machine_sn,
-            avgHash: result.summary.avg,
-            currentHash: result.summary.rt,
-            dagTime: result.summary.dag_time,
-            uptime: result.summary.uptime,
-            fanPercent: `${result.boards.fan_percent1}% - ${result.boards.fan_percent2}% - ${result.boards.fan_percent3}%`,
-            temp: `${result.summary.temp_min}℃ / ${result.summary.temp_max}℃`,
-            poolMiner: extractPoolMiner(result.pools.pool),
-            pools: result.pools.pool.map(x => ({
-                url: x.url,
-                user: x.user,
-                status: x.status,
-            })),
-        };
-    }),
-    reboot: (ip, login, password) => __awaiter(void 0, void 0, void 0, function* () {
-        const [isOk, _] = yield get(`http://${ip}/cgi-bin/reboot.cgi`, login, password, false);
-        return isOk;
-    }),
-    loadEdit: (ip, login, password) => __awaiter(void 0, void 0, void 0, function* () {
-        const [isOk, response] = yield get(`http://${ip}/cgi-bin/get_pools.cgi`, login, password);
-        if (!isOk) {
-            return null;
-        }
-        let result = {
-            protocol: response.protocol,
-            coin: response.coin,
-            work_pattern: response.work_pattern,
-        };
-        const pools = response.pools;
-        pools.forEach((pool, index) => {
-            result = Object.assign(Object.assign({}, result), { [`pool${index + 1}url`]: pool.url, [`pool${index + 1}user`]: pool.user, [`pool${index + 1}pw`]: pool.pass });
-        });
-        return result;
-    }),
-    edit: (ip, login, password, data) => __awaiter(void 0, void 0, void 0, function* () {
-        const formData = [
-            `pool1url=${encodeURIComponent(data.pool1url)}`,
-            `pool1user=${encodeURIComponent(data.pool1user)}`,
-            `pool1pw=${encodeURIComponent(data.pool1pw)}`,
-            `pool2url=${encodeURIComponent(data.pool2url)}`,
-            `pool2user=${encodeURIComponent(data.pool2user)}`,
-            `pool2pw=${encodeURIComponent(data.pool2pw)}`,
-            `pool3url=${encodeURIComponent(data.pool3url)}`,
-            `pool3user=${encodeURIComponent(data.pool3user)}`,
-            `pool3pw=${encodeURIComponent(data.pool3pw)}`,
-            `coin=${data.coin}`,
-            `work_pattern=${data.work_pattern}`,
-            `protocol=${data.protocol}`,
-        ].join("&");
-        console.log(formData);
-        const [isOk, _] = yield postForm(`http://${ip}/cgi-bin/set_pools.cgi`, login, password, formData);
-        return isOk;
-    }),
-};
-const extractPoolMiner = (pools) => {
-    if (pools.length === 0) {
-        return null;
-    }
-    const user = pools.map(x => x.user).find(x => !!x);
-    if (!user || user.indexOf(".") === -1) {
-        return null;
-    }
-    return user.substring(user.indexOf(".") + 1);
-};
-const get = (url_1, login_1, password_1, ...args_1) => __awaiter(void 0, [url_1, login_1, password_1, ...args_1], void 0, function* (url, login, password, isJson = true) {
-    const [ok, result] = yield minerRequestsSender_1.minerRequestsSender.current().send({
-        miner: exports.jasminer.name,
-        action: "get",
-        url,
-        login,
-        password
-    }, 3000);
-    if (!ok) {
-        return [false, null];
-    }
-    if (!isJson) {
-        return [true, result];
-    }
-    return [true, JSON.parse(result)];
-});
-const postForm = (url, login, password, data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield minerRequestsSender_1.minerRequestsSender.current().send({
-        miner: exports.jasminer.name,
-        action: "postForm",
-        url,
-        login,
-        password,
-        data
-    }, 5000);
-});
+const jasminer_1 = __webpack_require__(/*! ../../../../lib/miners/jasminer */ "../lib/miners/jasminer.ts");
+const minersRequestsSender_1 = __webpack_require__(/*! ./minersRequestsSender */ "./src/lib/miners/minersRequestsSender.ts");
+jasminer_1.jasminer.setSender(minersRequestsSender_1.minerRequestsSender);
+exports.jasminer = Object.assign({}, jasminer_1.jasminer);
 
 
 /***/ }),
@@ -21534,13 +21426,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.minerRequestsSenderSetup = void 0;
-const minerRequestsSender_1 = __webpack_require__(/*! ../../../../lib/miners/minerRequestsSender */ "../lib/miners/minerRequestsSender.ts");
+exports.minerRequestsSender = void 0;
 const auth_1 = __webpack_require__(/*! ../auth */ "./src/lib/auth.ts");
-exports.minerRequestsSenderSetup = {
-    setup: () => minerRequestsSender_1.minerRequestsSender.init(minerRequestsSenderImplementation),
-};
-const minerRequestsSenderImplementation = {
+exports.minerRequestsSender = {
     send: (body, timeout) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const controller = new AbortController();
@@ -21753,21 +21641,129 @@ exports.sleep = sleep;
 
 /***/ }),
 
-/***/ "../lib/miners/minerRequestsSender.ts":
-/*!********************************************!*\
-  !*** ../lib/miners/minerRequestsSender.ts ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ "../lib/miners/jasminer.ts":
+/*!*********************************!*\
+  !*** ../lib/miners/jasminer.ts ***!
+  \*********************************/
+/***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.minerRequestsSender = void 0;
-let current = null;
-exports.minerRequestsSender = {
-    init: (minerRequestsSender) => current = minerRequestsSender,
-    current: () => current,
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.jasminer = void 0;
+let currentSender = null;
+exports.jasminer = {
+    name: "Jasminer",
+    setSender: (sender) => currentSender = sender,
+    getInfo: (ip, login, password) => __awaiter(void 0, void 0, void 0, function* () {
+        const [isOk, result] = yield get(`http://${ip}/cgi-bin/minerStatus_all.cgi`, login, password);
+        if (!isOk) {
+            return null;
+        }
+        return {
+            ip,
+            name: "Jasminer",
+            miner: result.summary.miner,
+            sn: result.summary.machine_sn,
+            avgHash: result.summary.avg,
+            currentHash: result.summary.rt,
+            dagTime: result.summary.dag_time,
+            uptime: result.summary.uptime,
+            fanPercent: `${result.boards.fan_percent1}% - ${result.boards.fan_percent2}% - ${result.boards.fan_percent3}%`,
+            temp: `${result.summary.temp_min}℃ / ${result.summary.temp_max}℃`,
+            poolMiner: extractPoolMiner(result.pools.pool),
+            pools: result.pools.pool.map(x => ({
+                url: x.url,
+                user: x.user,
+                status: x.status,
+            })),
+        };
+    }),
+    reboot: (ip, login, password) => __awaiter(void 0, void 0, void 0, function* () {
+        const [isOk, _] = yield get(`http://${ip}/cgi-bin/reboot.cgi`, login, password, false);
+        return isOk;
+    }),
+    loadEdit: (ip, login, password) => __awaiter(void 0, void 0, void 0, function* () {
+        const [isOk, response] = yield get(`http://${ip}/cgi-bin/get_pools.cgi`, login, password);
+        if (!isOk) {
+            return null;
+        }
+        let result = {
+            protocol: response.protocol,
+            coin: response.coin,
+            work_pattern: response.work_pattern,
+        };
+        const pools = response.pools;
+        pools.forEach((pool, index) => {
+            result = Object.assign(Object.assign({}, result), { [`pool${index + 1}url`]: pool.url, [`pool${index + 1}user`]: pool.user, [`pool${index + 1}pw`]: pool.pass });
+        });
+        return result;
+    }),
+    edit: (ip, login, password, data) => __awaiter(void 0, void 0, void 0, function* () {
+        const formData = [
+            `pool1url=${encodeURIComponent(data.pool1url)}`,
+            `pool1user=${encodeURIComponent(data.pool1user)}`,
+            `pool1pw=${encodeURIComponent(data.pool1pw)}`,
+            `pool2url=${encodeURIComponent(data.pool2url)}`,
+            `pool2user=${encodeURIComponent(data.pool2user)}`,
+            `pool2pw=${encodeURIComponent(data.pool2pw)}`,
+            `pool3url=${encodeURIComponent(data.pool3url)}`,
+            `pool3user=${encodeURIComponent(data.pool3user)}`,
+            `pool3pw=${encodeURIComponent(data.pool3pw)}`,
+            `coin=${data.coin}`,
+            `work_pattern=${data.work_pattern}`,
+            `protocol=${data.protocol}`,
+        ].join("&");
+        console.log(formData);
+        const [isOk, _] = yield postForm(`http://${ip}/cgi-bin/set_pools.cgi`, login, password, formData);
+        return isOk;
+    }),
+};
+const extractPoolMiner = (pools) => {
+    if (pools.length === 0) {
+        return null;
+    }
+    const user = pools.map(x => x.user).find(x => !!x);
+    if (!user || user.indexOf(".") === -1) {
+        return null;
+    }
+    return user.substring(user.indexOf(".") + 1);
+};
+const get = (url_1, login_1, password_1, ...args_1) => __awaiter(void 0, [url_1, login_1, password_1, ...args_1], void 0, function* (url, login, password, isJson = true) {
+    const [ok, result] = yield currentSender.send({
+        miner: exports.jasminer.name,
+        action: "get",
+        url,
+        login,
+        password
+    }, 3000);
+    if (!ok) {
+        return [false, null];
+    }
+    if (!isJson) {
+        return [true, result];
+    }
+    return [true, JSON.parse(result)];
+});
+const postForm = (url, login, password, data) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield currentSender.send({
+        miner: exports.jasminer.name,
+        action: "postForm",
+        url,
+        login,
+        password,
+        data
+    }, 5000);
+});
 
 
 /***/ }),
@@ -22322,8 +22318,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const src_React = __webpack_require__(/*! react */ "react");
 const client_1 = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 const App_1 = __webpack_require__(/*! ./components/App */ "./src/components/App.tsx");
-const minersRequestsSender_1 = __webpack_require__(/*! ./lib/miners/minersRequestsSender */ "./src/lib/miners/minersRequestsSender.ts");
-minersRequestsSender_1.minerRequestsSenderSetup.setup();
 const container = document.getElementById("app");
 const root = (0, client_1.createRoot)(container);
 root.render(src_React.createElement(App_1.App, null));

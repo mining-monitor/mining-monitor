@@ -1,11 +1,7 @@
-import { MinerRequestsSender, minerRequestsSender } from "../../../../lib/miners/minerRequestsSender"
+import { MinerRequestsSender } from "../../../../lib/miners/minerRequestsSender"
 import { auth } from "../auth"
 
-export const minerRequestsSenderSetup = {
-    setup: () => minerRequestsSender.init(minerRequestsSenderImplementation),
-}
-
-const minerRequestsSenderImplementation: MinerRequestsSender = {
+export const minerRequestsSender: MinerRequestsSender = {
     send: async (body: object, timeout?: number): Promise<[boolean, string]> => {
         try {
             const controller = new AbortController()
