@@ -1,14 +1,20 @@
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const { dataBase } = require("./dataBase")
+import * as bcrypt from "bcrypt-ts"
+import * as jwt from "jsonwebtoken"
+import { Request, Response } from "express"
+import { dataBase } from "./dataBase"
 
-let secretCache = null
-let loginCache = null
+interface Account {
+    login: string,
+    password: string,
+}
+
+let secretCache: string | null = null
+let loginCache: string | null = null
 
 const accountKey = "account"
 const secretKey = "secret-key"
 
-exports.authMiddleware = async (request, response, next) => {
+export const authMiddleware = async (request: Request, response: Response, next: () => void) => {
     console.log("authMiddleware", request.url)
 
     if (request.url === "/auth/has") {
@@ -38,7 +44,7 @@ exports.authMiddleware = async (request, response, next) => {
     }
 
     if (request.url === "/auth/login") {
-        const [isLogin, token] = await login(request.headers.login)
+        const [isLogin, token] = await login(request.headers.login as string)
         console.log("authMiddleware", "login", isLogin)
 
         if (!isLogin) {
@@ -46,12 +52,12 @@ exports.authMiddleware = async (request, response, next) => {
             return
         }
 
-        successLogin(response, token)
+        successLogin(response, token!)
         return
     }
 
     if (request.url === "/auth/register") {
-        const [isRegister, token] = await register(request.headers.register)
+        const [isRegister, token] = await register(request.headers.register as string)
         console.log("authMiddleware", "register", isRegister)
 
         if (!isRegister) {
@@ -59,7 +65,7 @@ exports.authMiddleware = async (request, response, next) => {
             return
         }
 
-        successLogin(response, token)
+        successLogin(response, token!)
         return
     }
 
@@ -87,19 +93,19 @@ exports.authMiddleware = async (request, response, next) => {
     next()
 }
 
-const accessDenied = (response) => {
+const accessDenied = (response: Response) => {
     response
         .status(401)
         .send("Access Denied / Unauthorized request")
 }
 
-const successAccess = (response) => {
+const successAccess = (response: Response) => {
     response
         .status(200)
         .send("Success Access")
 }
 
-const successLogin = (response, token) => {
+const successLogin = (response: Response, token: string) => {
     response
         .header("auth-token", token)
         .status(200)
@@ -117,7 +123,7 @@ const hasAuthorization = async () => {
     return !!loginCache
 }
 
-const checkAuthorization = async (authorization) => {
+const checkAuthorization = async (authorization?: string) => {
     if (!authorization) {
         return false
     }
@@ -137,7 +143,7 @@ const checkAuthorization = async (authorization) => {
     }
 }
 
-const login = async (data) => {
+const login = async (data: string): Promise<[boolean, string | null]> => {
     if (!data) {
         return [false, null]
     }
@@ -150,7 +156,7 @@ const login = async (data) => {
     const object = JSON.parse(data)
     const account = await getAccount()
 
-    const validPass = await bcrypt.compare(object.password, account.password);
+    const validPass = await bcrypt.compare(object.password, account!.password);
     if (!validPass) {
         return [false, null]
     }
@@ -159,7 +165,7 @@ const login = async (data) => {
     return [true, token]
 }
 
-const register = async (data) => {
+const register = async (data: string): Promise<[boolean, string | null]> => {
     if (!data) {
         return [false, null]
     }
@@ -184,7 +190,7 @@ const register = async (data) => {
 
 const remove = async () => {
     await removeAccount()
-    
+
     secretCache = null
     loginCache = null
 
@@ -206,7 +212,7 @@ const getOrGenerateSecret = async () => {
     return secretCache
 }
 
-const getAccount = async () => {
+const getAccount = async (): Promise<Account | null> => {
     if (!(await dataBase.key(accountKey))) {
         return null
     }
@@ -214,7 +220,7 @@ const getAccount = async () => {
     return await dataBase.get(accountKey)
 }
 
-const saveAccount = async (account) => {
+const saveAccount = async (account: Account) => {
     await dataBase.set(accountKey, account)
 }
 

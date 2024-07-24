@@ -1,19 +1,19 @@
-const { LocalStorage } = require("node-localstorage")
-const CryptoJS = require("crypto-js")
-const { v4: uuidv4 } = require("uuid")
-const os = require("os")
-const fs = require("fs")
+import { LocalStorage } from "node-localstorage"
+import * as CryptoJS from "crypto-js"
+import { v4 as uuidv4 } from "uuid"
+import * as os from "os"
+import * as fs from "fs"
 
 const localStorage = new LocalStorage("./.db")
 
-exports.dataBase = {
-    set: (key, item) => set(key, item),
-    get: (key) => get(key),
-    key: (key) => !!get(key),
+export const dataBase = {
+    set: (key: string, item: any) => set(key, item),
+    get: (key: string) => get(key),
+    key: (key: string) => !!get(key),
     clear: () => localStorage.clear(),
 }
 
-const get = (key) => {
+const get = (key: string) => {
     const encryptedJson = localStorage.getItem(key)
     if (!encryptedJson) {
         return null
@@ -27,7 +27,7 @@ const get = (key) => {
     }
 }
 
-const set = (key, item) => {
+const set = (key: string, item: any) => {
     const json = JSON.stringify(item)
     const encryptedJson = CryptoJS.AES.encrypt(json, getSecretKey()).toString()
     localStorage.setItem(key, encryptedJson)
@@ -35,7 +35,7 @@ const set = (key, item) => {
 
 // *** Secret key ***
 
-let secretKeyCache = null
+let secretKeyCache: string | null = null
 const secretFileName = `${os.homedir()}/miningMonitor`
 
 const getSecretKey = () => {

@@ -1,12 +1,12 @@
-const express = require("express")
-const { digestAuthRequestAsync } = require("./digestAuthRequest")
-const { authMiddleware } = require("./auth")
-const { dataBase } = require("./dataBase")
+import express from "express"
+import { digestAuthRequestAsync } from "./digestAuthRequest"
+import { authMiddleware } from "./auth"
+import { dataBase } from "./dataBase"
 
 const app = express()
 
 app.use(express.static("./dist"))
-app.use(express.json({ extended: false }))
+app.use(express.json())
 app.use(authMiddleware)
 
 // *** Static ***
@@ -85,7 +85,7 @@ app.post("/data", async function (request, response) {
         return response.sendStatus(400)
     }
 
-    dataBase.set(request.query.key, request.body)
+    dataBase.set(request.query.key as string, request.body)
 
     response.send("ok")
 })
@@ -97,7 +97,7 @@ app.get("/data", async function (request, response) {
         return response.sendStatus(400)
     }
 
-    const data = dataBase.get(request.query.key)
+    const data = dataBase.get(request.query.key as string)
     if (!data) {
         return response.sendStatus(404)
     }
@@ -108,3 +108,4 @@ app.get("/data", async function (request, response) {
 // *** Start ***
 
 app.listen(4000)
+console.log("Web server started successful")

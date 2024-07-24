@@ -1,27 +1,39 @@
-const CryptoJS = require('crypto-js')
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
+import * as CryptoJS from "crypto-js"
+import { XMLHttpRequest } from "xmlhttprequest-ts"
+
+interface Request {
+    method: string,
+    url: string,
+    username: string,
+    password: string,
+    data?: string,
+    retryCount?: number,
+    contentType?: string,
+    timeout?: number,
+}
 
 //  method, url, username, password, data, retryCount, contentType, timeout
-module.exports.digestAuthRequestAsync = async function (request) {
+export const digestAuthRequestAsync = async (request: Request): Promise<[string | null, number]> => {
     console.log(request)
-    const getRequest = new digestAuthRequest(
+    const getRequest = digestAuthRequest(
         request.method,
         request.url,
         request.username,
         request.password,
         request.timeout)
 
-    let response = null
-    let responseCode = null
+    let response: string | null = null
+    let responseCode: number | null = null
+    const retryCount = request.retryCount || 5
 
-    for (i = 0; i < request.retryCount || 5; i++) {
+    for (let i = 0; i < retryCount; i++) {
         response = null
         responseCode = null
 
-        getRequest.request(function (responseData) {
+        getRequest.request((responseData: string | null) => {
             response = responseData
             responseCode = 200
-        }, function (errorCode) {
+        }, function (errorCode: number) {
             responseCode = errorCode || 404
         }, request.data, request.contentType);
 
@@ -34,36 +46,36 @@ module.exports.digestAuthRequestAsync = async function (request) {
         }
     }
 
-    return [response, responseCode]
+    return [response, responseCode!]
 }
 
-var digestAuthRequest = function (method, url, username, password, timeout) {
-    var self = this;
+const digestAuthRequest = (method: string, url: string, username: string, password: string, timeout?: number): any => {
+    const self = {} as any;
 
-    this.scheme = null; // we just echo the scheme, to allow for 'Digest', 'X-Digest', 'JDigest' etc
-    this.nonce = null; // server issued nonce
-    this.realm = null; // server issued realm
-    this.qop = null; // "quality of protection" - '' or 'auth' or 'auth-int'
-    this.response = null; // hashed response to server challenge
-    this.opaque = null; // hashed response to server challenge
-    this.nc = 1; // nonce count - increments with each request used with the same nonce
-    this.cnonce = null; // client nonce
+    self.scheme = null; // we just echo the scheme, to allow for 'Digest', 'X-Digest', 'JDigest' etc
+    self.nonce = null; // server issued nonce
+    self.realm = null; // server issued realm
+    self.qop = null; // "quality of protection" - '' or 'auth' or 'auth-int'
+    self.response = null; // hashed response to server challenge
+    self.opaque = null; // hashed response to server challenge
+    self.nc = 1; // nonce count - increments with each request used with the same nonce
+    self.cnonce = null; // client nonce
 
     // settings
-    this.timeout = timeout || 1000; // timeout
-    this.loggingOn = false; // toggle console logging
+    self.timeout = timeout || 1000; // timeout
+    self.loggingOn = false; // toggle console logging
 
     // determine if a post, so that request will send data
-    this.post = false;
+    self.post = false;
     if (method.toLowerCase() === 'post' || method.toLowerCase() === 'put') {
-        this.post = true;
+        self.post = true;
     }
 
     // start here
     // successFn - will be passed JSON data
     // errorFn - will be passed error status code
     // data - optional, for POSTS
-    this.request = function (successFn, errorFn, data, contentType) {
+    self.request = function (successFn: () => string | null, errorFn: () => number, data: object | string, contentType: string) {
         // posts data as JSON if there is any
         if (data) {
             self.contentType = contentType || 'application/json'
@@ -78,7 +90,7 @@ var digestAuthRequest = function (method, url, username, password, timeout) {
             self.makeAuthenticatedRequest();
         }
     }
-    this.makeUnauthenticatedRequest = function () {
+    self.makeUnauthenticatedRequest = function () {
         self.firstRequest = new XMLHttpRequest();
         self.firstRequest.open(method, url, true);
         self.firstRequest.timeout = self.timeout;
@@ -177,7 +189,7 @@ var digestAuthRequest = function (method, url, username, password, timeout) {
             }
         }
     }
-    this.makeAuthenticatedRequest = function () {
+    self.makeAuthenticatedRequest = function () {
 
         self.response = self.formulateResponse();
         self.authenticatedRequest = new XMLHttpRequest();
@@ -238,7 +250,7 @@ var digestAuthRequest = function (method, url, username, password, timeout) {
         self.log('Authenticated request to ' + url);
     }
     // hash response based on server challenge
-    this.formulateResponse = function () {
+    self.formulateResponse = function () {
         var HA1 = CryptoJS.MD5(username + ':' + self.realm + ':' + password).toString();
         var HA2 = CryptoJS.MD5(method + ':' + url).toString();
         var response = CryptoJS.MD5(HA1 + ':' +
@@ -250,7 +262,7 @@ var digestAuthRequest = function (method, url, username, password, timeout) {
         return response;
     }
     // generate 16 char client nonce
-    this.generateCnonce = function () {
+    self.generateCnonce = function () {
         var characters = 'abcdef0123456789';
         var token = '';
         for (var i = 0; i < 16; i++) {
@@ -259,7 +271,7 @@ var digestAuthRequest = function (method, url, username, password, timeout) {
         }
         return token;
     }
-    this.abort = function () {
+    self.abort = function () {
         self.log('[digestAuthRequest] Aborted request to ' + url);
         if (self.firstRequest != null) {
             if (self.firstRequest.readyState != 4) self.firstRequest.abort();
@@ -268,7 +280,7 @@ var digestAuthRequest = function (method, url, username, password, timeout) {
             if (self.authenticatedRequest.readyState != 4) self.authenticatedRequest.abort();
         }
     }
-    this.isJson = function (str) {
+    self.isJson = function (str: any) {
         try {
             JSON.parse(str);
         } catch (e) {
@@ -276,14 +288,16 @@ var digestAuthRequest = function (method, url, username, password, timeout) {
         }
         return true;
     }
-    this.log = function (str) {
+    self.log = function (str: string) {
         if (self.loggingOn) {
             console.log('[digestAuthRequest] ' + str);
         }
     }
-    this.version = function () { return '0.8.0' }
+    self.version = function () { return '0.8.0' }
+
+    return self
 }
 
-function sleep(ms) {
+function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
