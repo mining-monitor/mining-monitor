@@ -1,8 +1,8 @@
 import * as React from "react"
-import { SettingsProps } from "../../libs/settings"
-import { MinerInfo } from "../../libs/miners/miner"
-import { telegram } from "../../libs/telegram"
-import { date } from "../../libs/date"
+import { SettingsProps } from "../../lib/settings"
+import { MinerInfo } from "../../lib/miners/miner"
+import { telegram } from "../../lib/telegram"
+import { date } from "../../lib/date"
 
 interface Props extends SettingsProps {
     minerInfos: Map<string, MinerInfo | null>,

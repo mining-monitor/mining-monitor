@@ -1,5 +1,6 @@
 import { auth } from "../auth"
 import { Miner, MinerInfo } from "./miner"
+import { minerRequestsSender } from "../../../../lib/miners/minerRequestsSender"
 
 export interface EditData {
     pool1url: string,
@@ -116,74 +117,32 @@ const extractPoolMiner = (pools: any[]) => {
 }
 
 const get = async (url: string, login: string, password: string, isJson: boolean = true): Promise<[boolean, any]> => {
-    try {
-        const controller = new AbortController()
-        const id = setTimeout(() => controller.abort(), 3000)
+    const [ok, result] = await minerRequestsSender.current().send({
+        miner: jasminer.name,
+        action: "get",
+        url,
+        login,
+        password
+    }, 3000)
 
-        const result = await fetch("/requests/send", {
-            method: "POST",
-            headers: {
-                ...auth.getAuthorization(),
-                "Content-Type": "application/json;charset=utf-8"
-            },
-            body: JSON.stringify({
-                miner: jasminer.name,
-                action: "get",
-                url,
-                login,
-                password
-            }),
-            signal: controller.signal,
-        })
-
-        clearTimeout(id)
-
-        if (!result.ok) {
-            return [false, null]
-        }
-
-        if (!isJson) {
-            return [true, await result.text()]
-        }
-
-        return [true, await result.json()]
-    } catch (error) {
-        console.error(error)
+    if (!ok) {
         return [false, null]
     }
+
+    if (!isJson) {
+        return [true, result]
+    }
+
+    return [true, JSON.parse(result)]
 }
 
 const postForm = async (url: string, login: string, password: string, data: string): Promise<[boolean, string]> => {
-    try {
-        const controller = new AbortController()
-        const id = setTimeout(() => controller.abort(), 5000)
-
-        const result = await fetch("/requests/send", {
-            method: "POST",
-            headers: {
-                ...auth.getAuthorization(),
-                "Content-Type": "application/json;charset=utf-8"
-            },
-            body: JSON.stringify({
-                miner: jasminer.name,
-                action: "postForm",
-                url,
-                login,
-                password,
-                data
-            }),
-            signal: controller.signal,
-        })
-
-        clearTimeout(id)
-
-        if (!result.ok) {
-            return [false, null]
-        }
-
-        return [true, await result.text()]
-    } catch (error) {
-        console.error(error)
-        return [false, null]
-    }
+    return await minerRequestsSender.current().send({
+        miner: jasminer.name,
+        action: "postForm",
+        url,
+        login,
+        password,
+        data
+    }, 5000)
 }

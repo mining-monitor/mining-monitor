@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Master } from "./Master"
-import { Settings, SettingsContainer } from "../libs/settings";
+import { Settings, SettingsContainer } from "../lib/settings";
 import { Miners } from "./Miners/Miners";
 import { Head } from "./Head";
 import { Auth } from "./Auth/Auth";

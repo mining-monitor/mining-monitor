@@ -1,6 +1,6 @@
 import * as React from "react"
-import { MinerSettings } from "../../libs/settings"
-import { jasminer } from "../../libs/miners/jasminer"
+import { MinerSettings } from "../../lib/settings"
+import { jasminer } from "../../lib/miners/jasminer"
 import { MinerJasminerEdit } from "./Brands/MinerJasminerEdit"
 import { Modal, Alert } from "react-bootstrap"
 

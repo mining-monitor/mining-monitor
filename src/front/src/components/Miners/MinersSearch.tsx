@@ -1,8 +1,8 @@
 import * as React from "react"
-import { MinerSettings, SettingsProps } from "../../libs/settings"
+import { MinerSettings, SettingsProps } from "../../lib/settings"
 import { Form, Button, InputGroup, Accordion, Row, Col } from "react-bootstrap"
-import { minersSearcher } from "../../libs/miners/minersSearcher"
-import { minerNames as getMinerNames } from "../../libs/miners/miners"
+import { minersSearcher } from "../../lib/miners/minersSearcher"
+import { minerNames as getMinerNames } from "../../lib/miners/miners"
 
 interface Props extends SettingsProps {
     index: string,

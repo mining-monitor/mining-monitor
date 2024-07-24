@@ -20497,7 +20497,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.App = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const Master_1 = __webpack_require__(/*! ./Master */ "./src/components/Master.tsx");
-const settings_1 = __webpack_require__(/*! ../libs/settings */ "./src/libs/settings.ts");
+const settings_1 = __webpack_require__(/*! ../lib/settings */ "./src/lib/settings.ts");
 const Miners_1 = __webpack_require__(/*! ./Miners/Miners */ "./src/components/Miners/Miners.tsx");
 const Head_1 = __webpack_require__(/*! ./Head */ "./src/components/Head.tsx");
 const Auth_1 = __webpack_require__(/*! ./Auth/Auth */ "./src/components/Auth/Auth.tsx");
@@ -20558,7 +20558,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Auth = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-const auth_1 = __webpack_require__(/*! ../../libs/auth */ "./src/libs/auth.ts");
+const auth_1 = __webpack_require__(/*! ../../lib/auth */ "./src/lib/auth.ts");
 const Auth = (props) => {
     const [step, setStep] = React.useState("None");
     const [credentials, setCredentials] = React.useState({ login: "", password: "" });
@@ -20734,8 +20734,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MinerJasminerEdit = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-const jasminer_1 = __webpack_require__(/*! ../../../libs/miners/jasminer */ "./src/libs/miners/jasminer.ts");
-const unils_1 = __webpack_require__(/*! ../../../libs/unils */ "./src/libs/unils.ts");
+const jasminer_1 = __webpack_require__(/*! ../../../lib/miners/jasminer */ "./src/lib/miners/jasminer.ts");
+const utils_1 = __webpack_require__(/*! ../../../lib/utils */ "./src/lib/utils.ts");
 const MinerJasminerEdit = (props) => {
     const [editData, setEditData] = React.useState(null);
     const [saving, setSaving] = React.useState(false);
@@ -20765,7 +20765,7 @@ const MinerJasminerEdit = (props) => {
         setSaving(true);
         try {
             yield jasminer_1.jasminer.edit(props.minerSettings.ip, props.minerSettings.credentials.login, props.minerSettings.credentials.password, editData);
-            yield (0, unils_1.sleep)(500);
+            yield (0, utils_1.sleep)(500);
             yield jasminer_1.jasminer.reboot(props.minerSettings.ip, props.minerSettings.credentials.login, props.minerSettings.credentials.password);
         }
         catch (error) {
@@ -20837,7 +20837,7 @@ exports.MinerJasminerEdit = MinerJasminerEdit;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MinerEdit = void 0;
 const React = __webpack_require__(/*! react */ "react");
-const jasminer_1 = __webpack_require__(/*! ../../libs/miners/jasminer */ "./src/libs/miners/jasminer.ts");
+const jasminer_1 = __webpack_require__(/*! ../../lib/miners/jasminer */ "./src/lib/miners/jasminer.ts");
 const MinerJasminerEdit_1 = __webpack_require__(/*! ./Brands/MinerJasminerEdit */ "./src/components/Miners/Brands/MinerJasminerEdit.tsx");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 const MinerEdit = (props) => {
@@ -20882,8 +20882,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MinerRow = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-const miners_1 = __webpack_require__(/*! ../../libs/miners/miners */ "./src/libs/miners/miners.ts");
-const unils_1 = __webpack_require__(/*! ../../libs/unils */ "./src/libs/unils.ts");
+const miners_1 = __webpack_require__(/*! ../../lib/miners/miners */ "./src/lib/miners/miners.ts");
+const utils_1 = __webpack_require__(/*! ../../lib/utils */ "./src/lib/utils.ts");
 const MinerRow = (props) => {
     var _a, _b, _c, _d, _e, _f;
     const [loadState, setLoadState] = React.useState("Loading");
@@ -20905,7 +20905,7 @@ const MinerRow = (props) => {
                 if (minerInfo !== null) {
                     break;
                 }
-                yield (0, unils_1.sleep)(500);
+                yield (0, utils_1.sleep)(500);
             }
             props.updateMinerInfo(props.minerSettings.ip, minerInfo);
         }
@@ -21050,8 +21050,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MinersSearch = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-const minersSearcher_1 = __webpack_require__(/*! ../../libs/miners/minersSearcher */ "./src/libs/miners/minersSearcher.ts");
-const miners_1 = __webpack_require__(/*! ../../libs/miners/miners */ "./src/libs/miners/miners.ts");
+const minersSearcher_1 = __webpack_require__(/*! ../../lib/miners/minersSearcher */ "./src/lib/miners/minersSearcher.ts");
+const miners_1 = __webpack_require__(/*! ../../lib/miners/miners */ "./src/lib/miners/miners.ts");
 const MinersSearch = (props) => {
     const [search, setSearch] = React.useState({ login: "", password: "", ipStart: "", ipEnd: "", miner: "" });
     const [searchState, setSearchState] = React.useState("None");
@@ -21140,8 +21140,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Notifications = void 0;
 const React = __webpack_require__(/*! react */ "react");
-const telegram_1 = __webpack_require__(/*! ../../libs/telegram */ "./src/libs/telegram.ts");
-const date_1 = __webpack_require__(/*! ../../libs/date */ "./src/libs/date.ts");
+const telegram_1 = __webpack_require__(/*! ../../lib/telegram */ "./src/lib/telegram.ts");
+const date_1 = __webpack_require__(/*! ../../lib/date */ "./src/lib/date.ts");
 const Notifications = (props) => {
     const [notificationsData, setNotificationsData] = React.useState(new Map());
     const [lastNotify, setLastNotify] = React.useState(null);
@@ -21225,7 +21225,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EdtiSettings = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-const telegram_1 = __webpack_require__(/*! ../../libs/telegram */ "./src/libs/telegram.ts");
+const telegram_1 = __webpack_require__(/*! ../../lib/telegram */ "./src/lib/telegram.ts");
 const EdtiSettings = (props) => {
     const [error, setError] = React.useState(null);
     const handleChangeNotifications = (x) => {
@@ -21275,10 +21275,10 @@ exports.EdtiSettings = EdtiSettings;
 
 /***/ }),
 
-/***/ "./src/libs/auth.ts":
-/*!**************************!*\
-  !*** ./src/libs/auth.ts ***!
-  \**************************/
+/***/ "./src/lib/auth.ts":
+/*!*************************!*\
+  !*** ./src/lib/auth.ts ***!
+  \*************************/
 /***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
@@ -21349,10 +21349,10 @@ const getAuthorization = () => ({ Authorization: `Bearer ${getToken() || ""}` })
 
 /***/ }),
 
-/***/ "./src/libs/date.ts":
-/*!**************************!*\
-  !*** ./src/libs/date.ts ***!
-  \**************************/
+/***/ "./src/lib/date.ts":
+/*!*************************!*\
+  !*** ./src/lib/date.ts ***!
+  \*************************/
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -21370,10 +21370,10 @@ const formatValue = (value) => value < 10 ? `0${value}` : value.toString();
 
 /***/ }),
 
-/***/ "./src/libs/miners/jasminer.ts":
-/*!*************************************!*\
-  !*** ./src/libs/miners/jasminer.ts ***!
-  \*************************************/
+/***/ "./src/lib/miners/jasminer.ts":
+/*!************************************!*\
+  !*** ./src/lib/miners/jasminer.ts ***!
+  \************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -21389,7 +21389,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.jasminer = void 0;
-const auth_1 = __webpack_require__(/*! ../auth */ "./src/libs/auth.ts");
+const minerRequestsSender_1 = __webpack_require__(/*! ../../../../lib/miners/minerRequestsSender */ "../lib/miners/minerRequestsSender.ts");
 exports.jasminer = {
     name: "Jasminer",
     getInfo: (ip, login, password) => __awaiter(void 0, void 0, void 0, function* () {
@@ -21467,78 +21467,46 @@ const extractPoolMiner = (pools) => {
     return user.substring(user.indexOf(".") + 1);
 };
 const get = (url_1, login_1, password_1, ...args_1) => __awaiter(void 0, [url_1, login_1, password_1, ...args_1], void 0, function* (url, login, password, isJson = true) {
-    try {
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), 3000);
-        const result = yield fetch("/requests/send", {
-            method: "POST",
-            headers: Object.assign(Object.assign({}, auth_1.auth.getAuthorization()), { "Content-Type": "application/json;charset=utf-8" }),
-            body: JSON.stringify({
-                miner: exports.jasminer.name,
-                action: "get",
-                url,
-                login,
-                password
-            }),
-            signal: controller.signal,
-        });
-        clearTimeout(id);
-        if (!result.ok) {
-            return [false, null];
-        }
-        if (!isJson) {
-            return [true, yield result.text()];
-        }
-        return [true, yield result.json()];
-    }
-    catch (error) {
-        console.error(error);
+    const [ok, result] = yield minerRequestsSender_1.minerRequestsSender.current().send({
+        miner: exports.jasminer.name,
+        action: "get",
+        url,
+        login,
+        password
+    }, 3000);
+    if (!ok) {
         return [false, null];
     }
+    if (!isJson) {
+        return [true, result];
+    }
+    return [true, JSON.parse(result)];
 });
 const postForm = (url, login, password, data) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), 5000);
-        const result = yield fetch("/requests/send", {
-            method: "POST",
-            headers: Object.assign(Object.assign({}, auth_1.auth.getAuthorization()), { "Content-Type": "application/json;charset=utf-8" }),
-            body: JSON.stringify({
-                miner: exports.jasminer.name,
-                action: "postForm",
-                url,
-                login,
-                password,
-                data
-            }),
-            signal: controller.signal,
-        });
-        clearTimeout(id);
-        if (!result.ok) {
-            return [false, null];
-        }
-        return [true, yield result.text()];
-    }
-    catch (error) {
-        console.error(error);
-        return [false, null];
-    }
+    return yield minerRequestsSender_1.minerRequestsSender.current().send({
+        miner: exports.jasminer.name,
+        action: "postForm",
+        url,
+        login,
+        password,
+        data
+    }, 5000);
 });
 
 
 /***/ }),
 
-/***/ "./src/libs/miners/miners.ts":
-/*!***********************************!*\
-  !*** ./src/libs/miners/miners.ts ***!
-  \***********************************/
+/***/ "./src/lib/miners/miners.ts":
+/*!**********************************!*\
+  !*** ./src/lib/miners/miners.ts ***!
+  \**********************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.minerNames = exports.miners = void 0;
-const jasminer_1 = __webpack_require__(/*! ./jasminer */ "./src/libs/miners/jasminer.ts");
+const jasminer_1 = __webpack_require__(/*! ./jasminer */ "./src/lib/miners/jasminer.ts");
 exports.miners = new Map([
     [jasminer_1.jasminer.name, jasminer_1.jasminer],
 ]);
@@ -21548,10 +21516,61 @@ exports.minerNames = minerNames;
 
 /***/ }),
 
-/***/ "./src/libs/miners/minersSearcher.ts":
-/*!*******************************************!*\
-  !*** ./src/libs/miners/minersSearcher.ts ***!
-  \*******************************************/
+/***/ "./src/lib/miners/minersRequestsSender.ts":
+/*!************************************************!*\
+  !*** ./src/lib/miners/minersRequestsSender.ts ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.minerRequestsSenderSetup = void 0;
+const minerRequestsSender_1 = __webpack_require__(/*! ../../../../lib/miners/minerRequestsSender */ "../lib/miners/minerRequestsSender.ts");
+const auth_1 = __webpack_require__(/*! ../auth */ "./src/lib/auth.ts");
+exports.minerRequestsSenderSetup = {
+    setup: () => minerRequestsSender_1.minerRequestsSender.init(minerRequestsSenderImplementation),
+};
+const minerRequestsSenderImplementation = {
+    send: (body, timeout) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout || 5000);
+            const result = yield fetch("/requests/send", {
+                method: "POST",
+                headers: Object.assign(Object.assign({}, auth_1.auth.getAuthorization()), { "Content-Type": "application/json;charset=utf-8" }),
+                body: JSON.stringify(body),
+                signal: controller.signal,
+            });
+            clearTimeout(id);
+            if (!result.ok) {
+                return [false, null];
+            }
+            return [true, yield result.text()];
+        }
+        catch (error) {
+            console.error(error);
+            return [false, null];
+        }
+    })
+};
+
+
+/***/ }),
+
+/***/ "./src/lib/miners/minersSearcher.ts":
+/*!******************************************!*\
+  !*** ./src/lib/miners/minersSearcher.ts ***!
+  \******************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -21567,7 +21586,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.minersSearcher = void 0;
-const miners_1 = __webpack_require__(/*! ./miners */ "./src/libs/miners/miners.ts");
+const miners_1 = __webpack_require__(/*! ./miners */ "./src/lib/miners/miners.ts");
 exports.minersSearcher = {
     search: (search, skip) => __awaiter(void 0, void 0, void 0, function* () {
         const miner = miners_1.miners.get(search.miner);
@@ -21614,10 +21633,10 @@ const getIps = (ipStart, ipEnd, skip) => {
 
 /***/ }),
 
-/***/ "./src/libs/settings.ts":
-/*!******************************!*\
-  !*** ./src/libs/settings.ts ***!
-  \******************************/
+/***/ "./src/lib/settings.ts":
+/*!*****************************!*\
+  !*** ./src/lib/settings.ts ***!
+  \*****************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -21633,7 +21652,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsContainer = void 0;
-const auth_1 = __webpack_require__(/*! ./auth */ "./src/libs/auth.ts");
+const auth_1 = __webpack_require__(/*! ./auth */ "./src/lib/auth.ts");
 const settingsKey = "settings";
 const defaultSettings = { miners: [], notifications: {} };
 exports.SettingsContainer = {
@@ -21677,10 +21696,10 @@ const get = (key) => __awaiter(void 0, void 0, void 0, function* () {
 
 /***/ }),
 
-/***/ "./src/libs/telegram.ts":
-/*!******************************!*\
-  !*** ./src/libs/telegram.ts ***!
-  \******************************/
+/***/ "./src/lib/telegram.ts":
+/*!*****************************!*\
+  !*** ./src/lib/telegram.ts ***!
+  \*****************************/
 /***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
@@ -21716,10 +21735,10 @@ exports.telegram = {
 
 /***/ }),
 
-/***/ "./src/libs/unils.ts":
-/*!***************************!*\
-  !*** ./src/libs/unils.ts ***!
-  \***************************/
+/***/ "./src/lib/utils.ts":
+/*!**************************!*\
+  !*** ./src/lib/utils.ts ***!
+  \**************************/
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -21730,6 +21749,25 @@ const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 };
 exports.sleep = sleep;
+
+
+/***/ }),
+
+/***/ "../lib/miners/minerRequestsSender.ts":
+/*!********************************************!*\
+  !*** ../lib/miners/minerRequestsSender.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.minerRequestsSender = void 0;
+let current = null;
+exports.minerRequestsSender = {
+    init: (minerRequestsSender) => current = minerRequestsSender,
+    current: () => current,
+};
 
 
 /***/ }),
@@ -22284,6 +22322,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const src_React = __webpack_require__(/*! react */ "react");
 const client_1 = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 const App_1 = __webpack_require__(/*! ./components/App */ "./src/components/App.tsx");
+const minersRequestsSender_1 = __webpack_require__(/*! ./lib/miners/minersRequestsSender */ "./src/lib/miners/minersRequestsSender.ts");
+minersRequestsSender_1.minerRequestsSenderSetup.setup();
 const container = document.getElementById("app");
 const root = (0, client_1.createRoot)(container);
 root.render(src_React.createElement(App_1.App, null));

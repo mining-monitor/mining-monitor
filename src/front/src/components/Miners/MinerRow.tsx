@@ -1,10 +1,10 @@
 import * as React from "react"
-import { MinerSettings, SettingsProps } from "../../libs/settings"
+import { MinerSettings, SettingsProps } from "../../lib/settings"
 import { Button } from "react-bootstrap"
-import { MinerInfo } from "../../libs/miners/miner"
-import { miners } from "../../libs/miners/miners"
+import { MinerInfo } from "../../lib/miners/miner"
+import { miners } from "../../lib/miners/miners"
 import { Message } from "../Common/ToastMessage"
-import { sleep } from "../../libs/unils"
+import { sleep } from "../../lib/utils"
 
 interface Props extends SettingsProps {
     minerSettings: MinerSettings,

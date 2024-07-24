@@ -1,8 +1,8 @@
 import * as React from "react"
-import { MinerSettings } from "../../../libs/settings"
+import { MinerSettings } from "../../../lib/settings"
 import { Form, Button, InputGroup, ProgressBar } from "react-bootstrap"
-import { EditData, jasminer } from "../../../libs/miners/jasminer"
-import { sleep } from "../../../libs/unils"
+import { EditData, jasminer } from "../../../lib/miners/jasminer"
+import { sleep } from "../../../lib/utils"
 
 interface Props {
     minerSettings: MinerSettings,

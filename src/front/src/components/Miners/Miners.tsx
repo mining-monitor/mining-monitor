@@ -1,9 +1,9 @@
 import * as React from "react"
-import { MinerSettings, SettingsProps } from "../../libs/settings"
+import { MinerSettings, SettingsProps } from "../../lib/settings"
 import { Table } from "react-bootstrap"
 import { ToastMessage, Message } from "../Common/ToastMessage"
 import { MinerRow } from "./MinerRow"
-import { MinerInfo } from "../../libs/miners/miner"
+import { MinerInfo } from "../../lib/miners/miner"
 import { MinerEdit } from "./MinerEdit"
 import { Notifications } from "../Notifications/Notifications"
 
