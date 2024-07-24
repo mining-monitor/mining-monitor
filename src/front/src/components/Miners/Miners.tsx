@@ -1,5 +1,6 @@
 import * as React from "react"
-import { MinerSettings, SettingsProps } from "../../lib/settings"
+import { MinerSettings } from "../../../../lib/settings"
+import { SettingsProps } from "../../lib/settings"
 import { Table } from "react-bootstrap"
 import { ToastMessage, Message } from "../Common/ToastMessage"
 import { MinerRow } from "./MinerRow"

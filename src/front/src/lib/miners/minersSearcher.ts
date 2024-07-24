@@ -1,4 +1,4 @@
-import { MinerSettings } from "../settings";
+import { MinerSettings } from "../../../../lib/settings"
 import { miners } from "./miners";
 
 interface Search {

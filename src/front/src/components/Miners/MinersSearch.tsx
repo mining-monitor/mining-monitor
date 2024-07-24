@@ -1,5 +1,6 @@
 import * as React from "react"
-import { MinerSettings, SettingsProps } from "../../lib/settings"
+import { SettingsProps } from "../../lib/settings"
+import { MinerSettings } from "../../../../lib/settings"
 import { Form, Button, InputGroup, Accordion, Row, Col } from "react-bootstrap"
 import { minersSearcher } from "../../lib/miners/minersSearcher"
 import { minerNames as getMinerNames } from "../../lib/miners/miners"

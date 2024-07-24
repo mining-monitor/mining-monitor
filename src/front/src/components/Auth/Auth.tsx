@@ -1,8 +1,7 @@
 import * as React from "react"
 import { Container, Row, Col, Form, Button } from "react-bootstrap"
 import { auth } from "../../lib/auth"
-import { Credentials } from "../../lib/settings"
-import { path } from "../../lib/path"
+import { Credentials } from "../../../../lib/settings"
 
 interface Props {
     onAuth: (isAuth: boolean) => void,
