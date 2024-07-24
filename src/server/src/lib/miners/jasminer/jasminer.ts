@@ -1,0 +1,49 @@
+import { digestAuthRequestAsync } from "./digestAuthRequest";
+import { Miner } from "../miner";
+
+export const jasminer: Miner = {
+    name: "Jasminer",
+    send: async (request: any): Promise<[string | null, number]> => {
+        switch (request.action || "") {
+            case "get":
+                return await get(request)
+
+            case "postForm":
+                return await postForm(request)
+
+            default:
+                return [null, 400]
+        }
+
+    },
+}
+
+const get = async (request: any): Promise<[string | null, number]> => {
+    if (!request.url) {
+        return [null, 400]
+    }
+
+    return await digestAuthRequestAsync({
+        method: "GET",
+        url: request.url,
+        username: request.login,
+        password: request.password,
+    })
+}
+
+const postForm = async (request: any): Promise<[string | null, number]> => {
+    if (!request.url || !request.data) {
+        return [null, 400]
+    }
+
+    return await digestAuthRequestAsync({
+        method: "POST",
+        url: request.url,
+        username: request.login,
+        password: request.password,
+        data: request.data,
+        contentType: "application/x-www-form-urlencoded",
+        retryCount: 1,
+        timeout: 5000,
+    })
+}

@@ -12,7 +12,6 @@ interface Request {
     timeout?: number,
 }
 
-//  method, url, username, password, data, retryCount, contentType, timeout
 export const digestAuthRequestAsync = async (request: Request): Promise<[string | null, number]> => {
     console.log(request)
     const getRequest = digestAuthRequest(

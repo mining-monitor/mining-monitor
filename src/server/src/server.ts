@@ -15,8 +15,7 @@ app.get("/main.js", staticController.mainJs)
 app.get("/update.js", staticController.updateJs)
 app.get("/favicon.ico", staticController.favicon)
 
-app.post("/requests/get", requestsController.get)
-app.post("/requests/post/form", requestsController.postForm)
+app.post("/requests/send", requestsController.send)
 
 app.post("/data", dataController.post)
 app.get("/data", dataController.get)

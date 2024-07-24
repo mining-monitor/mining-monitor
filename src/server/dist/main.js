@@ -21104,7 +21104,7 @@ const MinersSearch = (props) => {
                         React.createElement("div", { className: "my-2 text-end" },
                             "\u041D\u0435\u0442 \u0432\u0430\u0448\u0435\u0433\u043E \u043C\u0430\u0439\u043D\u0435\u0440\u0430? \u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043D\u0430\u043C \u0432 Telegram ",
                             React.createElement("a", { href: "https://t.me/FreeMiningMonitor", target: "_blank" }, "@FreeMiningMonitor"),
-                            " \u0438 \u043C\u044B \u0434\u043E\u0431\u0430\u0432\u0438\u043C \u0435\u0433\u043E")))))));
+                            " \u0438 \u043C\u044B \u0434\u043E\u0431\u0430\u0432\u0438\u043C \u0435\u0433\u043E.")))))));
 };
 exports.MinersSearch = MinersSearch;
 const compareMiners = (a, b) => {
@@ -21470,10 +21470,12 @@ const get = (url_1, login_1, password_1, ...args_1) => __awaiter(void 0, [url_1,
     try {
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), 3000);
-        const result = yield fetch("/requests/get", {
+        const result = yield fetch("/requests/send", {
             method: "POST",
             headers: Object.assign(Object.assign({}, auth_1.auth.getAuthorization()), { "Content-Type": "application/json;charset=utf-8" }),
             body: JSON.stringify({
+                miner: exports.jasminer.name,
+                action: "get",
                 url,
                 login,
                 password
@@ -21498,10 +21500,12 @@ const postForm = (url, login, password, data) => __awaiter(void 0, void 0, void 
     try {
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), 5000);
-        const result = yield fetch("/requests/post/form", {
+        const result = yield fetch("/requests/send", {
             method: "POST",
             headers: Object.assign(Object.assign({}, auth_1.auth.getAuthorization()), { "Content-Type": "application/json;charset=utf-8" }),
             body: JSON.stringify({
+                miner: exports.jasminer.name,
+                action: "postForm",
                 url,
                 login,
                 password,

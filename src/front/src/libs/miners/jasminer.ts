@@ -120,13 +120,15 @@ const get = async (url: string, login: string, password: string, isJson: boolean
         const controller = new AbortController()
         const id = setTimeout(() => controller.abort(), 3000)
 
-        const result = await fetch("/requests/get", {
+        const result = await fetch("/requests/send", {
             method: "POST",
             headers: {
                 ...auth.getAuthorization(),
                 "Content-Type": "application/json;charset=utf-8"
             },
             body: JSON.stringify({
+                miner: jasminer.name,
+                action: "get",
                 url,
                 login,
                 password
@@ -152,18 +154,19 @@ const get = async (url: string, login: string, password: string, isJson: boolean
 }
 
 const postForm = async (url: string, login: string, password: string, data: string): Promise<[boolean, string]> => {
-
     try {
         const controller = new AbortController()
         const id = setTimeout(() => controller.abort(), 5000)
 
-        const result = await fetch("/requests/post/form", {
+        const result = await fetch("/requests/send", {
             method: "POST",
             headers: {
                 ...auth.getAuthorization(),
                 "Content-Type": "application/json;charset=utf-8"
             },
             body: JSON.stringify({
+                miner: jasminer.name,
+                action: "postForm",
                 url,
                 login,
                 password,
