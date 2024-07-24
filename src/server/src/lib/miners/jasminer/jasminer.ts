@@ -14,7 +14,6 @@ export const jasminer: Miner = {
             default:
                 return [null, 400]
         }
-
     },
 }
 
