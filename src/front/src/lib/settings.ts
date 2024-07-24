@@ -1,12 +1,11 @@
 import { auth } from "./auth"
-import { Settings } from "../../../lib/settings"
+import { Settings, settingsKey } from "../../../lib/settings"
 
 export interface SettingsProps {
     settings: Settings,
     onChangeSettings: (settings: Settings) => void,
 }
 
-const settingsKey = "settings"
 const defaultSettings: Settings = { miners: [], notifications: {} }
 
 export const SettingsContainer = {
