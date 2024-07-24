@@ -1,7 +1,8 @@
 import express from "express"
-import { digestAuthRequestAsync } from "./digestAuthRequest"
-import { authMiddleware } from "./auth"
-import { dataBase } from "./dataBase"
+import { authMiddleware } from "./lib/auth"
+import { staticController } from "./controllers/staticController"
+import { requestsController } from "./controllers/requestsController"
+import { dataController } from "./controllers/dataController"
 
 const app = express()
 
@@ -9,103 +10,16 @@ app.use(express.static("./dist"))
 app.use(express.json())
 app.use(authMiddleware)
 
-// *** Static ***
+app.get("/", staticController.index)
+app.get("/main.js", staticController.mainJs)
+app.get("/update.js", staticController.updateJs)
+app.get("/favicon.ico", staticController.favicon)
 
-app.get("/", function (_, response) {
-    response.sendFile(__dirname + "/dist/index.html")
-})
+app.post("/requests/get", requestsController.get)
+app.post("/requests/post/form", requestsController.postForm)
 
-app.get("/main.js", function (_, response) {
-    response.sendFile(__dirname + "/dist/main.js")
-})
-
-app.get("/update.js", function (_, response) {
-    response.sendFile(__dirname + "/dist/update.js")
-})
-
-app.get("/favicon.ico", function (_, response) {
-    response.sendFile(__dirname + "/dist/favicon.ico")
-})
-
-// *** Requests ***
-
-app.post("/requests/get", async function (request, response) {
-    console.log(request.body)
-
-    if (!request.body || !request.body.url) {
-        return response.sendStatus(400)
-    }
-
-    const [result, resultCode] = await digestAuthRequestAsync({
-        method: "GET",
-        url: request.body.url,
-        username: request.body.login,
-        password: request.body.password,
-    })
-
-    if (resultCode !== 200) {
-        return response.sendStatus(resultCode)
-    }
-
-    response.send(result)
-})
-
-app.post("/requests/post/form", async function (request, response) {
-    console.log(request.body)
-
-    if (!request.body || !request.body.url || !request.body.data) {
-        return response.sendStatus(400)
-    }
-
-    const [result, resultCode] = await digestAuthRequestAsync({
-        method: "POST",
-        url: request.body.url,
-        username: request.body.login,
-        password: request.body.password,
-        data: request.body.data,
-        contentType: "application/x-www-form-urlencoded",
-        retryCount: 1,
-        timeout: 5000,
-    })
-
-    if (resultCode !== 200) {
-        return response.sendStatus(resultCode)
-    }
-
-    response.send(result)
-})
-
-// *** Data ***
-
-app.post("/data", async function (request, response) {
-    console.log(request.body)
-    console.log(request.query)
-
-    if (!request.body || !request.query.key) {
-        return response.sendStatus(400)
-    }
-
-    dataBase.set(request.query.key as string, request.body)
-
-    response.send("ok")
-})
-
-app.get("/data", async function (request, response) {
-    console.log(request.query)
-
-    if (!request.query.key) {
-        return response.sendStatus(400)
-    }
-
-    const data = dataBase.get(request.query.key as string)
-    if (!data) {
-        return response.sendStatus(404)
-    }
-
-    response.send(data)
-})
-
-// *** Start ***
+app.post("/data", dataController.post)
+app.get("/data", dataController.get)
 
 app.listen(4000)
-console.log("Web server started successful")
+console.log("Web server started successfully")
