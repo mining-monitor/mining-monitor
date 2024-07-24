@@ -1,8 +1,12 @@
-import { digestAuthRequestAsync } from "./digestAuthRequest";
-import { Miner } from "../miner";
+import { digestAuthRequestAsync } from "./digestAuthRequest"
+import { Miner } from "../miner"
+import { jasminer as jasminerBase } from "../../../../../lib/miners/jasminer"
+import { minerRequestsSender } from "../minersRequestsSender"
+
+jasminerBase.setSender(minerRequestsSender)
 
 export const jasminer: Miner = {
-    name: "Jasminer",
+    ...jasminerBase,
     send: async (request: any): Promise<[string | null, number]> => {
         switch (request.action || "") {
             case "get":

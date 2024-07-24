@@ -3,6 +3,9 @@ import { authMiddleware } from "./lib/auth"
 import { staticController } from "./controllers/staticController"
 import { requestsController } from "./controllers/requestsController"
 import { dataController } from "./controllers/dataController"
+import { minerInfosUpdaterScheduler } from "./schedulers/minerInfosUpdaterScheduler"
+
+setInterval(minerInfosUpdaterScheduler.work, 1000)
 
 const app = express()
 
@@ -17,8 +20,8 @@ app.get("/favicon.ico", staticController.favicon)
 
 app.post("/requests/send", requestsController.send)
 
-app.post("/data", dataController.post)
 app.get("/data", dataController.get)
+app.post("/data", dataController.post)
 
 app.listen(4000)
 console.log("Web server started successfully")
