@@ -3,7 +3,7 @@ import { miners } from "../lib/miners/miners"
 
 export const requestsController = {
     send: async (request: Request, response: Response) => {
-        console.log(request.body)
+        console.log("requestsController", "send", request.body)
 
         if (!request.body || !request.body.miner) {
             return response.sendStatus(400)

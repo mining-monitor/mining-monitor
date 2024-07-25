@@ -289,7 +289,7 @@ const digestAuthRequest = (method: string, url: string, username: string, passwo
     }
     self.log = function (str: string) {
         if (self.loggingOn) {
-            console.log('[digestAuthRequest] ' + str);
+            console.log('digestAuthRequest', str);
         }
     }
     self.version = function () { return '0.8.0' }

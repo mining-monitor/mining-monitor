@@ -3,8 +3,7 @@ import { dataBase } from "../lib/dataBase"
 
 export const dataController = {
     post: async (request: Request, response: Response) => {
-        console.log(request.body)
-        console.log(request.query)
+        console.log("dataController", "post", request.body, request.query)
 
         if (!request.body || !request.query.key) {
             return response.sendStatus(400)
@@ -16,7 +15,7 @@ export const dataController = {
     },
 
     get: async (request: Request, response: Response) => {
-        console.log(request.query)
+        console.log("dataController", "get", request.query)
 
         if (!request.query.key) {
             return response.sendStatus(400)

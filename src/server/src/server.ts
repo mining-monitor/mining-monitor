@@ -29,4 +29,4 @@ app.post("/data", dataController.post)
 app.get("/miners/info", minersController.getInfo)
 
 app.listen(4000)
-console.log("Web server started successfully")
+console.log("server", "Web server started successfully")

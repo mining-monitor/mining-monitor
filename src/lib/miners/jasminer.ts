@@ -98,7 +98,7 @@ export const jasminer: JasminerMiner = {
             `protocol=${data.protocol}`,
         ].join("&")
 
-        console.log(formData)
+        console.log("jasminer", "edit", formData)
 
         const [isOk, _] = await postForm(`http://${ip}/cgi-bin/set_pools.cgi`, login, password, formData)
         return isOk

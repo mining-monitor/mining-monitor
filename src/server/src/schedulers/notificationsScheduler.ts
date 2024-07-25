@@ -63,6 +63,8 @@ export const notificationsScheduler = {
 }
 
 const notify = async (ip: string, turnOffDate: Date, currentSettings: Settings) => {
+    console.log("notify", ip, turnOffDate)
+
     const miner = currentSettings.miners.find(x => x.ip === ip)!
 
     await telegram.send(

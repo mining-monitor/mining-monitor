@@ -23,7 +23,7 @@ const get = (key: string) => {
         const json = CryptoJS.AES.decrypt(encryptedJson, getSecretKey()).toString(CryptoJS.enc.Utf8)
         return JSON.parse(json)
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
