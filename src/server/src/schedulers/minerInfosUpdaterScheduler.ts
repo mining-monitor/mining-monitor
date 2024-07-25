@@ -39,9 +39,13 @@ const updateMinerInfo = async (minerSettings: MinerSettings) => {
     let minerInfo: MinerInfo | null = null
 
     for (let i = 0; i < 5; i++) {
-        minerInfo = await miners
-            .get(minerSettings.name)!
-            .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
+        try {
+            minerInfo = await miners
+                .get(minerSettings.name)!
+                .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
+        } catch (error) {
+            console.error(error)
+        }
 
         if (minerInfo !== null) {
             break
