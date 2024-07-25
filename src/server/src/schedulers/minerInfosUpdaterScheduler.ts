@@ -38,7 +38,7 @@ export const minerInfosUpdaterScheduler = {
 const updateMinerInfo = async (minerSettings: MinerSettings) => {
     let minerInfo: MinerInfo | null = null
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
         minerInfo = await miners
             .get(minerSettings.name)!
             .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
