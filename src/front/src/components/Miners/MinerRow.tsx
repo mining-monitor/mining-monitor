@@ -20,9 +20,13 @@ export const MinerRow = (props: Props) => {
         const interval = setInterval(() => load(), getLoadInterval())
 
         return () => clearInterval(interval)
-    }, [props.minerSettings])
+    }, [props.minerSettings, props.state])
 
     const load = async () => {
+        if (!props.state.autoUpdate) {
+            return
+        }
+
         const miner = miners.get(props.minerSettings.name)
         const minerInfo = await miner.getInfoFromCache(props.minerSettings.ip)
 

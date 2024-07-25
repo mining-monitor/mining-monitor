@@ -1,8 +1,13 @@
 import { auth } from "./auth"
 import { Settings, settingsKey } from "../../../lib/settings"
 
+export interface State {
+    autoUpdate: boolean,
+}
+
 export interface SettingsProps {
     settings: Settings,
+    state: State,
     onChangeSettings: (settings: Settings) => void,
 }
 

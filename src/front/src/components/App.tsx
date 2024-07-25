@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Master } from "./Master"
-import { SettingsContainer } from "../lib/settings";
+import { SettingsContainer, State } from "../lib/settings";
 import { Settings } from "../../../lib/settings"
 import { Miners } from "./Miners/Miners";
 import { Head } from "./Head";
@@ -8,6 +8,7 @@ import { Auth } from "./Auth/Auth";
 import { MinersSearch } from "./Miners/MinersSearch";
 import { Accordion } from "react-bootstrap";
 import { EdtiSettings } from "./Settings/EdtiSettings";
+import ActivityDetector from "./Common/ActivityDetector";
 
 export const App = () => {
   const [isAuth, setIsAuth] = React.useState(false)
@@ -21,6 +22,7 @@ export const App = () => {
 
 const Body = () => {
   const [settings, setSettings] = React.useState<Settings | null>(null)
+  const [state, setState] = React.useState<State | null>({ autoUpdate: true })
 
   React.useEffect(() => { loadSettings() }, [])
 
@@ -34,18 +36,29 @@ const Body = () => {
     setSettings(newSettings)
   }
 
+  const handleChangeAutoUpdate = (autoUpdate: boolean) => {
+    setState(x => x.autoUpdate !== autoUpdate ? { ...x, autoUpdate } : x)
+  }
+
   if (!settings) {
     return null
+  }
+
+  const settingsProps = {
+    settings,
+    state,
+    onChangeSettings: handleChangeSettings,
   }
 
   return (
     <Master>
       <Head />
+      <ActivityDetector onChange={handleChangeAutoUpdate} />
       <Accordion>
-        <EdtiSettings settings={settings} onChangeSettings={handleChangeSettings} index="0" />
-        <MinersSearch settings={settings} onChangeSettings={handleChangeSettings} index="1" />
+        <EdtiSettings {...settingsProps} index="0" />
+        <MinersSearch {...settingsProps} index="1" />
       </Accordion>
-      <Miners settings={settings} onChangeSettings={handleChangeSettings} />
+      <Miners {...settingsProps} />
     </Master>
   )
 }

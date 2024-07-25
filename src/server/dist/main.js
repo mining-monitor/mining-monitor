@@ -20504,6 +20504,7 @@ const Auth_1 = __webpack_require__(/*! ./Auth/Auth */ "./src/components/Auth/Aut
 const MinersSearch_1 = __webpack_require__(/*! ./Miners/MinersSearch */ "./src/components/Miners/MinersSearch.tsx");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 const EdtiSettings_1 = __webpack_require__(/*! ./Settings/EdtiSettings */ "./src/components/Settings/EdtiSettings.tsx");
+const ActivityDetector_1 = __webpack_require__(/*! ./Common/ActivityDetector */ "./src/components/Common/ActivityDetector.tsx");
 const App = () => {
     const [isAuth, setIsAuth] = React.useState(false);
     if (!isAuth) {
@@ -20514,6 +20515,7 @@ const App = () => {
 exports.App = App;
 const Body = () => {
     const [settings, setSettings] = React.useState(null);
+    const [state, setState] = React.useState({ autoUpdate: true });
     React.useEffect(() => { loadSettings(); }, []);
     const loadSettings = () => __awaiter(void 0, void 0, void 0, function* () {
         const newSettings = yield settings_1.SettingsContainer.get();
@@ -20523,15 +20525,24 @@ const Body = () => {
         yield settings_1.SettingsContainer.save(newSettings);
         setSettings(newSettings);
     });
+    const handleChangeAutoUpdate = (autoUpdate) => {
+        setState(x => x.autoUpdate !== autoUpdate ? Object.assign(Object.assign({}, x), { autoUpdate }) : x);
+    };
     if (!settings) {
         return null;
     }
+    const settingsProps = {
+        settings,
+        state,
+        onChangeSettings: handleChangeSettings,
+    };
     return (React.createElement(Master_1.Master, null,
         React.createElement(Head_1.Head, null),
+        React.createElement(ActivityDetector_1.default, { onChange: handleChangeAutoUpdate }),
         React.createElement(react_bootstrap_1.Accordion, null,
-            React.createElement(EdtiSettings_1.EdtiSettings, { settings: settings, onChangeSettings: handleChangeSettings, index: "0" }),
-            React.createElement(MinersSearch_1.MinersSearch, { settings: settings, onChangeSettings: handleChangeSettings, index: "1" })),
-        React.createElement(Miners_1.Miners, { settings: settings, onChangeSettings: handleChangeSettings })));
+            React.createElement(EdtiSettings_1.EdtiSettings, Object.assign({}, settingsProps, { index: "0" })),
+            React.createElement(MinersSearch_1.MinersSearch, Object.assign({}, settingsProps, { index: "1" }))),
+        React.createElement(Miners_1.Miners, Object.assign({}, settingsProps))));
 };
 
 
@@ -20638,6 +20649,73 @@ const Master = (props) => {
         React.createElement(react_bootstrap_1.Row, { className: "justify-content-md-center" },
             React.createElement(react_bootstrap_1.Col, { md: "auto", style: ({ width: 300 }) }, props.children))));
 };
+
+
+/***/ }),
+
+/***/ "./src/components/Common/ActivityDetector.tsx":
+/*!****************************************************!*\
+  !*** ./src/components/Common/ActivityDetector.tsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const React = __webpack_require__(/*! react */ "react");
+const activityEvents = [
+    "click",
+    "mousemove",
+    "keydown",
+    "DOMMouseScroll",
+    "mousewheel",
+    "mousedown",
+    "touchstart",
+    "touchmove",
+    "focus",
+];
+const timeout = 5 * 60 * 1000;
+let scheduledIdleTimeout = null;
+let activityEventInterval = null;
+const ActivityDetector = (props) => {
+    const [timeoutScheduled, setTimeoutScheduled] = React.useState(false);
+    React.useEffect(() => {
+        attachListeners();
+        setTimeoutScheduled(false);
+        return () => stop();
+    }, []);
+    React.useEffect(() => {
+        if (!timeoutScheduled) {
+            scheduleIdleHandler();
+        }
+        setTimeoutScheduled(true);
+    }, [timeoutScheduled]);
+    const scheduleIdleHandler = () => {
+        clearTimeout(scheduledIdleTimeout);
+        scheduledIdleTimeout = setTimeout(() => props.onChange(false), timeout);
+    };
+    const resetTimer = () => {
+        clearTimeout(activityEventInterval);
+        activityEventInterval = setTimeout(() => setTimeoutScheduled(false), 200);
+    };
+    const handleUserActivityEvent = () => {
+        resetTimer();
+        props.onChange(true);
+    };
+    const stop = () => {
+        detachListeners();
+        clearTimeout(scheduledIdleTimeout);
+        clearTimeout(activityEventInterval);
+    };
+    const attachListeners = () => {
+        activityEvents.forEach((eventName) => window.addEventListener(eventName, handleUserActivityEvent));
+    };
+    const detachListeners = () => {
+        activityEvents.forEach((eventName) => window.removeEventListener(eventName, handleUserActivityEvent));
+    };
+    return timeoutScheduled;
+};
+exports["default"] = ActivityDetector;
 
 
 /***/ }),
@@ -20889,8 +20967,11 @@ const MinerRow = (props) => {
         load();
         const interval = setInterval(() => load(), getLoadInterval());
         return () => clearInterval(interval);
-    }, [props.minerSettings]);
+    }, [props.minerSettings, props.state]);
     const load = () => __awaiter(void 0, void 0, void 0, function* () {
+        if (!props.state.autoUpdate) {
+            return;
+        }
         const miner = miners_1.miners.get(props.minerSettings.name);
         const minerInfo = yield miner.getInfoFromCache(props.minerSettings.ip);
         props.updateMinerInfo(props.minerSettings.ip, minerInfo);
