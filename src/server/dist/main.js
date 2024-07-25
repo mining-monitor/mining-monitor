@@ -20883,36 +20883,17 @@ exports.MinerRow = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 const miners_1 = __webpack_require__(/*! ../../lib/miners/miners */ "./src/lib/miners/miners.ts");
-const utils_1 = __webpack_require__(/*! ../../lib/utils */ "./src/lib/utils.ts");
 const MinerRow = (props) => {
     var _a, _b, _c, _d, _e, _f;
-    const [loadState, setLoadState] = React.useState("Loading");
     React.useEffect(() => {
         load();
         const interval = setInterval(() => load(), getLoadInterval());
-        return () => {
-            clearInterval(interval);
-            setLoadState("Loading");
-        };
+        return () => clearInterval(interval);
     }, [props.minerSettings]);
     const load = () => __awaiter(void 0, void 0, void 0, function* () {
-        setLoadState("Loading");
-        try {
-            let minerInfo = null;
-            for (let i = 0; i < 5; i++) {
-                const miner = miners_1.miners.get(props.minerSettings.name);
-                minerInfo = yield miner.getInfo(props.minerSettings.ip, props.minerSettings.credentials.login, props.minerSettings.credentials.password);
-                if (minerInfo !== null) {
-                    break;
-                }
-                yield (0, utils_1.sleep)(500);
-            }
-            props.updateMinerInfo(props.minerSettings.ip, minerInfo);
-        }
-        catch (error) {
-            console.error(error);
-        }
-        setLoadState("None");
+        const miner = miners_1.miners.get(props.minerSettings.name);
+        const minerInfo = yield miner.getInfoFromCache(props.minerSettings.ip);
+        props.updateMinerInfo(props.minerSettings.ip, minerInfo);
     });
     const handleDelete = (event) => {
         const newMiners = props.settings.miners.filter(x => x.ip !== props.minerSettings.ip);
@@ -20949,10 +20930,7 @@ const MinerRow = (props) => {
             props.minerInfo !== null && props.minerInfo.dagTime !== 100 && (React.createElement("span", { className: "text-warning", title: "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430 DAG \u0444\u0430\u0439\u043B\u0430" },
                 props.minerInfo.dagTime,
                 "%")),
-            props.minerInfo === null && loadState === "None" && (React.createElement("span", { className: "text-danger" }, "\u041D\u0435 \u0432 \u0441\u0435\u0442\u0438")),
-            props.minerInfo === null && loadState === "Loading" && (React.createElement("span", { className: "text-secondary" }, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...")),
-            loadState === "None" && (React.createElement("i", { className: "bi bi-check-lg" })),
-            loadState === "Loading" && (React.createElement("i", { className: "bi bi-hourglass-split" }))),
+            props.minerInfo === null && (React.createElement("span", { className: "text-danger" }, "\u041D\u0435 \u0432 \u0441\u0435\u0442\u0438"))),
         React.createElement("td", { className: "text-nowrap" }, (_c = props.minerInfo) === null || _c === void 0 ? void 0 : _c.currentHash),
         React.createElement("td", { className: "text-nowrap" }, (_d = props.minerInfo) === null || _d === void 0 ? void 0 : _d.avgHash),
         React.createElement("td", { className: "text-nowrap" }, (_e = props.minerInfo) === null || _e === void 0 ? void 0 : _e.temp),
@@ -21374,16 +21352,34 @@ const formatValue = (value) => value < 10 ? `0${value}` : value.toString();
 /*!************************************!*\
   !*** ./src/lib/miners/jasminer.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.jasminer = void 0;
 const jasminer_1 = __webpack_require__(/*! ../../../../lib/miners/jasminer */ "../lib/miners/jasminer.ts");
 const minersRequestsSender_1 = __webpack_require__(/*! ./minersRequestsSender */ "./src/lib/miners/minersRequestsSender.ts");
+const auth_1 = __webpack_require__(/*! ../auth */ "./src/lib/auth.ts");
 jasminer_1.jasminer.setSender(minersRequestsSender_1.minerRequestsSender);
-exports.jasminer = Object.assign({}, jasminer_1.jasminer);
+exports.jasminer = Object.assign(Object.assign({}, jasminer_1.jasminer), { getInfoFromCache: (ip) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield fetch(`/miners/info?ip=${ip}`, {
+            headers: Object.assign({}, auth_1.auth.getAuthorization()),
+        });
+        if (!result.ok) {
+            return null;
+        }
+        return yield result.json();
+    }) });
 
 
 /***/ }),
@@ -21541,13 +21537,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsContainer = void 0;
 const auth_1 = __webpack_require__(/*! ./auth */ "./src/lib/auth.ts");
-const settingsKey = "settings";
+const settings_1 = __webpack_require__(/*! ../../../lib/settings */ "../lib/settings.ts");
 const defaultSettings = { miners: [], notifications: {} };
 exports.SettingsContainer = {
-    save: (settings) => __awaiter(void 0, void 0, void 0, function* () { return yield set(settingsKey, settings); }),
+    save: (settings) => __awaiter(void 0, void 0, void 0, function* () { return yield set(settings_1.settingsKey, settings); }),
     get: () => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const [isOk, settings] = yield get(settingsKey);
+            const [isOk, settings] = yield get(settings_1.settingsKey);
             if (!isOk) {
                 return Object.assign({}, defaultSettings);
             }
@@ -21764,6 +21760,21 @@ const postForm = (url, login, password, data) => __awaiter(void 0, void 0, void 
         data
     }, 5000);
 });
+
+
+/***/ }),
+
+/***/ "../lib/settings.ts":
+/*!**************************!*\
+  !*** ../lib/settings.ts ***!
+  \**************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.settingsKey = void 0;
+exports.settingsKey = "settings";
 
 
 /***/ }),

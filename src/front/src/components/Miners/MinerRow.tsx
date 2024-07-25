@@ -5,7 +5,6 @@ import { Button } from "react-bootstrap"
 import { MinerInfo } from "../../../../lib/miners/miner"
 import { miners } from "../../lib/miners/miners"
 import { Message } from "../Common/ToastMessage"
-import { sleep } from "../../lib/utils"
 
 interface Props extends SettingsProps {
     minerSettings: MinerSettings,
@@ -16,44 +15,18 @@ interface Props extends SettingsProps {
 }
 
 export const MinerRow = (props: Props) => {
-    const [loadState, setLoadState] = React.useState<"None" | "Loading">("Loading")
-
     React.useEffect(() => {
         load()
         const interval = setInterval(() => load(), getLoadInterval())
 
-        return () => {
-            clearInterval(interval)
-            setLoadState("Loading")
-        }
+        return () => clearInterval(interval)
     }, [props.minerSettings])
 
     const load = async () => {
-        setLoadState("Loading")
+        const miner = miners.get(props.minerSettings.name)
+        const minerInfo = await miner.getInfoFromCache(props.minerSettings.ip)
 
-        try {
-            let minerInfo: MinerInfo | null = null
-
-            for (let i = 0; i < 5; i++) {
-                const miner = miners.get(props.minerSettings.name)
-                minerInfo = await miner.getInfo(
-                    props.minerSettings.ip,
-                    props.minerSettings.credentials.login,
-                    props.minerSettings.credentials.password)
-
-                if (minerInfo !== null) {
-                    break
-                }
-
-                await sleep(500)
-            }
-
-            props.updateMinerInfo(props.minerSettings.ip, minerInfo)
-        } catch (error) {
-            console.error(error)
-        }
-
-        setLoadState("None")
+        props.updateMinerInfo(props.minerSettings.ip, minerInfo)
     }
 
     const handleDelete = (event: any) => {
@@ -102,10 +75,7 @@ export const MinerRow = (props: Props) => {
             <td className="text-nowrap">
                 {props.minerInfo !== null && props.minerInfo.dagTime === 100 && (<span className="text-success">В сети</span>)}
                 {props.minerInfo !== null && props.minerInfo.dagTime !== 100 && (<span className="text-warning" title="Загрузка DAG файла">{props.minerInfo.dagTime}%</span>)}
-                {props.minerInfo === null && loadState === "None" && (<span className="text-danger">Не в сети</span>)}
-                {props.minerInfo === null && loadState === "Loading" && (<span className="text-secondary">Загрузка...</span>)}
-                {loadState === "None" && (<i className="bi bi-check-lg"></i>)}
-                {loadState === "Loading" && (<i className="bi bi-hourglass-split"></i>)}
+                {props.minerInfo === null && (<span className="text-danger">Не в сети</span>)}
             </td>
             <td className="text-nowrap">
                 {props.minerInfo?.currentHash}

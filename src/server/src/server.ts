@@ -4,6 +4,7 @@ import { staticController } from "./controllers/staticController"
 import { requestsController } from "./controllers/requestsController"
 import { dataController } from "./controllers/dataController"
 import { minerInfosUpdaterScheduler } from "./schedulers/minerInfosUpdaterScheduler"
+import { minersController } from "./controllers/minersController"
 
 setInterval(minerInfosUpdaterScheduler.work, 1000)
 
@@ -22,6 +23,8 @@ app.post("/requests/send", requestsController.send)
 
 app.get("/data", dataController.get)
 app.post("/data", dataController.post)
+
+app.get("/miners/info", minersController.getInfo)
 
 app.listen(4000)
 console.log("Web server started successfully")

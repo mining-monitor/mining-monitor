@@ -119,7 +119,7 @@ const extractPoolMiner = (pools: any[]) => {
 }
 
 const get = async (url: string, login: string, password: string, isJson: boolean = true): Promise<[boolean, any]> => {
-    const [ok, result] = await currentSender.send({
+    const [ok, result] = await currentSender!.send({
         miner: jasminer.name,
         action: "get",
         url,
@@ -139,7 +139,7 @@ const get = async (url: string, login: string, password: string, isJson: boolean
 }
 
 const postForm = async (url: string, login: string, password: string, data: string): Promise<[boolean, string]> => {
-    return await currentSender.send({
+    return await currentSender!.send({
         miner: jasminer.name,
         action: "postForm",
         url,
