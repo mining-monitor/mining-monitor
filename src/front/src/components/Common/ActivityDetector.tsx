@@ -21,7 +21,7 @@ interface Props {
     onChange: (isActive: boolean) => void,
 }
 
-const ActivityDetector = (props: Props) => {
+export const ActivityDetector = (props: Props) => {
     const [timeoutScheduled, setTimeoutScheduled] = React.useState(false)
 
     React.useEffect(() => {
@@ -77,5 +77,3 @@ const ActivityDetector = (props: Props) => {
 
     return timeoutScheduled
 }
-
-export default ActivityDetector

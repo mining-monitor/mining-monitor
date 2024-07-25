@@ -20538,7 +20538,7 @@ const Body = () => {
     };
     return (React.createElement(Master_1.Master, null,
         React.createElement(Head_1.Head, null),
-        React.createElement(ActivityDetector_1.default, { onChange: handleChangeAutoUpdate }),
+        React.createElement(ActivityDetector_1.ActivityDetector, { onChange: handleChangeAutoUpdate }),
         React.createElement(react_bootstrap_1.Accordion, null,
             React.createElement(EdtiSettings_1.EdtiSettings, Object.assign({}, settingsProps, { index: "0" })),
             React.createElement(MinersSearch_1.MinersSearch, Object.assign({}, settingsProps, { index: "1" }))),
@@ -20662,6 +20662,7 @@ const Master = (props) => {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ActivityDetector = void 0;
 const React = __webpack_require__(/*! react */ "react");
 const activityEvents = [
     "click",
@@ -20715,7 +20716,7 @@ const ActivityDetector = (props) => {
     };
     return timeoutScheduled;
 };
-exports["default"] = ActivityDetector;
+exports.ActivityDetector = ActivityDetector;
 
 
 /***/ }),

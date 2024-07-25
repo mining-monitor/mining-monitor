@@ -8,7 +8,7 @@ import { Auth } from "./Auth/Auth";
 import { MinersSearch } from "./Miners/MinersSearch";
 import { Accordion } from "react-bootstrap";
 import { EdtiSettings } from "./Settings/EdtiSettings";
-import ActivityDetector from "./Common/ActivityDetector";
+import { ActivityDetector } from "./Common/ActivityDetector";
 
 export const App = () => {
   const [isAuth, setIsAuth] = React.useState(false)
