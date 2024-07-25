@@ -44,7 +44,6 @@ export const MinerRow = (props: Props) => {
             props.minerSettings.credentials.password)
 
         if (result) {
-            props.updateMinerInfo(props.minerSettings.ip, null)
             props.sendMessage({
                 head: "Перезагрузка майнера",
                 text: `Майнер ${props.minerSettings.ip} успешно перезагружен. В течении нескольких минут майнер должен появиться в сети`,
