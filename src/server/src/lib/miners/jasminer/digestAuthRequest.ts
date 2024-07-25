@@ -14,7 +14,6 @@ interface Request {
 }
 
 export const digestAuthRequestAsync = async (request: Request): Promise<[object | null, number]> => {
-    console.log(request)
     const getRequest = digestAuthRequest(
         request.method,
         request.url,

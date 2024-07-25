@@ -1,7 +1,7 @@
 import * as React from "react"
 import { SettingsProps } from "../../lib/settings"
 import { Form, InputGroup, Accordion } from "react-bootstrap"
-import { telegram } from "../../lib/telegram"
+import { telegram } from "../../../../lib/telegram"
 
 interface Props extends SettingsProps {
     index: string,

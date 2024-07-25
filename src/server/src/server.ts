@@ -5,8 +5,10 @@ import { requestsController } from "./controllers/requestsController"
 import { dataController } from "./controllers/dataController"
 import { minerInfosUpdaterScheduler } from "./schedulers/minerInfosUpdaterScheduler"
 import { minersController } from "./controllers/minersController"
+import { notificationsScheduler } from "./schedulers/notificationsScheduler"
 
 setInterval(minerInfosUpdaterScheduler.work, 1000)
+setInterval(notificationsScheduler.work, 10000)
 
 const app = express()
 

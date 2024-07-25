@@ -6,7 +6,6 @@ import { ToastMessage, Message } from "../Common/ToastMessage"
 import { MinerRow } from "./MinerRow"
 import { MinerInfo } from "../../../../lib/miners/miner"
 import { MinerEdit } from "./MinerEdit"
-import { Notifications } from "../Notifications/Notifications"
 
 interface Props extends SettingsProps {
 }
@@ -32,7 +31,6 @@ export const Miners = (props: Props) => {
         <>
             <ToastMessage message={message} />
             <MinerEdit minerSettings={edit} onClose={handleCloseEdit} />
-            <Notifications {...props} minerInfos={minerInfos} />
             <Table hover className="my-3">
                 <thead>
                     <tr>
