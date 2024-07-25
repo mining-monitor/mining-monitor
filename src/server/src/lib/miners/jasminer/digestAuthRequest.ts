@@ -12,7 +12,7 @@ interface Request {
     timeout?: number,
 }
 
-export const digestAuthRequestAsync = async (request: Request): Promise<[string | null, number]> => {
+export const digestAuthRequestAsync = async (request: Request): Promise<[object | null, number]> => {
     console.log(request)
     const getRequest = digestAuthRequest(
         request.method,
@@ -21,7 +21,7 @@ export const digestAuthRequestAsync = async (request: Request): Promise<[string 
         request.password,
         request.timeout)
 
-    let response: string | null = null
+    let response: object | null = null
     let responseCode: number | null = null
     const retryCount = request.retryCount || 5
 
@@ -29,7 +29,7 @@ export const digestAuthRequestAsync = async (request: Request): Promise<[string 
         response = null
         responseCode = null
 
-        getRequest.request((responseData: string | null) => {
+        getRequest.request((responseData: object | null) => {
             response = responseData
             responseCode = 200
         }, function (errorCode: number) {

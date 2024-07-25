@@ -7,7 +7,11 @@ export const minerRequestsSender: MinerRequestsSender = {
             .get(body.miner)!
             .send(body)
 
-        return [resultCode === 200, result || ""]
+        if (resultCode !== 200) {
+            return [false, ""]
+        }
+
+        return [true, JSON.stringify(result)]
     }
 }
 

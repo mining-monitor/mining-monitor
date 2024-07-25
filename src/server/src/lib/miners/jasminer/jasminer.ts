@@ -7,7 +7,7 @@ jasminerBase.setSender(minerRequestsSender)
 
 export const jasminer: Miner = {
     ...jasminerBase,
-    send: async (request: any): Promise<[string | null, number]> => {
+    send: async (request: any): Promise<[object | null, number]> => {
         switch (request.action || "") {
             case "get":
                 return await get(request)
@@ -21,7 +21,7 @@ export const jasminer: Miner = {
     },
 }
 
-const get = async (request: any): Promise<[string | null, number]> => {
+const get = async (request: any): Promise<[object | null, number]> => {
     if (!request.url) {
         return [null, 400]
     }
@@ -34,7 +34,7 @@ const get = async (request: any): Promise<[string | null, number]> => {
     })
 }
 
-const postForm = async (request: any): Promise<[string | null, number]> => {
+const postForm = async (request: any): Promise<[object | null, number]> => {
     if (!request.url || !request.data) {
         return [null, 400]
     }

@@ -127,5 +127,5 @@ export const MinerRow = (props: Props) => {
 }
 
 const getLoadInterval = () => {
-    return 9000 + Math.floor(Math.random() * 2000)
+    return 2500 + Math.floor(Math.random() * 1000)
 }

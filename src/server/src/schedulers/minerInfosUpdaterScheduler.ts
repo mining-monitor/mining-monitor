@@ -17,6 +17,7 @@ export const minerInfosUpdaterScheduler = {
             const id = setInterval(() => { updateMinerInfo(x) }, getUpdateInterval())
             schedulers.set(x.ip, id)
 
+            updateMinerInfo(x)
         })
 
         const ips = currentSettings.miners.map(x => x.ip)
@@ -36,8 +37,6 @@ const updateMinerInfo = async (minerSettings: MinerSettings) => {
     const minerInfo = await miners
         .get(minerSettings.name)!
         .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
-
-    console.log("updateMinerInfo", minerSettings, minerInfo)
 
     minerInfos.set(minerSettings.ip, minerInfo)
 }
