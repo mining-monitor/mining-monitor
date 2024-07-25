@@ -20680,6 +20680,7 @@ let scheduledIdleTimeout = null;
 let activityEventInterval = null;
 const ActivityDetector = (props) => {
     const [timeoutScheduled, setTimeoutScheduled] = React.useState(false);
+    const [isActive, setIsActive] = React.useState(true);
     React.useEffect(() => {
         attachListeners();
         setTimeoutScheduled(false);
@@ -20693,7 +20694,10 @@ const ActivityDetector = (props) => {
     }, [timeoutScheduled]);
     const scheduleIdleHandler = () => {
         clearTimeout(scheduledIdleTimeout);
-        scheduledIdleTimeout = setTimeout(() => props.onChange(false), timeout);
+        scheduledIdleTimeout = setTimeout(() => {
+            setIsActive(false);
+            props.onChange(false);
+        }, timeout);
     };
     const resetTimer = () => {
         clearTimeout(activityEventInterval);
@@ -20701,6 +20705,7 @@ const ActivityDetector = (props) => {
     };
     const handleUserActivityEvent = () => {
         resetTimer();
+        setIsActive(true);
         props.onChange(true);
     };
     const stop = () => {
@@ -20714,7 +20719,10 @@ const ActivityDetector = (props) => {
     const detachListeners = () => {
         activityEvents.forEach((eventName) => window.removeEventListener(eventName, handleUserActivityEvent));
     };
-    return timeoutScheduled;
+    if (isActive) {
+        return null;
+    }
+    return (React.createElement("div", { className: "fixed-top bg-secondary opacity-50", style: { height: "100%" } }));
 };
 exports.ActivityDetector = ActivityDetector;
 

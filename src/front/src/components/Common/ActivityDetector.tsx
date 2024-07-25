@@ -23,6 +23,7 @@ interface Props {
 
 export const ActivityDetector = (props: Props) => {
     const [timeoutScheduled, setTimeoutScheduled] = React.useState(false)
+    const [isActive, setIsActive] = React.useState(true)
 
     React.useEffect(() => {
         attachListeners()
@@ -41,8 +42,11 @@ export const ActivityDetector = (props: Props) => {
 
     const scheduleIdleHandler = () => {
         clearTimeout(scheduledIdleTimeout)
-        
-        scheduledIdleTimeout = setTimeout(() => props.onChange(false), timeout)
+
+        scheduledIdleTimeout = setTimeout(() => {
+            setIsActive(false)
+            props.onChange(false)
+        }, timeout)
     }
 
     const resetTimer = () => {
@@ -54,6 +58,7 @@ export const ActivityDetector = (props: Props) => {
     const handleUserActivityEvent = () => {
         resetTimer()
 
+        setIsActive(true)
         props.onChange(true)
     }
 
@@ -75,5 +80,11 @@ export const ActivityDetector = (props: Props) => {
         )
     }
 
-    return timeoutScheduled
+    if (isActive) {
+        return null
+    }
+
+    return (
+        <div className="fixed-top bg-secondary opacity-50" style={{ height: "100%" }}></div>
+    )
 }
