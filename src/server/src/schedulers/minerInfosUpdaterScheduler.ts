@@ -37,6 +37,8 @@ const updateMinerInfo = async (minerSettings: MinerSettings) => {
         .get(minerSettings.name)!
         .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
 
+    console.log("updateMinerInfo", minerSettings, minerInfo)
+
     minerInfos.set(minerSettings.ip, minerInfo)
 }
 
