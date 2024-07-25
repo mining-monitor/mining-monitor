@@ -1,5 +1,6 @@
 import * as CryptoJS from "crypto-js"
 import { XMLHttpRequest } from "xmlhttprequest-ts"
+import { sleep } from "../../utils"
 
 interface Request {
     method: string,
@@ -295,8 +296,4 @@ const digestAuthRequest = (method: string, url: string, username: string, passwo
     self.version = function () { return '0.8.0' }
 
     return self
-}
-
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }

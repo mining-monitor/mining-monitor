@@ -1,7 +1,9 @@
+import { MinerInfo } from "../../../lib/miners/miner"
 import { MinerSettings } from "../../../lib/settings"
 import { minerInfos } from "../lib/miners/minerInfos"
 import { miners } from "../lib/miners/miners"
 import { settings } from "../lib/settings"
+import { sleep } from "../lib/utils"
 
 const schedulers = new Map<string, NodeJS.Timeout>()
 
@@ -34,9 +36,19 @@ export const minerInfosUpdaterScheduler = {
 }
 
 const updateMinerInfo = async (minerSettings: MinerSettings) => {
-    const minerInfo = await miners
-        .get(minerSettings.name)!
-        .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
+    let minerInfo: MinerInfo | null = null
+
+    for (let i = 0; i < 3; i++) {
+        minerInfo = await miners
+            .get(minerSettings.name)!
+            .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
+
+        if (minerInfo !== null) {
+            break
+        }
+
+        await sleep(500)
+    }
 
     minerInfos.set(minerSettings.ip, minerInfo)
 }
