@@ -1,8 +1,11 @@
 import { jasminer } from "./jasminer";
 import { Miner as MinerBase, MinerInfo } from "../../../../lib/miners/miner";
 
-export interface Miner extends MinerBase {
+export interface MinerCommon {
     getInfoFromCache: (ip: string) => Promise<MinerInfo | null>,
+}
+
+export interface Miner extends MinerBase, MinerCommon {
 }
 
 export const miners: Map<string, Miner> = new Map<string, Miner>([
