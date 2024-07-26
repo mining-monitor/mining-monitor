@@ -75,6 +75,11 @@ export const authController = {
 export const authMiddleware = async (request: Request, response: Response, next: () => void) => {
     console.log("authMiddleware", request.url)
 
+    if (request.path.startsWith("/auth/")) {
+        next()
+        return
+    }
+
     const isAuth = await checkAuthorization(request.headers.authorization)
     console.log("authMiddleware", "checkAuthorization", isAuth)
 
