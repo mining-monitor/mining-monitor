@@ -28,14 +28,24 @@ export const proxy: Proxy = {
         if (!isConnected()) {
             return
         }
+
+        socket!.on(`/get${url}`, (body: any, callback: (result: any) => void) => {
+            console.log(url, body)
+            callback({ result: "reseived get" })
+        })
     },
     post: async (url: string, action: (request: Request, response: Response) => any) => {
         if (!isConnected()) {
             return
         }
+
+        socket!.on(`/post${url}`, (body: any, callback: (result: any) => void) => {
+            console.log(url, body)
+            callback({ result: "reseived post" })
+        })
     },
 }
 
 const isConnected = () => {
-    return socket !== null && socket.connected
+    return socket !== null
 }
