@@ -27,7 +27,7 @@ export const authController = {
         successAccess(response)
     },
     check: async (request: Request, response: Response) => {
-        const isAuth = await checkAuthorization(request.headers.authorization)
+        const isAuth = await checkAuthorization(request.headers.authorization, "/data")
         console.log("authController", "checkAuthorization", isAuth)
 
         if (!isAuth) {
@@ -75,12 +75,7 @@ export const authController = {
 export const authMiddleware = async (request: Request, response: Response, next: () => void) => {
     console.log("authMiddleware", request.url)
 
-    if (request.path.startsWith("/auth/")) {
-        next()
-        return
-    }
-
-    const isAuth = await checkAuthorization(request.headers.authorization)
+    const isAuth = await checkAuthorization(request.headers.authorization, request.path)
     console.log("authMiddleware", "checkAuthorization", isAuth)
 
     if (!isAuth) {
@@ -121,7 +116,11 @@ const hasAuthorization = async () => {
     return !!loginCache
 }
 
-const checkAuthorization = async (authorization?: string) => {
+const checkAuthorization = async (authorization?: string, url?: string) => {
+    if (isNotAuthUrl(url!)) {
+        return true
+    }
+
     if (!authorization) {
         return false
     }
@@ -139,6 +138,28 @@ const checkAuthorization = async (authorization?: string) => {
         console.error(error)
         return false
     }
+}
+
+const notAuthUrls = [
+    "/",
+    "/favicon.ico",
+    "/main.js",
+    "/update.js"
+]
+const isNotAuthUrl = (url: string) => {
+    if (!url) {
+        throw new Error("Url is empty")
+    }
+
+    if (url.startsWith("/auth/")) {
+        return true
+    }
+
+    if (notAuthUrls.includes(url)) {
+        return true
+    }
+
+    return false
 }
 
 const login = async (data: string): Promise<[boolean, string | null]> => {
@@ -224,4 +245,9 @@ const saveAccount = async (account: Account) => {
 
 const removeAccount = async () => {
     await dataBase.clear()
+}
+
+export const auth = {
+    checkAuthorization,
+    accessDenied,
 }
