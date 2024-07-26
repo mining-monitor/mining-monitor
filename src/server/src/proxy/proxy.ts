@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { io, Socket } from "socket.io-client"
 import * as fs from "fs"
+import { WebSocketResponse } from "./response"
 
 export interface Proxy {
     connect: () => void,
@@ -29,9 +30,13 @@ export const proxy: Proxy = {
             return
         }
 
-        socket!.on(`/get${url}`, (body: any, callback: (result: any) => void) => {
-            console.log(url, body)
-            callback({ result: "reseived get" })
+        socket!.on(`/get${url}`, (headers: any, query: any, callback: (result: any) => void) => {
+            console.log("proxy", "get", url, query)
+
+            const response = new WebSocketResponse()
+            action({ headers, query } as Request, (response as any) as Response)
+
+            callback(response.get())
         })
     },
     post: async (url: string, action: (request: Request, response: Response) => any) => {
@@ -39,9 +44,13 @@ export const proxy: Proxy = {
             return
         }
 
-        socket!.on(`/post${url}`, (body: any, callback: (result: any) => void) => {
-            console.log(url, body)
-            callback({ result: "reseived post" })
+        socket!.on(`/post${url}`, (headers: any, query: any, body: any, callback: (result: any) => void) => {
+            console.log("proxy", "post", url, query, body)
+
+            const response = new WebSocketResponse()
+            action({ headers, query, body } as Request, (response as any) as Response)
+
+            callback(response.get())
         })
     },
 }
