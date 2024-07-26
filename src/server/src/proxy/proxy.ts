@@ -25,6 +25,10 @@ export const proxy: Proxy = {
         socket.on("connect", () => {
             console.log("proxy", `successfully connect to proxy server ${proxyServer}`);
         })
+
+        socket.on("disconnect", () => {
+            console.log("proxy", `disconnected from proxy server ${proxyServer}`);
+        })
     },
     get: async (url: string, action: (request: Request, response: Response) => Promise<any>) => {
         if (!isConnected()) {
