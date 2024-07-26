@@ -25,30 +25,30 @@ export const proxy: Proxy = {
             console.log(`Successfully connect to proxy server ${proxyServer}`);
         })
     },
-    get: async (url: string, action: (request: Request, response: Response) => any) => {
+    get: async (url: string, action: (request: Request, response: Response) => Promise<any>) => {
         if (!isConnected()) {
             return
         }
 
-        socket!.on(`/get${url}`, (headers: any, query: any, callback: (result: any) => void) => {
+        socket!.on(`/get${url}`, async (headers: any, query: any, callback: (result: any) => void) => {
             console.log("proxy", "get", url, query)
 
             const response = new WebSocketResponse()
-            action({ headers, query } as Request, (response as any) as Response)
+            await action({ headers, query } as Request, (response as any) as Response)
 
             callback(response.get())
         })
     },
-    post: async (url: string, action: (request: Request, response: Response) => any) => {
+    post: async (url: string, action: (request: Request, response: Response) => Promise<any>) => {
         if (!isConnected()) {
             return
         }
 
-        socket!.on(`/post${url}`, (headers: any, query: any, body: any, callback: (result: any) => void) => {
+        socket!.on(`/post${url}`, async (headers: any, query: any, body: any, callback: (result: any) => void) => {
             console.log("proxy", "post", url, query, body)
 
             const response = new WebSocketResponse()
-            action({ headers, query, body } as Request, (response as any) as Response)
+            await action({ headers, query, body } as Request, (response as any) as Response)
 
             callback(response.get())
         })

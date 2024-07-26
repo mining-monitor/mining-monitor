@@ -1,18 +1,46 @@
 import * as fs from "fs"
 
 export class WebSocketResponse {
-    private file: Buffer | null = null
-    private response: object | string | null = null
-    private code: number | null = null
+    private headers: any = {}
+    private code: number = 200
+    private response: Buffer | object | string = ""
 
     public sendFile(fileName: string) {
         fileName = fileName.replace("/src/controllers/", "/")
-        this.file = fs.readFileSync(fileName)
+        this.response = fs.readFileSync(fileName)
+        
+        return this
+    }
+
+    public status(code: number) {
+        this.code = code
+        
+        return this
+    }
+
+    public sendStatus(code: number) {
+        this.code = code
+        
+        return this
+    }
+
+    public send(response: object | string) {
+        this.response = response
+        
+        return this
+    }
+
+    public header(name: string, value: string) {
+        this.headers[name] = value
+        
+        return this
     }
 
     public get(): any {
-        if (this.file) {
-            return this.file
+        return {
+            headers: this.headers,
+            code: this.code,
+            response: this.response,
         }
     }
 }

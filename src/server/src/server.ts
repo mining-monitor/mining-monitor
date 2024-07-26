@@ -1,5 +1,5 @@
 import express from "express"
-import { authMiddleware } from "./lib/auth"
+import { authController, authMiddleware } from "./lib/auth"
 import { staticController } from "./controllers/staticController"
 import { requestsController } from "./controllers/requestsController"
 import { dataController } from "./controllers/dataController"
@@ -31,6 +31,12 @@ serverConfig.get("/data", dataController.get)
 serverConfig.post("/data", dataController.post)
 
 serverConfig.get("/miners/info", minersController.getInfo)
+
+serverConfig.post("/auth/has", authController.has)
+serverConfig.post("/auth/check", authController.check)
+serverConfig.post("/auth/login", authController.login)
+serverConfig.post("/auth/register", authController.register)
+serverConfig.post("/auth/remove", authController.remove)
 
 app.listen(4000)
 console.log("server", "Web server started successfully")

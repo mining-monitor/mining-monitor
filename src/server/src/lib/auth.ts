@@ -14,12 +14,10 @@ let loginCache: string | null = null
 const accountKey = "account"
 const secretKey = "secret-key"
 
-export const authMiddleware = async (request: Request, response: Response, next: () => void) => {
-    console.log("authMiddleware", request.url)
-
-    if (request.url === "/auth/has") {
+export const authController = {
+    has: async (_: Request, response: Response) => {
         const hasAuth = await hasAuthorization()
-        console.log("authMiddleware", "hasAuthorization", hasAuth)
+        console.log("authController", "hasAuthorization", hasAuth)
 
         if (!hasAuth) {
             accessDenied(response)
@@ -27,12 +25,10 @@ export const authMiddleware = async (request: Request, response: Response, next:
         }
 
         successAccess(response)
-        return
-    }
-
-    if (request.url === "/auth/check") {
+    },
+    check: async (request: Request, response: Response) => {
         const isAuth = await checkAuthorization(request.headers.authorization)
-        console.log("authMiddleware", "checkAuthorization", isAuth)
+        console.log("authController", "checkAuthorization", isAuth)
 
         if (!isAuth) {
             accessDenied(response)
@@ -40,12 +36,10 @@ export const authMiddleware = async (request: Request, response: Response, next:
         }
 
         successAccess(response)
-        return
-    }
-
-    if (request.url === "/auth/login") {
+    },
+    login: async (request: Request, response: Response) => {
         const [isLogin, token] = await login(request.headers.login as string)
-        console.log("authMiddleware", "login", isLogin)
+        console.log("authController", "login", isLogin)
 
         if (!isLogin) {
             accessDenied(response)
@@ -53,12 +47,10 @@ export const authMiddleware = async (request: Request, response: Response, next:
         }
 
         successLogin(response, token!)
-        return
-    }
-
-    if (request.url === "/auth/register") {
+    },
+    register: async (request: Request, response: Response) => {
         const [isRegister, token] = await register(request.headers.register as string)
-        console.log("authMiddleware", "register", isRegister)
+        console.log("authController", "register", isRegister)
 
         if (!isRegister) {
             accessDenied(response)
@@ -66,12 +58,10 @@ export const authMiddleware = async (request: Request, response: Response, next:
         }
 
         successLogin(response, token!)
-        return
-    }
-
-    if (request.url === "/auth/remove") {
+    },
+    remove: async (_: Request, response: Response) => {
         const isRemove = await remove()
-        console.log("authMiddleware", "remove", isRemove)
+        console.log("authController", "remove", isRemove)
 
         if (!isRemove) {
             accessDenied(response)
@@ -79,8 +69,11 @@ export const authMiddleware = async (request: Request, response: Response, next:
         }
 
         successAccess(response)
-        return
-    }
+    },
+}
+
+export const authMiddleware = async (request: Request, response: Response, next: () => void) => {
+    console.log("authMiddleware", request.url)
 
     const isAuth = await checkAuthorization(request.headers.authorization)
     console.log("authMiddleware", "checkAuthorization", isAuth)
