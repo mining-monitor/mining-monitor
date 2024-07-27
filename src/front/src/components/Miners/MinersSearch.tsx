@@ -56,7 +56,7 @@ export const MinersSearch = (props: Props) => {
                 <Form>
                     <Form.Group className="mb-3" controlId="login-and-password">
                         <InputGroup className="mb-3">
-                            <InputGroup.Text>Авторизация на майнере</InputGroup.Text>
+                            <InputGroup.Text>Авторизация<span className="d-none d-lg-inline"> на майнере</span></InputGroup.Text>
                             <Form.Control
                                 type="text"
                                 name="login"
@@ -76,7 +76,10 @@ export const MinersSearch = (props: Props) => {
 
                     <Form.Group className="mb-3" controlId="ip">
                         <InputGroup className="mb-3">
-                            <InputGroup.Text>Сканирование IP адресов</InputGroup.Text>
+                            <InputGroup.Text>
+                                <span className="d-inline d-lg-none">IP адреса</span>
+                                <span className="d-none d-lg-inline">Сканирование IP адресов</span>
+                            </InputGroup.Text>
                             <Form.Control
                                 type="text"
                                 name="ipStart"
@@ -96,7 +99,7 @@ export const MinersSearch = (props: Props) => {
 
                     <Form.Group className="mb-3" controlId="miner">
                         <InputGroup className="mb-3">
-                            <InputGroup.Text>Оборудование для поиска</InputGroup.Text>
+                            <InputGroup.Text>Оборудование<span className="d-none d-lg-inline"> для поиска</span></InputGroup.Text>
                             <Form.Select
                                 name="miner"
                                 value={search.miner}

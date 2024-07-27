@@ -128,7 +128,7 @@ export const MinerRow = (props: Props) => {
                 </td>
             </tr>
             <tr className="d-table-row d-lg-none">
-                <td colSpan={9}>
+                <td colSpan={9} className="p-0">
                     <Card className="mb-3">
                         <Card.Body>
                             <Card.Title>{props.minerSettings.ip}</Card.Title>
