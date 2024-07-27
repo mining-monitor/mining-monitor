@@ -7,7 +7,7 @@ import { minerInfosUpdaterScheduler } from "./schedulers/minerInfosUpdaterSchedu
 import { minersController } from "./controllers/minersController"
 import { notificationsScheduler } from "./schedulers/notificationsScheduler"
 import { proxy } from "./proxy/proxy"
-import { serverConfig } from "./serverConfig"
+import { serverConfig } from "./config/serverConfig"
 
 setInterval(minerInfosUpdaterScheduler.work, 1000)
 setInterval(notificationsScheduler.work, 10000)

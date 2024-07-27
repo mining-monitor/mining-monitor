@@ -1,5 +1,5 @@
 import { Express, Request, Response } from "express"
-import { Proxy } from "./proxy/proxy"
+import { Proxy } from "../proxy/proxy"
 
 let app: Express | null = null
 let proxy: Proxy | null = null
