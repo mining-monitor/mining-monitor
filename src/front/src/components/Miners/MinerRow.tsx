@@ -135,39 +135,39 @@ export const MinerRow = (props: Props) => {
                             <Card.Subtitle className="mb-3 text-muted">{props.minerSettings.miner}</Card.Subtitle>
                             <Card.Text>
                                 <div className="row">
-                                    <div className="col-4">Имя</div>
-                                    <div className="col-8">{props.minerInfo?.poolMiner}</div>
+                                    <div className="col-5">Имя</div>
+                                    <div className="col-7">{props.minerInfo?.poolMiner}</div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-4">Статус</div>
-                                    <div className="col-8">
+                                    <div className="col-5">Статус</div>
+                                    <div className="col-7">
                                         {props.minerInfo !== null && props.minerInfo.dagTime === 100 && (<span className="text-success">В сети</span>)}
                                         {props.minerInfo !== null && props.minerInfo.dagTime !== 100 && (<span className="text-warning" title="Загрузка DAG файла">{props.minerInfo.dagTime}%</span>)}
                                         {props.minerInfo === null && (<span className="text-danger">Не в сети</span>)}
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-4">Текущий хэш</div>
-                                    <div className="col-8">{props.minerInfo?.currentHash}</div>
+                                    <div className="col-5">Текущий хэш</div>
+                                    <div className="col-7">{props.minerInfo?.currentHash}</div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-4">Средний хэш</div>
-                                    <div className="col-8">{props.minerInfo?.avgHash}</div>
+                                    <div className="col-5">Средний хэш</div>
+                                    <div className="col-7">{props.minerInfo?.avgHash}</div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-4">Температура</div>
-                                    <div className="col-8">{props.minerInfo?.temp}</div>
+                                    <div className="col-5">Температура</div>
+                                    <div className="col-7">{props.minerInfo?.temp}</div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-4">Вентиляторы</div>
-                                    <div className="col-8">{props.minerInfo?.fanPercent}</div>
+                                    <div className="col-5">Вентиляторы</div>
+                                    <div className="col-7">{props.minerInfo?.fanPercent}</div>
                                 </div>
                                 <div className="mt-3">
                                     <Button
                                         variant="primary"
                                         size="sm"
                                         title="Удалить"
-                                        className="me-2"
+                                        className="me-2 mb-2"
                                         onClick={handleDelete}
                                     >
                                         <i className="bi bi-x-circle"></i> Удалить
@@ -178,7 +178,7 @@ export const MinerRow = (props: Props) => {
                                                 variant="primary"
                                                 size="sm"
                                                 title="Перезагрузить"
-                                                className="me-2"
+                                                className="me-2 mb-2"
                                                 onClick={handleReboot}
                                             >
                                                 <i className="bi bi-arrow-clockwise"></i> Перезагрузить
@@ -187,7 +187,7 @@ export const MinerRow = (props: Props) => {
                                                 variant="primary"
                                                 size="sm"
                                                 title="Настройка"
-                                                className="me-2"
+                                                className="me-2 mb-2"
                                                 onClick={handleEdit}
                                             >
                                                 <i className="bi bi-gear-fill"></i> Настройка

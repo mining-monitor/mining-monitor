@@ -197,14 +197,14 @@ export const MinerJasminerEdit = (props: Props) => {
                     </Form.Select>
                 </InputGroup>
             </Form.Group>
-            <div>
-                <Button variant="primary" className="me-3" onClick={handleSave} disabled={saving}>
+            <div className="d-none1 d-lg-block1">
+                <Button variant="primary" className="me-3 mb-3" onClick={handleSave} disabled={saving}>
                     Сохранить
                 </Button>
-                <Button variant="primary" className="me-3" onClick={handleSaveAndResetState} disabled={saving}>
+                <Button variant="primary" className="me-3 mb-3" onClick={handleSaveAndResetState} disabled={saving}>
                     Сохранить и перезагрузить
                 </Button>
-                <Button variant="secondary" className="me-3" onClick={handleClose} disabled={saving}>
+                <Button variant="secondary" className="me-3 mb-3" onClick={handleClose} disabled={saving}>
                     Закрыть
                 </Button>
             </div>
