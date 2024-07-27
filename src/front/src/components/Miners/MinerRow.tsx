@@ -1,7 +1,7 @@
 import * as React from "react"
 import { SettingsProps } from "../../lib/settings"
 import { MinerSettings } from "../../../../lib/settings"
-import { Button } from "react-bootstrap"
+import { Button, Card } from "react-bootstrap"
 import { MinerInfo } from "../../../../lib/miners/miner"
 import { miners } from "../../lib/miners/miners"
 import { Message } from "../Common/ToastMessage"
@@ -65,67 +65,142 @@ export const MinerRow = (props: Props) => {
     }
 
     return (
-        <tr key={props.minerSettings.ip}>
-            <td className="text-nowrap" title={props.minerInfo?.sn}>
-                {props.minerSettings.miner}
-            </td>
-            <td className="text-nowrap">
-                <a href={`http://${props.minerSettings.ip}`} target="_blank">{props.minerSettings.ip}</a>
-            </td>
-            <td className="text-nowrap">
-                {props.minerInfo?.poolMiner}
-            </td>
-            <td className="text-nowrap">
-                {props.minerInfo !== null && props.minerInfo.dagTime === 100 && (<span className="text-success">В сети</span>)}
-                {props.minerInfo !== null && props.minerInfo.dagTime !== 100 && (<span className="text-warning" title="Загрузка DAG файла">{props.minerInfo.dagTime}%</span>)}
-                {props.minerInfo === null && (<span className="text-danger">Не в сети</span>)}
-            </td>
-            <td className="text-nowrap">
-                {props.minerInfo?.currentHash}
-            </td>
-            <td className="text-nowrap">
-                {props.minerInfo?.avgHash}
-            </td>
-            <td className="text-nowrap">
-                {props.minerInfo?.temp}
-            </td>
-            <td className="text-nowrap">
-                {props.minerInfo?.fanPercent}
-            </td>
-            <td className="text-nowrap">
-                <Button
-                    variant="outline-primary"
-                    size="sm"
-                    className="border-0"
-                    title="Удалить"
-                    onClick={handleDelete}
-                >
-                    <i className="bi bi-x-circle"></i>
-                </Button>
-                {!!props.minerInfo && (
-                    <>
-                        <Button
-                            variant="outline-primary"
-                            size="sm"
-                            className="border-0"
-                            title="Перезагрузить"
-                            onClick={handleReboot}
-                        >
-                            <i className="bi bi-arrow-clockwise"></i>
-                        </Button>
-                        <Button
-                            variant="outline-primary"
-                            size="sm"
-                            className="border-0"
-                            title="Настройка"
-                            onClick={handleEdit}
-                        >
-                            <i className="bi bi-gear-fill"></i>
-                        </Button>
-                    </>
-                )}
-            </td>
-        </tr>
+        <>
+            <tr className="d-none d-lg-table-row">
+                <td className="text-nowrap" title={props.minerInfo?.sn}>
+                    {props.minerSettings.miner}
+                </td>
+                <td className="text-nowrap">
+                    <a href={`http://${props.minerSettings.ip}`} target="_blank">{props.minerSettings.ip}</a>
+                </td>
+                <td className="text-nowrap">
+                    {props.minerInfo?.poolMiner}
+                </td>
+                <td className="text-nowrap">
+                    {props.minerInfo !== null && props.minerInfo.dagTime === 100 && (<span className="text-success">В сети</span>)}
+                    {props.minerInfo !== null && props.minerInfo.dagTime !== 100 && (<span className="text-warning" title="Загрузка DAG файла">{props.minerInfo.dagTime}%</span>)}
+                    {props.minerInfo === null && (<span className="text-danger">Не в сети</span>)}
+                </td>
+                <td className="text-nowrap">
+                    {props.minerInfo?.currentHash}
+                </td>
+                <td className="text-nowrap">
+                    {props.minerInfo?.avgHash}
+                </td>
+                <td className="text-nowrap">
+                    {props.minerInfo?.temp}
+                </td>
+                <td className="text-nowrap">
+                    {props.minerInfo?.fanPercent}
+                </td>
+                <td className="text-nowrap">
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        className="border-0"
+                        title="Удалить"
+                        onClick={handleDelete}
+                    >
+                        <i className="bi bi-x-circle"></i>
+                    </Button>
+                    {!!props.minerInfo && (
+                        <>
+                            <Button
+                                variant="outline-primary"
+                                size="sm"
+                                className="border-0"
+                                title="Перезагрузить"
+                                onClick={handleReboot}
+                            >
+                                <i className="bi bi-arrow-clockwise"></i>
+                            </Button>
+                            <Button
+                                variant="outline-primary"
+                                size="sm"
+                                className="border-0"
+                                title="Настройка"
+                                onClick={handleEdit}
+                            >
+                                <i className="bi bi-gear-fill"></i>
+                            </Button>
+                        </>
+                    )}
+                </td>
+            </tr>
+            <tr className="d-table-row d-lg-none">
+                <td colSpan={9}>
+                    <Card className="mb-3">
+                        <Card.Body>
+                            <Card.Title>{props.minerSettings.ip}</Card.Title>
+                            <Card.Subtitle className="mb-3 text-muted">{props.minerSettings.miner}</Card.Subtitle>
+                            <Card.Text>
+                                <div className="row">
+                                    <div className="col-4">Имя</div>
+                                    <div className="col-8">{props.minerInfo?.poolMiner}</div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-4">Статус</div>
+                                    <div className="col-8">
+                                        {props.minerInfo !== null && props.minerInfo.dagTime === 100 && (<span className="text-success">В сети</span>)}
+                                        {props.minerInfo !== null && props.minerInfo.dagTime !== 100 && (<span className="text-warning" title="Загрузка DAG файла">{props.minerInfo.dagTime}%</span>)}
+                                        {props.minerInfo === null && (<span className="text-danger">Не в сети</span>)}
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-4">Текущий хэш</div>
+                                    <div className="col-8">{props.minerInfo?.currentHash}</div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-4">Средний хэш</div>
+                                    <div className="col-8">{props.minerInfo?.avgHash}</div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-4">Температура</div>
+                                    <div className="col-8">{props.minerInfo?.temp}</div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-4">Вентиляторы</div>
+                                    <div className="col-8">{props.minerInfo?.fanPercent}</div>
+                                </div>
+                                <div className="mt-3">
+                                    <Button
+                                        variant="primary"
+                                        size="sm"
+                                        title="Удалить"
+                                        className="me-2"
+                                        onClick={handleDelete}
+                                    >
+                                        <i className="bi bi-x-circle"></i> Удалить
+                                    </Button>
+                                    {!!props.minerInfo && (
+                                        <>
+                                            <Button
+                                                variant="primary"
+                                                size="sm"
+                                                title="Перезагрузить"
+                                                className="me-2"
+                                                onClick={handleReboot}
+                                            >
+                                                <i className="bi bi-arrow-clockwise"></i> Перезагрузить
+                                            </Button>
+                                            <Button
+                                                variant="primary"
+                                                size="sm"
+                                                title="Настройка"
+                                                className="me-2"
+                                                onClick={handleEdit}
+                                            >
+                                                <i className="bi bi-gear-fill"></i> Настройка
+                                            </Button>
+                                        </>
+                                    )}
+                                </div>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </td>
+            </tr>
+        </>
     )
 }
 

@@ -33,7 +33,7 @@ export const Miners = (props: Props) => {
             <MinerEdit minerSettings={edit} onClose={handleCloseEdit} />
             <Table hover className="my-3">
                 <thead>
-                    <tr>
+                    <tr className="d-none d-lg-table-row">
                         <th>Майнер</th>
                         <th>IP адрес</th>
                         <th>Имя</th>
