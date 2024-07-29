@@ -57,7 +57,7 @@ const send = async (
     action: (request: Request, response: Response) => Promise<any>,
     callback: (result: any) => void
 ) => {
-    console.log("proxy", method, url, request.query, request.body, request.headers.authorization)
+    console.log("proxy", method, url, request.query, request.body)
 
     const webSocketResponse = new WebSocketResponse()
     const response = (webSocketResponse as any) as Response
