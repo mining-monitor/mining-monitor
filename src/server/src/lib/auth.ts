@@ -2,6 +2,7 @@ import * as bcrypt from "bcrypt-ts"
 import * as jwt from "jsonwebtoken"
 import { Request, Response } from "express"
 import { dataBase } from "./dataBase"
+import { log } from "./log"
 
 interface Account {
     login: string,
@@ -17,7 +18,7 @@ const secretKey = "secret-key"
 export const authController = {
     has: async (_: Request, response: Response) => {
         const hasAuth = await hasAuthorization()
-        console.log("authController", "hasAuthorization", hasAuth)
+        log.debug("authController", "hasAuthorization", hasAuth)
 
         if (!hasAuth) {
             accessDenied(response)
@@ -28,7 +29,7 @@ export const authController = {
     },
     check: async (request: Request, response: Response) => {
         const isAuth = await checkAuthorization(request.headers.authorization, "/data")
-        console.log("authController", "checkAuthorization", isAuth)
+        log.debug("authController", "checkAuthorization", isAuth)
 
         if (!isAuth) {
             accessDenied(response)
@@ -39,7 +40,7 @@ export const authController = {
     },
     login: async (request: Request, response: Response) => {
         const [isLogin, token] = await login(request.headers.login as string)
-        console.log("authController", "login", isLogin)
+        log.debug("authController", "login", isLogin)
 
         if (!isLogin) {
             accessDenied(response)
@@ -50,7 +51,7 @@ export const authController = {
     },
     register: async (request: Request, response: Response) => {
         const [isRegister, token] = await register(request.headers.register as string)
-        console.log("authController", "register", isRegister)
+        log.debug("authController", "register", isRegister)
 
         if (!isRegister) {
             accessDenied(response)
@@ -61,7 +62,7 @@ export const authController = {
     },
     remove: async (_: Request, response: Response) => {
         const isRemove = await remove()
-        console.log("authController", "remove", isRemove)
+        log.debug("authController", "remove", isRemove)
 
         if (!isRemove) {
             accessDenied(response)
@@ -73,10 +74,10 @@ export const authController = {
 }
 
 export const authMiddleware = async (request: Request, response: Response, next: () => void) => {
-    console.log("authMiddleware", request.url)
+    log.debug("authMiddleware", request.url)
 
     const isAuth = await checkAuthorization(request.headers.authorization, request.path)
-    console.log("authMiddleware", "checkAuthorization", isAuth)
+    log.debug("authMiddleware", "checkAuthorization", isAuth)
 
     if (!isAuth) {
         accessDenied(response)

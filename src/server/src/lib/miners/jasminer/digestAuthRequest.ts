@@ -1,6 +1,7 @@
 import * as CryptoJS from "crypto-js"
 import { XMLHttpRequest } from "xmlhttprequest-ts"
 import { sleep } from "../../utils"
+import { log } from "../../log"
 
 interface Request {
     method: string,
@@ -289,7 +290,7 @@ const digestAuthRequest = (method: string, url: string, username: string, passwo
     }
     self.log = function (str: string) {
         if (self.loggingOn) {
-            console.log('digestAuthRequest', str);
+            log.debug('digestAuthRequest', str);
         }
     }
     self.version = function () { return '0.8.0' }

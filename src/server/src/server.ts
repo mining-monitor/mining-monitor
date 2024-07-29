@@ -8,6 +8,10 @@ import { minersController } from "./controllers/minersController"
 import { notificationsScheduler } from "./schedulers/notificationsScheduler"
 import { proxy } from "./proxy/proxy"
 import { serverConfig } from "./config/serverConfig"
+import { log } from "./lib/log"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 setInterval(minerInfosUpdaterScheduler.work, 1000)
 setInterval(notificationsScheduler.work, 10000)
@@ -39,4 +43,4 @@ serverConfig.post("/auth/register", authController.register)
 serverConfig.post("/auth/remove", authController.remove)
 
 app.listen(4000)
-console.log("server", "Web server started successfully")
+log.info("server", "Web server started successfully")

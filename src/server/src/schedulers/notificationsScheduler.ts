@@ -3,6 +3,7 @@ import { settings } from "../lib/settings"
 import { Settings } from "../../../lib/settings"
 import { telegram } from "../../../lib/telegram"
 import { date } from "../../../lib/date"
+import { log } from "../lib/log"
 
 interface NotificationData {
     turnOffDate: Date | null,
@@ -63,7 +64,7 @@ export const notificationsScheduler = {
 }
 
 const notify = async (ip: string, turnOffDate: Date, currentSettings: Settings) => {
-    console.log("notify", ip, turnOffDate)
+    log.info("notify", ip, turnOffDate)
 
     const miner = currentSettings.miners.find(x => x.ip === ip)!
 

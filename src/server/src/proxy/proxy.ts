@@ -3,6 +3,7 @@ import { io, Socket } from "socket.io-client"
 import * as fs from "fs"
 import { WebSocketResponse } from "./response"
 import { auth } from "../lib/auth"
+import { log } from "../lib/log"
 
 export interface Proxy {
     connect: () => void,
@@ -23,11 +24,11 @@ export const proxy: Proxy = {
         socket = io(proxyServer)
 
         socket.on("connect", () => {
-            console.log("proxy", `successfully connect to proxy server ${proxyServer}`);
+            log.info("proxy", `successfully connect to proxy server ${proxyServer}`);
         })
 
         socket.on("disconnect", () => {
-            console.log("proxy", `disconnected from proxy server ${proxyServer}`);
+            log.info("proxy", `disconnected from proxy server ${proxyServer}`);
         })
     },
     get: async (url: string, action: (request: Request, response: Response) => Promise<any>) => {
@@ -57,14 +58,14 @@ const send = async (
     action: (request: Request, response: Response) => Promise<any>,
     callback: (result: any) => void
 ) => {
-    console.log("proxy", method, url, request.query, request.body)
+    log.debug("proxy", method, url, request.query, request.body)
 
     const webSocketResponse = new WebSocketResponse()
     const response = (webSocketResponse as any) as Response
 
     const hasAccess = await auth.checkAuthorization(request.headers.authorization, url)
     if (!hasAccess) {
-        console.log("proxy", method, url, "access denied")
+        log.debug("proxy", method, url, "access denied")
         auth.accessDenied(response)
     } else {
         await action({ ...request, path: url } as Request, response)

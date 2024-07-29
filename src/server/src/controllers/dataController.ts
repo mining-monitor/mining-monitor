@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
 import { dataBase } from "../lib/dataBase"
+import { log } from "../lib/log"
 
 export const dataController = {
     post: async (request: Request, response: Response) => {
-        console.log("dataController", "post", request.body, request.query)
+        log.debug("dataController", "post", request.body, request.query)
 
         if (!request.body || !request.query.key) {
             return response.sendStatus(400)
@@ -15,7 +16,7 @@ export const dataController = {
     },
 
     get: async (request: Request, response: Response) => {
-        console.log("dataController", "get", request.query)
+        log.debug("dataController", "get", request.query)
 
         if (!request.query.key) {
             return response.sendStatus(400)

@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
 import { minerInfos } from "../lib/miners/minerInfos"
+import { log } from "../lib/log"
 
 export const minersController = {
     getInfo: async (request: Request, response: Response) => {
-        console.log("minersController", "getInfo", request.query)
+        log.debug("minersController", "getInfo", request.query)
 
         if (!request.query.ip) {
             return response.sendStatus(400)

@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
 import { miners } from "../lib/miners/miners"
+import { log } from "../lib/log"
 
 export const requestsController = {
     send: async (request: Request, response: Response) => {
-        console.log("requestsController", "send", request.body)
+        log.debug("requestsController", "send", request.body)
 
         if (!request.body || !request.body.miner) {
             return response.sendStatus(400)
