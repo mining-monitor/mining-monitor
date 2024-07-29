@@ -6,6 +6,10 @@ const end = "\""
 const checkVersion = async () => {
     const result = await fetch(`/?v=${new Date().getTime()}`)
     const html = await result.text()
+   
+    if (!result.ok || html.indexOf(start) === -1) {
+        return
+    }
 
     let newMainJsVersion = html.substring(html.indexOf(start) + start.length)
     newMainJsVersion = newMainJsVersion.substring(0, newMainJsVersion.indexOf(end))
