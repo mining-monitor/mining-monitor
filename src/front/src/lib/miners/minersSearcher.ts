@@ -10,11 +10,19 @@ interface Search {
 }
 
 export const minersSearcher = {
-    search: async (search: Search, skip: string[]): Promise<MinerSettings[]> => {
+    search: async (search: Search, skip: string[], onProgress: (current: number, total: number) => void): Promise<MinerSettings[]> => {
         const miner = miners.get(search.miner)
         const newMiners: MinerSettings[] = []
 
-        for (const ip of getIps(search.ipStart, search.ipEnd, skip)) {
+        if (!miner) {
+            throw new Error("Майнер не выбран")
+        }
+
+        const ips = getIps(search.ipStart, search.ipEnd, skip)
+        let index = 0
+        for (const ip of ips) {
+            onProgress(index++, ips.length)
+
             const minerInfo = await getMinerInfo(miner, ip, search)
             if (!minerInfo) {
                 continue

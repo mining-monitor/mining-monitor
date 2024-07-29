@@ -21163,15 +21163,19 @@ const MinersSearch = (props) => {
     const [search, setSearch] = React.useState({ login: "", password: "", ipStart: "", ipEnd: "", miner: "" });
     const [searchState, setSearchState] = React.useState("None");
     const [searchResultState, setSearchResultState] = React.useState("None");
+    const [searchProgress, setSearchProgress] = React.useState(-1);
     const handleChange = (x) => {
         setSearch(Object.assign(Object.assign({}, search), { [x.target.name]: x.target.value }));
+    };
+    const handleProgress = (current, total) => {
+        setSearchProgress(Math.floor(current / total * 100));
     };
     const handleSearch = () => __awaiter(void 0, void 0, void 0, function* () {
         setSearchState("Searching");
         setSearchResultState("None");
         try {
             const skip = props.settings.miners.map(x => x.ip);
-            const miners = yield minersSearcher_1.minersSearcher.search(search, skip);
+            const miners = yield minersSearcher_1.minersSearcher.search(search, skip, handleProgress);
             const newMiners = [...props.settings.miners, ...miners];
             newMiners.sort(compareMiners);
             props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { miners: [...newMiners] }));
@@ -21181,6 +21185,7 @@ const MinersSearch = (props) => {
             setSearchResultState("Error");
         }
         setSearchState("None");
+        setSearchProgress(-1);
     });
     return (React.createElement(react_bootstrap_1.Accordion.Item, { eventKey: props.index },
         React.createElement(react_bootstrap_1.Accordion.Header, null,
@@ -21217,7 +21222,8 @@ const MinersSearch = (props) => {
                         React.createElement("div", { className: "my-2 text-end" },
                             "\u041D\u0435\u0442 \u0432\u0430\u0448\u0435\u0433\u043E \u043C\u0430\u0439\u043D\u0435\u0440\u0430? \u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043D\u0430\u043C \u0432 Telegram ",
                             React.createElement("a", { href: "https://t.me/FreeMiningMonitor", target: "_blank" }, "@FreeMiningMonitor"),
-                            " \u0438 \u043C\u044B \u0434\u043E\u0431\u0430\u0432\u0438\u043C \u0435\u0433\u043E.")))))));
+                            " \u0438 \u043C\u044B \u0434\u043E\u0431\u0430\u0432\u0438\u043C \u0435\u0433\u043E."))),
+                searchState === "Searching" && searchProgress >= 0 && (React.createElement(react_bootstrap_1.ProgressBar, { animated: true, now: searchProgress, label: "\u041F\u043E\u0438\u0441\u043A..", className: "mt-4 mb-2" }))))));
 };
 exports.MinersSearch = MinersSearch;
 const compareMiners = (a, b) => {
@@ -21520,10 +21526,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.minersSearcher = void 0;
 const miners_1 = __webpack_require__(/*! ./miners */ "./src/lib/miners/miners.ts");
 exports.minersSearcher = {
-    search: (search, skip) => __awaiter(void 0, void 0, void 0, function* () {
+    search: (search, skip, onProgress) => __awaiter(void 0, void 0, void 0, function* () {
         const miner = miners_1.miners.get(search.miner);
         const newMiners = [];
-        for (const ip of getIps(search.ipStart, search.ipEnd, skip)) {
+        if (!miner) {
+            throw new Error("Майнер не выбран");
+        }
+        const ips = getIps(search.ipStart, search.ipEnd, skip);
+        let index = 0;
+        for (const ip of ips) {
+            onProgress(index++, ips.length);
             const minerInfo = yield getMinerInfo(miner, ip, search);
             if (!minerInfo) {
                 continue;

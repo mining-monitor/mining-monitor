@@ -1,7 +1,7 @@
 import * as React from "react"
 import { SettingsProps } from "../../lib/settings"
 import { MinerSettings } from "../../../../lib/settings"
-import { Form, Button, InputGroup, Accordion, Row, Col } from "react-bootstrap"
+import { Form, Button, InputGroup, Accordion, Row, Col, ProgressBar } from "react-bootstrap"
 import { minersSearcher } from "../../lib/miners/minersSearcher"
 import { minerNames as getMinerNames } from "../../lib/miners/miners"
 
@@ -21,6 +21,7 @@ export const MinersSearch = (props: Props) => {
     const [search, setSearch] = React.useState<Search>({ login: "", password: "", ipStart: "", ipEnd: "", miner: "" })
     const [searchState, setSearchState] = React.useState<"None" | "Searching">("None")
     const [searchResultState, setSearchResultState] = React.useState<"None" | "Error">("None")
+    const [searchProgress, setSearchProgress] = React.useState(-1)
 
     const handleChange = (x: any) => {
         setSearch({
@@ -29,13 +30,17 @@ export const MinersSearch = (props: Props) => {
         })
     }
 
+    const handleProgress = (current: number, total: number) => {
+        setSearchProgress(Math.floor(current / total * 100))
+    }
+
     const handleSearch = async () => {
         setSearchState("Searching")
         setSearchResultState("None")
 
         try {
             const skip = props.settings.miners.map(x => x.ip)
-            const miners = await minersSearcher.search(search, skip)
+            const miners = await minersSearcher.search(search, skip, handleProgress)
 
             const newMiners = [...props.settings.miners, ...miners]
             newMiners.sort(compareMiners)
@@ -47,6 +52,7 @@ export const MinersSearch = (props: Props) => {
         }
 
         setSearchState("None")
+        setSearchProgress(-1)
     }
 
     return (
@@ -131,6 +137,10 @@ export const MinersSearch = (props: Props) => {
                             </div>
                         </Col>
                     </Row>
+
+                    {searchState === "Searching" && searchProgress >= 0 && (
+                        <ProgressBar animated now={searchProgress} label="Поиск.." className="mt-4 mb-2" />
+                    )}
                 </Form>
             </Accordion.Body>
         </Accordion.Item>
