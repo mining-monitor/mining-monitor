@@ -1,5 +1,5 @@
 import { MinerSettings } from "../../../../lib/settings"
-import { miners } from "./miners";
+import { Miner, miners } from "./miners";
 
 interface Search {
     login: string,
@@ -15,7 +15,7 @@ export const minersSearcher = {
         const newMiners: MinerSettings[] = []
 
         for (const ip of getIps(search.ipStart, search.ipEnd, skip)) {
-            const minerInfo = await miner.getInfo(ip, search.login, search.password)
+            const minerInfo = await getMinerInfo(miner, ip, search)
             if (!minerInfo) {
                 continue
             }
@@ -33,6 +33,14 @@ export const minersSearcher = {
 
         return newMiners
     },
+}
+
+const getMinerInfo = async (miner: Miner, ip: string, search: Search) => {
+    try {
+        return await miner.getInfo(ip, search.login, search.password)
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 const getIps = (ipStart: string, ipEnd: string, skip: string[]) => {

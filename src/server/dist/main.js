@@ -21524,7 +21524,7 @@ exports.minersSearcher = {
         const miner = miners_1.miners.get(search.miner);
         const newMiners = [];
         for (const ip of getIps(search.ipStart, search.ipEnd, skip)) {
-            const minerInfo = yield miner.getInfo(ip, search.login, search.password);
+            const minerInfo = yield getMinerInfo(miner, ip, search);
             if (!minerInfo) {
                 continue;
             }
@@ -21541,6 +21541,14 @@ exports.minersSearcher = {
         return newMiners;
     }),
 };
+const getMinerInfo = (miner, ip, search) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        return yield miner.getInfo(ip, search.login, search.password);
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
 const getIps = (ipStart, ipEnd, skip) => {
     if (!ipStart) {
         return [];
