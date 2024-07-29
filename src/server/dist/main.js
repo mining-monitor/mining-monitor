@@ -20751,10 +20751,10 @@ const ToastMessage = (props) => {
     }, [props.message]);
     const handleClose = () => setShow(false);
     return (React.createElement(react_bootstrap_1.ToastContainer, { position: "top-end", className: "p-3", style: { zIndex: 1 } },
-        React.createElement(react_bootstrap_1.Toast, { onClose: handleClose, show: show, delay: 10000, autohide: true },
+        React.createElement(react_bootstrap_1.Toast, { onClose: handleClose, show: show, delay: 10000, autohide: true, bg: "primary" },
             React.createElement(react_bootstrap_1.Toast.Header, null,
                 React.createElement("strong", { className: "me-auto" }, props.message.head)),
-            React.createElement(react_bootstrap_1.Toast.Body, null, props.message.text))));
+            React.createElement(react_bootstrap_1.Toast.Body, { className: "text-white" }, props.message.text))));
 };
 exports.ToastMessage = ToastMessage;
 
@@ -21159,11 +21159,13 @@ const React = __webpack_require__(/*! react */ "react");
 const react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 const minersSearcher_1 = __webpack_require__(/*! ../../lib/miners/minersSearcher */ "./src/lib/miners/minersSearcher.ts");
 const miners_1 = __webpack_require__(/*! ../../lib/miners/miners */ "./src/lib/miners/miners.ts");
+const ToastMessage_1 = __webpack_require__(/*! ../Common/ToastMessage */ "./src/components/Common/ToastMessage.tsx");
 const MinersSearch = (props) => {
     const [search, setSearch] = React.useState({ login: "", password: "", ipStart: "", ipEnd: "", miner: "" });
     const [searchState, setSearchState] = React.useState("None");
     const [searchResultState, setSearchResultState] = React.useState("None");
     const [searchProgress, setSearchProgress] = React.useState(-1);
+    const [message, setMessage] = React.useState({ head: "", text: "" });
     const handleChange = (x) => {
         setSearch(Object.assign(Object.assign({}, search), { [x.target.name]: x.target.value }));
     };
@@ -21179,6 +21181,7 @@ const MinersSearch = (props) => {
             const newMiners = [...props.settings.miners, ...miners];
             newMiners.sort(compareMiners);
             props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { miners: [...newMiners] }));
+            sendNotification(miners);
         }
         catch (error) {
             console.error(error);
@@ -21187,10 +21190,19 @@ const MinersSearch = (props) => {
         setSearchState("None");
         setSearchProgress(-1);
     });
+    const sendNotification = (miners) => {
+        setMessage({
+            head: "Поиск майнеров",
+            text: miners.length === 0
+                ? "Не удалось найти новые майнеры"
+                : `Найдены новые майнеры ${miners.map(x => x.ip).join(", ")}`
+        });
+    };
     return (React.createElement(react_bootstrap_1.Accordion.Item, { eventKey: props.index },
         React.createElement(react_bootstrap_1.Accordion.Header, null,
             React.createElement("h5", { className: "mb-0" }, "\u041F\u043E\u0438\u0441\u043A \u043C\u0430\u0439\u043D\u0435\u0440\u043E\u0432")),
         React.createElement(react_bootstrap_1.Accordion.Body, null,
+            React.createElement(ToastMessage_1.ToastMessage, { message: message }),
             React.createElement(react_bootstrap_1.Form, null,
                 React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "login-and-password" },
                     React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },

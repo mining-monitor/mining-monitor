@@ -4,6 +4,7 @@ import { MinerSettings } from "../../../../lib/settings"
 import { Form, Button, InputGroup, Accordion, Row, Col, ProgressBar } from "react-bootstrap"
 import { minersSearcher } from "../../lib/miners/minersSearcher"
 import { minerNames as getMinerNames } from "../../lib/miners/miners"
+import { Message, ToastMessage } from "../Common/ToastMessage"
 
 interface Props extends SettingsProps {
     index: string,
@@ -22,6 +23,7 @@ export const MinersSearch = (props: Props) => {
     const [searchState, setSearchState] = React.useState<"None" | "Searching">("None")
     const [searchResultState, setSearchResultState] = React.useState<"None" | "Error">("None")
     const [searchProgress, setSearchProgress] = React.useState(-1)
+    const [message, setMessage] = React.useState<Message>({ head: "", text: "" })
 
     const handleChange = (x: any) => {
         setSearch({
@@ -46,6 +48,8 @@ export const MinersSearch = (props: Props) => {
             newMiners.sort(compareMiners)
 
             props.onChangeSettings({ ...props.settings, miners: [...newMiners] })
+
+            sendNotification(miners)
         } catch (error) {
             console.error(error)
             setSearchResultState("Error")
@@ -55,10 +59,20 @@ export const MinersSearch = (props: Props) => {
         setSearchProgress(-1)
     }
 
+    const sendNotification = (miners: MinerSettings[]) => {
+        setMessage({
+            head: "Поиск майнеров",
+            text: miners.length === 0
+                ? "Не удалось найти новые майнеры"
+                : `Найдены новые майнеры ${miners.map(x => x.ip).join(", ")}`
+        })
+    }
+
     return (
         <Accordion.Item eventKey={props.index}>
             <Accordion.Header><h5 className="mb-0">Поиск майнеров</h5></Accordion.Header>
             <Accordion.Body>
+                <ToastMessage message={message} />
                 <Form>
                     <Form.Group className="mb-3" controlId="login-and-password">
                         <InputGroup className="mb-3">

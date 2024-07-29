@@ -25,11 +25,11 @@ export const ToastMessage = (props: MessageProps) => {
 
     return (
         <ToastContainer position="top-end" className="p-3" style={{ zIndex: 1 }}>
-            <Toast onClose={handleClose} show={show} delay={10000} autohide>
+            <Toast onClose={handleClose} show={show} delay={10000} autohide bg="primary">
                 <Toast.Header>
                     <strong className="me-auto">{props.message.head}</strong>
                 </Toast.Header>
-                <Toast.Body>{props.message.text}</Toast.Body>
+                <Toast.Body className="text-white">{props.message.text}</Toast.Body>
             </Toast>
         </ToastContainer>
     )
