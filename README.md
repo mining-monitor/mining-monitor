@@ -16,6 +16,10 @@
 * На данный момент поддерживается только майнеры Jasminer
 * Если вы хотите, чтобы ваш майнер был добавлен в наше приложение, напишите нам в Telegram [@FreeMiningMonitor](https://t.me/FreeMiningMonitor)
 
+## Поддержка
+
+* Возникли проблемы при работе приложения - пишите нам в Telegram [@FreeMiningMonitor](https://t.me/FreeMiningMonitor), мы поможем
+
 ## Инструкция
 
 ### Установка
