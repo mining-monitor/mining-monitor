@@ -21,7 +21,7 @@ export const proxy: Proxy = {
         }
 
         const proxyServer = fs.readFileSync(proxyServerFile).toString()
-        socket = io(proxyServer)
+        socket = io(`http://${proxyServer}:8080`)
 
         socket.on("connect", () => {
             log.info("proxy", `successfully connect to proxy server ${proxyServer}`);
