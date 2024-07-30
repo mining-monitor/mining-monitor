@@ -1,5 +1,10 @@
 export const settingsKey = "settings"
 
+export const defaultSettings: Settings = {
+    miners: [],
+    notifications: {},
+}
+
 export interface Settings {
     miners: MinerSettings[],
     notifications: NotificationsSettings,
