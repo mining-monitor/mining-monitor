@@ -1,8 +1,7 @@
 import { spawn } from "child_process"
-import * as os from "os"
 import * as fs from "fs"
-import * as path from "path"
 import fetch from "electron-fetch"
+import { environment } from "./environment"
 
 export const webServerRunner = {
     run: async (onSuccess: () => void) => {
@@ -20,7 +19,7 @@ export const webServerRunner = {
         ])
 
         console.log("Start application")
-        commandLine("supervisor", getPath("server.js"))
+        commandLine("supervisor", environment.getPath("server.js"))
 
         console.log("Application is running")
         setTimeout(onSuccess, 3000)
@@ -28,18 +27,16 @@ export const webServerRunner = {
 }
 
 const createDirectory = (...paths: string[]) => {
-    const directoryPath = getPath(...paths)
+    const directoryPath = environment.getPath(...paths)
     if (!fs.existsSync(directoryPath)) {
         fs.mkdirSync(directoryPath)
     }
 }
 
 const loadFile = async (url: string, ...paths: string[]) => {
-    const filePath = getPath(...paths)
+    const filePath = environment.getPath(...paths)
     const result = await (await fetch(url)).buffer()
     fs.writeFileSync(filePath, result)
 }
 
-const commandLine = (message: string, ...args: string[]) => spawn(message, args, { cwd: getPath(""), shell: true })
-
-const getPath = (...paths: string[]) => path.join(os.homedir(), ".mining-monitor", ...paths)
+const commandLine = (message: string, ...args: string[]) => spawn(message, args, { cwd: environment.getPath(""), shell: true })

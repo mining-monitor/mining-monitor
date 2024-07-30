@@ -37,10 +37,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.webServerRunner = void 0;
 const child_process_1 = require("child_process");
-const os = __importStar(require("os"));
 const fs = __importStar(require("fs"));
-const path = __importStar(require("path"));
 const electron_fetch_1 = __importDefault(require("electron-fetch"));
+const environment_1 = require("./environment");
 exports.webServerRunner = {
     run: (onSuccess) => __awaiter(void 0, void 0, void 0, function* () {
         createDirectory("");
@@ -54,21 +53,20 @@ exports.webServerRunner = {
             loadFile("https://mining-monitor.github.io/mining-monitor/js/dist/update.js", "dist", "update.js")
         ]);
         console.log("Start application");
-        commandLine("supervisor", getPath("server.js"));
+        commandLine("supervisor", environment_1.environment.getPath("server.js"));
         console.log("Application is running");
         setTimeout(onSuccess, 3000);
     }),
 };
 const createDirectory = (...paths) => {
-    const directoryPath = getPath(...paths);
+    const directoryPath = environment_1.environment.getPath(...paths);
     if (!fs.existsSync(directoryPath)) {
         fs.mkdirSync(directoryPath);
     }
 };
 const loadFile = (url, ...paths) => __awaiter(void 0, void 0, void 0, function* () {
-    const filePath = getPath(...paths);
+    const filePath = environment_1.environment.getPath(...paths);
     const result = yield (yield (0, electron_fetch_1.default)(url)).buffer();
     fs.writeFileSync(filePath, result);
 });
-const commandLine = (message, ...args) => (0, child_process_1.spawn)(message, args, { cwd: getPath(""), shell: true });
-const getPath = (...paths) => path.join(os.homedir(), ".mining-monitor", ...paths);
+const commandLine = (message, ...args) => (0, child_process_1.spawn)(message, args, { cwd: environment_1.environment.getPath(""), shell: true });
