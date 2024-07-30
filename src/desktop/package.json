@@ -3,7 +3,7 @@
   "productName": "mining-monitor",
   "version": "1.0.0",
   "description": "My Electron application description",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "npx tsc && electron-forge start",
     "package": "electron-forge package",
