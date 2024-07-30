@@ -26,6 +26,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
 const path = __importStar(require("path"));
 const os = __importStar(require("os"));
+const fs = __importStar(require("fs"));
 exports.environment = {
-    getPath: (...paths) => path.join(os.homedir(), ".mining-monitor", ...paths)
+    getPath: (...paths) => path.join(os.homedir(), ".mining-monitor", ...paths),
+    createDirectory: (...paths) => {
+        const directoryPath = exports.environment.getPath(...paths);
+        if (!fs.existsSync(directoryPath)) {
+            fs.mkdirSync(directoryPath);
+        }
+    },
 };

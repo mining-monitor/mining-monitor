@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron"
 import { webServerRunner } from "./webServerRunner"
+import { log } from "./log"
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) { // eslint-disable-line global-require
@@ -50,6 +51,6 @@ app.on("activate", () => {
 })
 
 webServerRunner.run(() => {
-  console.log("Load url http://localhost:4000")
+  log.info("Load url http://localhost:4000")
   mainWindow!.loadURL("http://localhost:4000")
 })

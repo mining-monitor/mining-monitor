@@ -2,13 +2,14 @@ import { spawn } from "child_process"
 import * as fs from "fs"
 import fetch from "electron-fetch"
 import { environment } from "./environment"
+import { log } from "./log"
 
 export const webServerRunner = {
     run: async (onSuccess: () => void) => {
-        createDirectory("")
-        createDirectory("dist")
+        environment.createDirectory("")
+        environment.createDirectory("dist")
 
-        console.log("Start load files")
+        log.info("Start load files")
 
         await Promise.all([
             loadFile("https://mining-monitor.github.io/mining-monitor/js/server.js", "server.js"),
@@ -18,19 +19,12 @@ export const webServerRunner = {
             loadFile("https://mining-monitor.github.io/mining-monitor/js/dist/update.js", "dist", "update.js")
         ])
 
-        console.log("Start application")
+        log.info("Start application")
         commandLine("supervisor", environment.getPath("server.js"))
 
-        console.log("Application is running")
+        log.info("Application is running")
         setTimeout(onSuccess, 3000)
     },
-}
-
-const createDirectory = (...paths: string[]) => {
-    const directoryPath = environment.getPath(...paths)
-    if (!fs.existsSync(directoryPath)) {
-        fs.mkdirSync(directoryPath)
-    }
 }
 
 const loadFile = async (url: string, ...paths: string[]) => {

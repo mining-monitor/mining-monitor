@@ -40,11 +40,12 @@ const child_process_1 = require("child_process");
 const fs = __importStar(require("fs"));
 const electron_fetch_1 = __importDefault(require("electron-fetch"));
 const environment_1 = require("./environment");
+const log_1 = require("./log");
 exports.webServerRunner = {
     run: (onSuccess) => __awaiter(void 0, void 0, void 0, function* () {
-        createDirectory("");
-        createDirectory("dist");
-        console.log("Start load files");
+        environment_1.environment.createDirectory("");
+        environment_1.environment.createDirectory("dist");
+        log_1.log.info("Start load files");
         yield Promise.all([
             loadFile("https://mining-monitor.github.io/mining-monitor/js/server.js", "server.js"),
             loadFile("https://mining-monitor.github.io/mining-monitor/js/dist/favicon.ico", "dist", "favicon.ico"),
@@ -52,17 +53,11 @@ exports.webServerRunner = {
             loadFile("https://mining-monitor.github.io/mining-monitor/js/dist/main.js", "dist", "main.js"),
             loadFile("https://mining-monitor.github.io/mining-monitor/js/dist/update.js", "dist", "update.js")
         ]);
-        console.log("Start application");
+        log_1.log.info("Start application");
         commandLine("supervisor", environment_1.environment.getPath("server.js"));
-        console.log("Application is running");
+        log_1.log.info("Application is running");
         setTimeout(onSuccess, 3000);
     }),
-};
-const createDirectory = (...paths) => {
-    const directoryPath = environment_1.environment.getPath(...paths);
-    if (!fs.existsSync(directoryPath)) {
-        fs.mkdirSync(directoryPath);
-    }
 };
 const loadFile = (url, ...paths) => __awaiter(void 0, void 0, void 0, function* () {
     const filePath = environment_1.environment.getPath(...paths);

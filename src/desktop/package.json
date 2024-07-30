@@ -51,7 +51,8 @@
     "bootstrap": "^5.3.3",
     "electron-compile": "^6.4.4",
     "electron-fetch": "^1.9.1",
-    "electron-squirrel-startup": "^1.0.1"
+    "electron-squirrel-startup": "^1.0.1",
+    "winston": "^3.13.1"
   },
   "devDependencies": {
     "babel-plugin-transform-async-to-generator": "^6.24.1",
