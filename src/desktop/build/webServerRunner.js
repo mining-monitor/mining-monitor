@@ -54,9 +54,9 @@ exports.webServerRunner = {
             loadFile("https://mining-monitor.github.io/mining-monitor/js/dist/update.js", "dist", "update.js")
         ]);
         console.log("Start application");
-        commandLine(`node ${getPath("server.js")}`);
+        commandLine("supervisor", getPath("server.js"));
         console.log("Application is running");
-        setTimeout(onSuccess, 5000);
+        setTimeout(onSuccess, 3000);
     }),
 };
 const createDirectory = (...paths) => {
@@ -67,20 +67,8 @@ const createDirectory = (...paths) => {
 };
 const loadFile = (url, ...paths) => __awaiter(void 0, void 0, void 0, function* () {
     const filePath = getPath(...paths);
-    const result = yield (yield (0, electron_fetch_1.default)(url)).text();
+    const result = yield (yield (0, electron_fetch_1.default)(url)).buffer();
     fs.writeFileSync(filePath, result);
 });
-const commandLine = (message) => (0, child_process_1.exec)(message, { cwd: getPath(""), maxBuffer: 1024 * 1024 * 1024 * 1024 }, execCallback);
+const commandLine = (message, ...args) => (0, child_process_1.spawn)(message, args, { cwd: getPath(""), shell: true });
 const getPath = (...paths) => path.join(os.homedir(), ".mining-monitor", ...paths);
-const execCallback = (error, stdout, stderr) => {
-    const dubug = false;
-    if (error && dubug) {
-        console.log(`error: ${error.message}`);
-        return;
-    }
-    if (stderr && dubug) {
-        console.log(`stderr: ${stderr}`);
-        return;
-    }
-    dubug && console.log(`stdout: ${stdout}`);
-};

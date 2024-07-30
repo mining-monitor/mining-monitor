@@ -1,4 +1,4 @@
-import { exec } from "child_process"
+import { spawn } from "child_process"
 import * as os from "os"
 import * as fs from "fs"
 import * as path from "path"
@@ -20,12 +20,10 @@ export const webServerRunner = {
         ])
 
         console.log("Start application")
-
-        commandLine(`supervisor ${getPath("server.js")}`)
+        commandLine("supervisor", getPath("server.js"))
 
         console.log("Application is running")
-       
-        setTimeout(onSuccess, 5000)
+        setTimeout(onSuccess, 3000)
     },
 }
 
@@ -38,26 +36,10 @@ const createDirectory = (...paths: string[]) => {
 
 const loadFile = async (url: string, ...paths: string[]) => {
     const filePath = getPath(...paths)
-    const result = await (await fetch(url)).text()
+    const result = await (await fetch(url)).buffer()
     fs.writeFileSync(filePath, result)
 }
 
-const commandLine = (message: string) => exec(message, { cwd: getPath(""), maxBuffer: 1024 * 1024 * 1024 * 1024 }, execCallback)
+const commandLine = (message: string, ...args: string[]) => spawn(message, args, { cwd: getPath(""), shell: true })
 
 const getPath = (...paths: string[]) => path.join(os.homedir(), ".mining-monitor", ...paths)
-
-const execCallback = (error: Error, stdout: string, stderr: string) => {
-    const dubug = false
-
-    if (error && dubug) {
-        console.log(`error: ${error.message}`)
-        return
-    }
-
-    if (stderr && dubug) {
-        console.log(`stderr: ${stderr}`)
-        return
-    }
-
-    dubug && console.log(`stdout: ${stdout}`)
-}
