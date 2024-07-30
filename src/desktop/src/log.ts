@@ -15,7 +15,9 @@ const fileLogger = winston.createLogger({
             format: winston.format.combine(
                 winston.format.timestamp(),
                 fileFormat
-            )
+            ),
+            maxsize: 10485760,
+            maxFiles: 5
         }),
     ],
 })

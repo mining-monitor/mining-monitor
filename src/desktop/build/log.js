@@ -15,7 +15,9 @@ const fileLogger = winston_1.default.createLogger({
     transports: [
         new winston_1.default.transports.File({
             filename: environment_1.environment.getPath("logs", "log.txt"),
-            format: winston_1.default.format.combine(winston_1.default.format.timestamp(), fileFormat)
+            format: winston_1.default.format.combine(winston_1.default.format.timestamp(), fileFormat),
+            maxsize: 10485760,
+            maxFiles: 5
         }),
     ],
 });
