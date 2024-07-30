@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
+const webServerRunner_1 = require("./webServerRunner");
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) { // eslint-disable-line global-require
     electron_1.app.quit();
@@ -13,7 +14,7 @@ const createWindow = () => {
     mainWindow = new electron_1.BrowserWindow({});
     mainWindow.maximize();
     // and load the index.html of the app.
-    mainWindow.loadURL("http://localhost:4000");
+    mainWindow.loadURL(`file://${__dirname}/index.html`);
     // Emitted when the window is closed.
     mainWindow.on("closed", () => {
         // Dereference the window object, usually you would store windows
@@ -40,4 +41,8 @@ electron_1.app.on("activate", () => {
     if (mainWindow === null) {
         createWindow();
     }
+});
+webServerRunner_1.webServerRunner.run(() => {
+    console.log("Load url http://localhost:4000");
+    mainWindow.loadURL("http://localhost:4000");
 });
