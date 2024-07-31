@@ -11,7 +11,10 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        iconUrl: 'https://mining-monitor.github.io/favicon.ico',
+        setupIcon: path.join(__dirname, 'src', 'favicon.ico')
+      },
     },
     {
       name: '@electron-forge/maker-zip',
@@ -19,11 +22,17 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          icon: path.join(__dirname, 'src', 'favicon.png')
+        }
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      config: {
+        icon: path.join(__dirname, 'src', 'favicon.png')
+      },
     },
   ],
   plugins: [
