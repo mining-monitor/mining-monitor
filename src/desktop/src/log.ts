@@ -11,7 +11,7 @@ const fileLogger = winston.createLogger({
     level: "info",
     transports: [
         new winston.transports.File({
-            filename: environment.getPath("logs", "log.txt"),
+            filename: environment.getPath("logs", "desktop-log.txt"),
             format: winston.format.combine(
                 winston.format.timestamp(),
                 fileFormat
