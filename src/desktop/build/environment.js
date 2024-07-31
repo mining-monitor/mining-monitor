@@ -27,6 +27,7 @@ exports.environment = void 0;
 const path = __importStar(require("path"));
 const os = __importStar(require("os"));
 const fs = __importStar(require("fs"));
+const child_process_1 = require("child_process");
 exports.environment = {
     getPath: (...paths) => path.join(os.homedir(), ".mining-monitor", ...paths),
     createDirectory: (...paths) => {
@@ -35,4 +36,6 @@ exports.environment = {
             fs.mkdirSync(directoryPath);
         }
     },
+    commandLine: (message, ...args) => (0, child_process_1.spawn)(message, args, { cwd: exports.environment.getPath(""), shell: true }),
+    isProduction: () => process.env.NODE_ENV === "production",
 };

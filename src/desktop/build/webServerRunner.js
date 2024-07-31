@@ -36,7 +36,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.webServerRunner = void 0;
-const child_process_1 = require("child_process");
 const fs = __importStar(require("fs"));
 const electron_fetch_1 = __importDefault(require("electron-fetch"));
 const environment_1 = require("./environment");
@@ -54,7 +53,7 @@ exports.webServerRunner = {
             loadFile("https://mining-monitor.github.io/mining-monitor/js/dist/update.js", "dist", "update.js")
         ]);
         log_1.log.info("Start application");
-        commandLine("supervisor", environment_1.environment.getPath("server.js"));
+        environment_1.environment.commandLine("supervisor", environment_1.environment.getPath("server.js"));
         log_1.log.info("Application is running");
         setTimeout(onSuccess, 3000);
     }),
@@ -64,4 +63,3 @@ const loadFile = (url, ...paths) => __awaiter(void 0, void 0, void 0, function* 
     const result = yield (yield (0, electron_fetch_1.default)(url)).buffer();
     fs.writeFileSync(filePath, result);
 });
-const commandLine = (message, ...args) => (0, child_process_1.spawn)(message, args, { cwd: environment_1.environment.getPath(""), shell: true });

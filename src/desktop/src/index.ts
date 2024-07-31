@@ -1,6 +1,7 @@
 import { app, BrowserWindow, Tray, Menu } from "electron"
 import { webServerRunner } from "./webServerRunner"
 import { log } from "./log"
+import { environment } from "./environment"
 
 if (require("electron-squirrel-startup")) { // eslint-disable-line global-require
   app.quit()
@@ -22,7 +23,7 @@ const createWindow = () => {
   })
 
   mainWindow.on("close", (event: any) => {
-    if (!isQuit) {
+    if (!isQuit && environment.isProduction()) {
       event.preventDefault()
       hideWindow()
     }
@@ -42,6 +43,10 @@ const createTray = () => {
   tray = new Tray(`${__dirname}/favicon.png`)
 
   const contextMenu = Menu.buildFromTemplate([
+    {
+      label: "Открыть в браузере",
+      click: openBrowser,
+    },
     {
       label: "Открыть",
       click: showWindow,
@@ -81,6 +86,11 @@ const hideWindow = () => {
 const quit = () => {
   isQuit = true
   app.quit()
+}
+
+const openBrowser = () => {
+  environment.commandLine("start", "http://localhost:4000")
+  environment.commandLine("xdg-open", "http://localhost:4000")
 }
 
 app.on("ready", createWindow)

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const webServerRunner_1 = require("./webServerRunner");
 const log_1 = require("./log");
+const environment_1 = require("./environment");
 if (require("electron-squirrel-startup")) { // eslint-disable-line global-require
     electron_1.app.quit();
 }
@@ -18,7 +19,7 @@ const createWindow = () => {
         mainWindow = null;
     });
     mainWindow.on("close", (event) => {
-        if (!isQuit) {
+        if (!isQuit && environment_1.environment.isProduction()) {
             event.preventDefault();
             hideWindow();
         }
@@ -33,6 +34,10 @@ const createWindow = () => {
 const createTray = () => {
     tray = new electron_1.Tray(`${__dirname}/favicon.png`);
     const contextMenu = electron_1.Menu.buildFromTemplate([
+        {
+            label: "Открыть в браузере",
+            click: openBrowser,
+        },
         {
             label: "Открыть",
             click: showWindow,
@@ -67,6 +72,10 @@ const hideWindow = () => {
 const quit = () => {
     isQuit = true;
     electron_1.app.quit();
+};
+const openBrowser = () => {
+    environment_1.environment.commandLine("start", "http://localhost:4000");
+    environment_1.environment.commandLine("xdg-open", "http://localhost:4000");
 };
 electron_1.app.on("ready", createWindow);
 electron_1.app.on("window-all-closed", () => {

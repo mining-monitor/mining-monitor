@@ -1,4 +1,3 @@
-import { spawn } from "child_process"
 import * as fs from "fs"
 import fetch from "electron-fetch"
 import { environment } from "./environment"
@@ -20,7 +19,7 @@ export const webServerRunner = {
         ])
 
         log.info("Start application")
-        commandLine("supervisor", environment.getPath("server.js"))
+        environment.commandLine("supervisor", environment.getPath("server.js"))
 
         log.info("Application is running")
         setTimeout(onSuccess, 3000)
@@ -32,5 +31,3 @@ const loadFile = async (url: string, ...paths: string[]) => {
     const result = await (await fetch(url)).buffer()
     fs.writeFileSync(filePath, result)
 }
-
-const commandLine = (message: string, ...args: string[]) => spawn(message, args, { cwd: environment.getPath(""), shell: true })
