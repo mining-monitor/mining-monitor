@@ -1,8 +1,7 @@
 {
-  "name": "desktop",
-  "productName": "desktop",
+  "name": "mining-monitor",
+  "productName": "MiningMonitor",
   "version": "1.0.0",
-  "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -10,6 +9,15 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "mining-monitor",
+    "email": "free-mining-monitor@yandex.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
@@ -21,14 +29,5 @@
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
     "electron": "31.3.1"
-  },
-  "keywords": [],
-  "author": {
-    "name": "simetrio",
-    "email": "simetrio@yandex.com"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
   }
 }
