@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Hello World!</title>
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
-  </body>
+
+<head>
+    <meta charset="utf-8">
+    <title>Майнинг монитор</title>
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container-fluid position-fixed" style="height: 100%;">
+        <div class="d-flex align-items-center" style="height: 100%; width: 100%;">
+            <div class="progress m-5" style="height: 30px; width: 100%;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                    style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Загрузка...</div>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
