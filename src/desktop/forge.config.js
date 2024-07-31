@@ -15,24 +15,17 @@ module.exports = {
         iconUrl: 'https://mining-monitor.github.io/favicon.ico',
         setupIcon: path.join(__dirname, 'src', 'favicon.ico')
       },
+      platforms: ['win32']
     },
     {
-      name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
-    },
-    {
-      name: '@electron-forge/maker-deb',
+      name: '@electron-forge/maker-wix',
       config: {
-        options: {
-          icon: path.join(__dirname, 'src', 'favicon.png')
-        }
+        iconUrl: 'https://mining-monitor.github.io/favicon.ico',
+        setupIcon: path.join(__dirname, 'src', 'favicon.ico'),
+        language: 1049,
+        manufacturer: 'mining-monitor'
       },
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {
-        icon: path.join(__dirname, 'src', 'favicon.png')
-      },
+      platforms: ['win32']
     },
   ],
   plugins: [
