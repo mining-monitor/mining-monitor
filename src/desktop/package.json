@@ -10,7 +10,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint src --color",
-    "compile": "npx tsc && copyfiles -f src/index.html build"
+    "compile": "npx tsc"
   },
   "keywords": [],
   "author": "roman",
@@ -58,7 +58,6 @@
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "copyfiles": "^2.4.1",
     "electron-forge": "^5.2.4",
     "electron-prebuilt-compile": "8.2.0",
     "eslint": "^3.19.0",
