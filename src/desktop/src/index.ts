@@ -43,21 +43,18 @@ const createWindow = () => {
 
 const createTray = () => {
   tray = new Tray(`${__dirname}/favicon.png`)
+
   const contextMenu = Menu.buildFromTemplate([
     {
       label: "Открыть",
-      click: () => {
-        showWindow()
-      }
+      click: showWindow,
     },
     {
       label: "Завершить",
-      click: () => {
-        isQuit = true
-        app.quit()
-      }
+      click: quit,
     },
   ])
+
   tray.setToolTip("Майнинг монитор")
   tray.setContextMenu(contextMenu)
 
@@ -82,6 +79,11 @@ const showWindow = () => {
 const hideWindow = () => {
   mainWindow!.hide()
   isShow = false
+}
+
+const quit = () => {
+  isQuit = true
+  app.quit()
 }
 
 app.on("ready", createWindow)

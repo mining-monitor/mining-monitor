@@ -38,16 +38,11 @@ const createTray = () => {
     const contextMenu = electron_1.Menu.buildFromTemplate([
         {
             label: "Открыть",
-            click: () => {
-                showWindow();
-            }
+            click: showWindow,
         },
         {
             label: "Завершить",
-            click: () => {
-                isQuit = true;
-                electron_1.app.quit();
-            }
+            click: quit,
         },
     ]);
     tray.setToolTip("Майнинг монитор");
@@ -71,6 +66,10 @@ const showWindow = () => {
 const hideWindow = () => {
     mainWindow.hide();
     isShow = false;
+};
+const quit = () => {
+    isQuit = true;
+    electron_1.app.quit();
 };
 electron_1.app.on("ready", createWindow);
 electron_1.app.on("window-all-closed", () => {
