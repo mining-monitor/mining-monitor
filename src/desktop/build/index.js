@@ -10,35 +10,75 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
+let tray = null;
+let isShow = true;
+let isQuit = false;
 const createWindow = () => {
-    // Create the browser window.
     mainWindow = new electron_1.BrowserWindow({});
     mainWindow.maximize();
-    // and load the index.html of the app.
     mainWindow.loadURL(`file://${__dirname}/index.html`);
-    // Emitted when the window is closed.
     mainWindow.on("closed", () => {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
         mainWindow = null;
     });
+    mainWindow.on("close", (event) => {
+        if (!isQuit) {
+            event.preventDefault();
+            hideWindow();
+        }
+        return false;
+    });
+    mainWindow.on("minimize", (event) => {
+        event.preventDefault();
+        hideWindow();
+    });
+    createTray();
 };
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+const createTray = () => {
+    tray = new electron_1.Tray(`${__dirname}/favicon.png`);
+    const contextMenu = electron_1.Menu.buildFromTemplate([
+        {
+            label: "Открыть",
+            click: () => {
+                showWindow();
+            }
+        },
+        {
+            label: "Завершить",
+            click: () => {
+                isQuit = true;
+                electron_1.app.quit();
+            }
+        },
+    ]);
+    tray.setToolTip("Майнинг монитор");
+    tray.setContextMenu(contextMenu);
+    tray.on("click", toogleWindow);
+};
+const toogleWindow = () => {
+    if (isShow) {
+        mainWindow.hide();
+        isShow = false;
+    }
+    else {
+        mainWindow.show();
+        isShow = true;
+    }
+};
+const showWindow = () => {
+    mainWindow.show();
+    isShow = true;
+};
+const hideWindow = () => {
+    mainWindow.hide();
+    isShow = false;
+};
 electron_1.app.on("ready", createWindow);
-// Quit when all windows are closed.
 electron_1.app.on("window-all-closed", () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== "darwin") {
         electron_1.app.quit();
     }
 });
 electron_1.app.on("activate", () => {
-    // On OS X it"s common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
         createWindow();
     }
