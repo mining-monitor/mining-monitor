@@ -14,11 +14,12 @@ if (require("electron-squirrel-startup")) {
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
+    icon: path.join(__dirname, "favicon.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
   })
-log.info(process.env.ELECTRON_IS_DEV)
+
   mainWindow.maximize()
   mainWindow.loadFile(path.join(__dirname, "index.html"))
   mainWindow.on("close", (event) => {
