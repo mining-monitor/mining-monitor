@@ -3,12 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const webServerRunner_1 = require("./webServerRunner");
 const log_1 = require("./log");
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) { // eslint-disable-line global-require
     electron_1.app.quit();
 }
-// Keep a global reference of the window object, if you don"t, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
 let tray = null;
 let isShow = true;
