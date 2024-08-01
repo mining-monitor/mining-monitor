@@ -3,7 +3,8 @@ namespace MiningMonitor
     public partial class Main : Form
     {
         private bool isNotificationShowed;
-        
+        private bool isQuit;
+
         public Main()
         {
             InitializeComponent();
@@ -23,6 +24,7 @@ namespace MiningMonitor
 
         private void HandleClose(object sender, EventArgs e)
         {
+            isQuit = true;
             Close();
         }
 
@@ -33,6 +35,15 @@ namespace MiningMonitor
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(!isQuit)
+            {
+                HideWindow();
+                e.Cancel = true;
+            }
+        }
+
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
             ServerRunner.Stop();
         }

@@ -96,6 +96,7 @@
             Name = "Main";
             Text = "Майнинг монитор v1.0.1";
             FormClosing += Main_FormClosing;
+            FormClosed += Main_FormClosed;
             Load += Main_Load;
             Resize += Main_Resize;
             contextMenuStrip.ResumeLayout(false);
