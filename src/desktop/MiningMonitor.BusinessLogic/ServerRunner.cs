@@ -1,10 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace MiningMonitor
+namespace MiningMonitor.BusinessLogic
 {
     public static class ServerRunner
     {
-        private static readonly object @lock = new();
+        private static readonly object @lock = new object();
         private static bool _isExecute;
         private static bool _isNodeInstalled;
         private static bool _isSupervisorInstalled;

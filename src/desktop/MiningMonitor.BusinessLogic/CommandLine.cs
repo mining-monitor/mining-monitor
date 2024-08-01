@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Management;
 
-namespace MiningMonitor
+namespace MiningMonitor.BusinessLogic
 {
     public static class CommandLine
     {

@@ -1,4 +1,7 @@
-﻿namespace MiningMonitor
+﻿using System;
+using System.Linq;
+
+namespace MiningMonitor.BusinessLogic
 {
     public static class Log
     {

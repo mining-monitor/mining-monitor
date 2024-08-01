@@ -1,3 +1,5 @@
+using MiningMonitor.BusinessLogic;
+
 namespace MiningMonitor
 {
     public partial class Main : Form
