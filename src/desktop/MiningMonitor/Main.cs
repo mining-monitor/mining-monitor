@@ -38,7 +38,7 @@ namespace MiningMonitor
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(!isQuit)
+            if (!isQuit)
             {
                 HideWindow();
                 e.Cancel = true;

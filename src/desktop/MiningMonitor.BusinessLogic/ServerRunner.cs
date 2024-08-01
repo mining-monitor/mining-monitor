@@ -8,7 +8,7 @@ namespace MiningMonitor.BusinessLogic
 {
     public static class ServerRunner
     {
-        private static readonly object @lock = new object();
+        private static readonly object Lock = new object();
         private static bool _isExecute;
         private static bool _isNodeInstalled;
         private static bool _isSupervisorInstalled;
@@ -45,7 +45,10 @@ namespace MiningMonitor.BusinessLogic
             _isRunning = false;
 
             Log.Add("Завершаем работу приложения");
-            CommandLine.Close(_runningTask);
+            CommandLine.Close(
+                _runningTask,
+                _ => System.Diagnostics.Process.GetProcessesByName("node")
+            );
         }
 
         private static bool InstallNode()
@@ -280,7 +283,7 @@ namespace MiningMonitor.BusinessLogic
                 return;
             }
 
-            lock (@lock)
+            lock (Lock)
             {
                 if (_isExecute)
                 {

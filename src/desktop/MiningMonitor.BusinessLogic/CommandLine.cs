@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Management;
 
 namespace MiningMonitor.BusinessLogic
 {
@@ -62,9 +61,9 @@ namespace MiningMonitor.BusinessLogic
             return process;
         }
 
-        public static void Close(Process process)
+        public static void Close(Process process, Func<Process, IEnumerable<Process>> getChildProcesses)
         {
-            foreach (var childProcess in process.GetChildProcesses())
+            foreach (var childProcess in getChildProcesses(process))
             {
                 childProcess.Kill();
                 childProcess.Dispose();
@@ -93,18 +92,6 @@ namespace MiningMonitor.BusinessLogic
             }
 
             return Path.Combine(workDirectory, directory);
-        }
-
-        private static IEnumerable<Process> GetChildProcesses(this Process process)
-        {
-            var result = new ManagementObjectSearcher(
-                $"Select * From Win32_Process Where ParentProcessID={process.Id}"
-            );
-
-            foreach (var item in result.Get())
-            {
-                yield return Process.GetProcessById(Convert.ToInt32(item["ProcessID"]));
-            }
         }
     }
 }

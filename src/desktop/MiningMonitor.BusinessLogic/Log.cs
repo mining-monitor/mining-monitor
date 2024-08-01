@@ -9,10 +9,14 @@ namespace MiningMonitor.BusinessLogic
 
         public static void Add(string message)
         {
-            _items = new[] {$"{DateTime.Now} - {message}"}
+            message = $"{DateTime.Now} - {message}";
+            
+            _items = new[] {message}
                 .Concat(_items)
                 .Take(100)
                 .ToArray();
+            
+            Console.WriteLine(message);
         }
 
         public static string[] Get() => _items;
