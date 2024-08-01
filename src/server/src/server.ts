@@ -1,11 +1,12 @@
 import express from "express"
-import { authController, authMiddleware } from "./lib/auth"
 import { staticController } from "./controllers/staticController"
 import { requestsController } from "./controllers/requestsController"
 import { dataController } from "./controllers/dataController"
-import { minerInfosUpdaterScheduler } from "./schedulers/minerInfosUpdaterScheduler"
 import { minersController } from "./controllers/minersController"
+import { healthController } from "./controllers/healthController"
+import { minerInfosUpdaterScheduler } from "./schedulers/minerInfosUpdaterScheduler"
 import { notificationsScheduler } from "./schedulers/notificationsScheduler"
+import { authController, authMiddleware } from "./lib/auth"
 import { proxy } from "./proxy/proxy"
 import { serverConfig } from "./config/serverConfig"
 import { log } from "./lib/log"
@@ -23,6 +24,8 @@ serverConfig.init(app, proxy)
 app.use(express.static("./dist"))
 app.use(express.json())
 app.use(authMiddleware)
+
+serverConfig.get("/health/check", healthController.check)
 
 serverConfig.get("/", staticController.index)
 serverConfig.get("/main.js", staticController.mainJs)

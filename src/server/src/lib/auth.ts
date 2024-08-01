@@ -145,7 +145,8 @@ const notAuthUrls = [
     "/",
     "/favicon.ico",
     "/main.js",
-    "/update.js"
+    "/update.js",
+    "/health/check",
 ]
 const isNotAuthUrl = (url: string) => {
     if (!url) {
