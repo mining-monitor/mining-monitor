@@ -88,13 +88,21 @@ namespace MiningMonitor.BusinessLogic
 
             void RunInstall()
             {
-                CommandLine.Execute("del node.msi /q");
+                if (CommandLine.IsWindows)
+                {
+                    CommandLine.Execute("del node.msi /q");
 
-                CommandLine.Execute(
-                    "curl https://nodejs.org/dist/v22.5.1/node-v22.5.1-x64.msi --output node.msi"
-                );
+                    CommandLine.Execute(
+                        "curl https://nodejs.org/dist/v22.5.1/node-v22.5.1-x64.msi --output node.msi"
+                    );
 
-                CommandLine.Execute("node.msi");
+                    CommandLine.Execute("node.msi");
+                }
+                else
+                {
+                    Log.Add("Установите Node.js самостоятельно https://nodejs.org");
+                    throw new NotImplementedException();
+                }
             }
 
             bool WaitWhileInstalling()

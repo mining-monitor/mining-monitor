@@ -9,7 +9,8 @@ namespace MiningMonitor.BusinessLogic
 {
     public static class CommandLine
     {
-        private static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        public static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+      
         private static string Cmd => IsWindows ? "cmd" : "bash";
        
         public static string OpenUrlCmd => IsWindows ? "start" : "xdg-open";
