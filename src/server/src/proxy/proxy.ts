@@ -4,6 +4,7 @@ import * as fs from "fs"
 import { WebSocketResponse } from "./response"
 import { auth } from "../lib/auth"
 import { log } from "../lib/log"
+import { settings } from "../lib/settings"
 
 export interface Proxy {
     connect: () => void,
@@ -11,16 +12,15 @@ export interface Proxy {
     post: (url: string, action: (request: Request, response: Response) => any) => Promise<any>,
 }
 
-const proxyServerFile = "proxy-server"
 let socket: Socket | null = null
 
 export const proxy: Proxy = {
     connect: () => {
-        if (!fs.existsSync(proxyServerFile)) {
+        const proxyServer = settings.get().proxy
+        if (!proxyServer) {
             return
         }
 
-        const proxyServer = fs.readFileSync(proxyServerFile).toString()
         socket = io(`http://${proxyServer}:8080`)
 
         socket.on("connect", () => {

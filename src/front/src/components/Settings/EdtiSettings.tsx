@@ -67,6 +67,19 @@ export const EdtiSettings = (props: Props) => {
         })
     }
 
+    const handleChangeProxy = (x: any) => {
+        let proxy = x.target.value as string
+        
+        if (proxy.startsWith("http://")) proxy = proxy.substring("http://".length)
+        if (proxy.startsWith("https://")) proxy = proxy.substring("https://".length)
+        if (proxy.endsWith("/")) proxy = proxy.substring(0, proxy.length - 1)
+
+        props.onChangeSettings({
+            ...props.settings,
+            proxy,
+        })
+    }
+
     return (
         <Accordion.Item eventKey={props.index}>
             <Accordion.Header><h5 className="mb-0">Настройки</h5></Accordion.Header>
@@ -97,6 +110,18 @@ export const EdtiSettings = (props: Props) => {
                             />
                         </InputGroup>
                         {!!error && (<div className="text-danger">{error}</div>)}
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="login-and-password">
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text>Прокси-сервер</InputGroup.Text>
+                            <Form.Control
+                                type="text"
+                                name="proxy"
+                                placeholder="Домен вида example-domain.com"
+                                value={props.settings.proxy}
+                                onChange={handleChangeProxy}
+                            />
+                        </InputGroup>
                     </Form.Group>
                 </Form>
             </Accordion.Body>

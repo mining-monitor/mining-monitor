@@ -8,6 +8,7 @@ export const defaultSettings: Settings = {
 export interface Settings {
     miners: MinerSettings[],
     notifications: NotificationsSettings,
+    proxy?: string,
 }
 
 export interface Credentials {

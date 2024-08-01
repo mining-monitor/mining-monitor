@@ -21304,6 +21304,16 @@ const EdtiSettings = (props) => {
         }
         props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { notifications: Object.assign(Object.assign({}, props.settings.notifications), { enabled: true, telegramBotChatId }) }));
     });
+    const handleChangeProxy = (x) => {
+        let proxy = x.target.value;
+        if (proxy.startsWith("http://"))
+            proxy = proxy.substring("http://".length);
+        if (proxy.startsWith("https://"))
+            proxy = proxy.substring("https://".length);
+        if (proxy.endsWith("/"))
+            proxy = proxy.substring(0, proxy.length - 1);
+        props.onChangeSettings(Object.assign(Object.assign({}, props.settings), { proxy }));
+    };
     return (React.createElement(react_bootstrap_1.Accordion.Item, { eventKey: props.index },
         React.createElement(react_bootstrap_1.Accordion.Header, null,
             React.createElement("h5", { className: "mb-0" }, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438")),
@@ -21315,7 +21325,11 @@ const EdtiSettings = (props) => {
                         React.createElement(react_bootstrap_1.InputGroup.Checkbox, { name: "enabled", checked: props.settings.notifications.enabled || false, onChange: handleToogleNotifications }),
                         React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotToken", placeholder: "Telegram Bot Token", value: props.settings.notifications.telegramBotToken, disabled: props.settings.notifications.enabled, onChange: handleChangeNotifications }),
                         React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "telegramBotUsername", placeholder: "Telegram Bot Username", value: props.settings.notifications.telegramBotUsername, disabled: props.settings.notifications.enabled, onChange: handleChangeNotifications })),
-                    !!error && (React.createElement("div", { className: "text-danger" }, error)))))));
+                    !!error && (React.createElement("div", { className: "text-danger" }, error))),
+                React.createElement(react_bootstrap_1.Form.Group, { className: "mb-3", controlId: "login-and-password" },
+                    React.createElement(react_bootstrap_1.InputGroup, { className: "mb-3" },
+                        React.createElement(react_bootstrap_1.InputGroup.Text, null, "\u041F\u0440\u043E\u043A\u0441\u0438-\u0441\u0435\u0440\u0432\u0435\u0440"),
+                        React.createElement(react_bootstrap_1.Form.Control, { type: "text", name: "proxy", placeholder: "\u0414\u043E\u043C\u0435\u043D \u0432\u0438\u0434\u0430 example-domain.com", value: props.settings.proxy, onChange: handleChangeProxy })))))));
 };
 exports.EdtiSettings = EdtiSettings;
 
@@ -21814,8 +21828,12 @@ const postForm = (url, login, password, data) => __awaiter(void 0, void 0, void 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.settingsKey = void 0;
+exports.defaultSettings = exports.settingsKey = void 0;
 exports.settingsKey = "settings";
+exports.defaultSettings = {
+    miners: [],
+    notifications: {},
+};
 
 
 /***/ }),
