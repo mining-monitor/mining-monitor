@@ -5,7 +5,7 @@ namespace MiningMonitor
 {
     public static class Setup
     {
-        private static readonly string UpdateUrl = Environment.CurrentDirectory;
+        private static readonly string UpdateUrl = "https://mining-monitor.github.io/mining-monitor/desktop";
         private static CancellationTokenSource? _cancelTokenSource;
         private static CancellationToken _cancellationToken;
 
@@ -20,35 +20,65 @@ namespace MiningMonitor
             _cancelTokenSource = new CancellationTokenSource();
             _cancellationToken = _cancelTokenSource.Token;
             Task.Run(Update, _cancellationToken);
+
+            LogCurrentVersion();
+        }
+
+        public static void Close()
+        {
+            _cancelTokenSource!.Cancel();
+        }
+
+        public static string GetCurrentVersion()
+        {
+            const string app = "app-";
+
+            try
+            {
+                var directory = new DirectoryInfo(Environment.CurrentDirectory).Name;
+                if (!directory.StartsWith(app))
+                {
+                    return "";
+                }
+
+                return $"v{directory.Substring(app.Length)}";
+            }
+            catch (Exception e)
+            {
+                Log.Add(e.Message);
+                return "";
+            }
+        }
+
+        private static void LogCurrentVersion()
+        {
+            var version = GetCurrentVersion();
+
+            if (!string.IsNullOrEmpty(version))
+            {
+                Log.Add($"Версия приложения {version}");
+            }
         }
 
         private static async Task Update()
         {
-            Log.Add($"Ожидаем обновления в {UpdateUrl}");
-
             while (true)
             {
                 try
                 {
                     using var mgr = new UpdateManager(UpdateUrl);
-                    await mgr.UpdateApp();
-                }
-#pragma warning disable CS0168
-                catch (Exception ex)
-#pragma warning restore CS0168
-                {
-                    // Log.Add(ex.Message);
+                    var newVersion = await mgr.UpdateApp();
+
+                    if (newVersion != null)
+                    {
+                        UpdateManager.RestartApp();
+                    }
                 }
                 finally
                 {
                     await Task.Delay(TimeSpan.FromMinutes(1), _cancellationToken);
                 }
             }
-        }
-
-        public static void Close()
-        {
-            _cancelTokenSource!.Cancel();
         }
 
         private static void OnAppInstall(SemanticVersion version, IAppTools tools)

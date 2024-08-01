@@ -17,4 +17,8 @@
     <PackageReference Include="Clowd.Squirrel" Version="2.11.1" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
 </Project>

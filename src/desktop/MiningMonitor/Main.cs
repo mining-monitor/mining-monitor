@@ -16,12 +16,13 @@ namespace MiningMonitor
         {
             openToolStripMenuItem.Click += HandleOpen!;
             closeToolStripMenuItem.Click += HandleClose!;
+            Text = $"{Text} {Setup.GetCurrentVersion()}".Trim();
             Log.Add("Начало запуска приложения");
         }
 
         private void HandleOpen(object sender, EventArgs e)
         {
-            CommandLine.Execute("start http://localhost:4000");
+            CommandLine.Execute($"{CommandLine.OpenUrlCmd} http://localhost:4000");
         }
 
         private void HandleClose(object sender, EventArgs e)

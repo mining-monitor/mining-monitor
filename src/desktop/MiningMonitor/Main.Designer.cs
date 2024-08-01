@@ -94,7 +94,7 @@
             Controls.Add(textBoxLog);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Main";
-            Text = "Майнинг монитор v1.0.1";
+            Text = "Майнинг монитор";
             FormClosing += Main_FormClosing;
             FormClosed += Main_FormClosed;
             Load += Main_Load;
