@@ -196,7 +196,7 @@ namespace MiningMonitor.BusinessLogic
                 ).Trim();
 
                 var mainJsVersion = File.ReadAllText(
-                    Path.Combine(CommandLine.GetWorkDirectory(@"web-server\dist"), "main.js.VERSION.txt")
+                    Path.Combine(CommandLine.GetWorkDirectory("web-server", "dist"), "main.js.VERSION.txt")
                 ).Trim();
 
                 var needUpdate = _serverJsVersion != serverJsVersion || _mainJsVersion != mainJsVersion;
@@ -214,9 +214,9 @@ namespace MiningMonitor.BusinessLogic
                     Directory.CreateDirectory(CommandLine.GetWorkDirectory("web-server"));
                 }
 
-                if (!Directory.Exists(CommandLine.GetWorkDirectory(@"web-server\dist")))
+                if (!Directory.Exists(CommandLine.GetWorkDirectory("web-server", "dist")))
                 {
-                    Directory.CreateDirectory(CommandLine.GetWorkDirectory(@"web-server\dist"));
+                    Directory.CreateDirectory(CommandLine.GetWorkDirectory("web-server", "dist"));
                 }
             }
 
@@ -272,7 +272,7 @@ namespace MiningMonitor.BusinessLogic
                 return;
             }
 
-            CommandLine.Execute("start http://localhost:4000");
+            CommandLine.Execute($"{CommandLine.OpenUrlCmd} http://localhost:4000");
             Log.Add("Откройте в браузере http://localhost:4000");
         }
 
@@ -295,6 +295,10 @@ namespace MiningMonitor.BusinessLogic
                 try
                 {
                     action();
+                }
+                catch (Exception ex)
+                {
+                    Log.Add(ex.Message);
                 }
                 finally
                 {

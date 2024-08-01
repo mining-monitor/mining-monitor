@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace MiningMonitor.BusinessLogic
 {
     public static class CommandLine
     {
+        private static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        private static string Cmd => IsWindows ? "cmd" : "bash";
+       
+        public static string OpenUrlCmd => IsWindows ? "start" : "xdg-open";
+
         public static List<string> Execute(string command, string directory = "")
         {
             var output = new List<string>();
 
             using var process = new Process();
-            process.StartInfo.FileName = "cmd";
+            process.StartInfo.FileName = Cmd;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardError = true;
@@ -43,7 +50,7 @@ namespace MiningMonitor.BusinessLogic
         public static Process Run(string command, string directory = "")
         {
             var process = new Process();
-            process.StartInfo.FileName = "cmd";
+            process.StartInfo.FileName = Cmd;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardInput = true;
@@ -73,16 +80,16 @@ namespace MiningMonitor.BusinessLogic
             process.Dispose();
         }
 
-        public static string GetWorkDirectory(string directory)
+        public static string GetWorkDirectory(params string[] directories)
         {
 #if DEBUG
-            const string programDirectory = "MiningMonitorDebug";
+            const string programDirectory = ".mining-monitor-debug";
 #else
-            const string programDirectory = "MiningMonitor";
+            const string programDirectory = ".mining-monitor";
 #endif
 
             var workDirectory = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 programDirectory
             );
 
@@ -91,7 +98,7 @@ namespace MiningMonitor.BusinessLogic
                 Directory.CreateDirectory(workDirectory);
             }
 
-            return Path.Combine(workDirectory, directory);
+            return Path.Combine(new[] { workDirectory }.Concat(directories).ToArray());
         }
     }
 }
