@@ -76,7 +76,7 @@ namespace MiningMonitor
                 }
                 finally
                 {
-                    await Task.Delay(TimeSpan.FromMinutes(1), _cancellationToken);
+                    await Task.Delay(TimeSpan.FromMinutes(5), _cancellationToken);
                 }
             }
         }
