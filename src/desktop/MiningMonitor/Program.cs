@@ -13,12 +13,12 @@ namespace MiningMonitor
             try
             {
                 ApplicationConfiguration.Initialize();
-                Updater.Run();
+                Setup.Init();
                 Application.Run(new Main());
             }
             finally
             {
-                Updater.Stop();
+                Setup.Close();
             }
         }
     }
