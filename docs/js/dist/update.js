@@ -26,6 +26,6 @@ const checkVersion = async () => {
 
 setInterval(async () => {
     await checkVersion()
-}, 5000)
+}, 5 * 60 * 1000)
 
 checkVersion()
