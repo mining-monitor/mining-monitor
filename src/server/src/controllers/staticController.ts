@@ -1,16 +1,27 @@
 import { Request, Response } from "express"
+import { environment } from "../lib/environment"
 
 export const staticController = {
-    index: async (_: Request, response: Response) => {
-        response.sendFile(__dirname + "/dist/index.html")
+    index: async (request: Request, response: Response) => {
+        await load(request, response, "/dist/index.html")
     },
-    mainJs: async (_: Request, response: Response) => {
-        response.sendFile(__dirname + "/dist/main.js")
+    mainJs: async (request: Request, response: Response) => {
+        await load(request, response, "/dist/main.js")
     },
-    updateJs: async (_: Request, response: Response) => {
-        response.sendFile(__dirname + "/dist/update.js")
+    updateJs: async (request: Request, response: Response) => {
+        await load(request, response, "/dist/update.js")
     },
-    favicon: async (_: Request, response: Response) => {
-        response.sendFile(__dirname + "/dist/favicon.ico")
+    favicon: async (request: Request, response: Response) => {
+        await load(request, response, "/dist/favicon.ico")
     },
+}
+
+const load = async (request: Request, response: Response, file: string) => {
+    if (environment.isDebug()) {
+        response.sendFile(__dirname + file)
+    }
+    else {
+        const conrent = await fetch(`https://mining-monitor.github.io/mining-monitor/js/dist${request.path}`)
+        return response.send(await conrent.text())
+    }
 }

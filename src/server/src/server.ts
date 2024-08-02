@@ -12,6 +12,7 @@ import { serverConfig } from "./config/serverConfig"
 import { log } from "./lib/log"
 import dotenv from "dotenv"
 import { eventsScheduler } from "./schedulers/eventsScheduler"
+import { environment } from "./lib/environment"
 
 dotenv.config()
 
@@ -23,7 +24,7 @@ const app = express()
 proxy.connect()
 serverConfig.init(app, proxy)
 
-app.use(express.static("./dist"))
+environment.isDebug() && app.use(express.static("./dist"))
 app.use(express.json())
 app.use(authMiddleware)
 
