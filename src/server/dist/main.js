@@ -21633,8 +21633,12 @@ exports.SettingsContainer = void 0;
 const auth_1 = __webpack_require__(/*! ./auth */ "./src/lib/auth.ts");
 const settings_1 = __webpack_require__(/*! ../../../lib/settings */ "../lib/settings.ts");
 const defaultSettings = { miners: [], notifications: {} };
+let saveTimeout = null;
 exports.SettingsContainer = {
-    save: (settings) => __awaiter(void 0, void 0, void 0, function* () { return yield set(settings_1.settingsKey, settings); }),
+    save: (settings) => __awaiter(void 0, void 0, void 0, function* () {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => set(settings_1.settingsKey, settings), 1000);
+    }),
     get: () => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const [isOk, settings] = yield get(settings_1.settingsKey);

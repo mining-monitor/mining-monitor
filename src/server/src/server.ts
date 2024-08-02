@@ -11,11 +11,13 @@ import { proxy } from "./proxy/proxy"
 import { serverConfig } from "./config/serverConfig"
 import { log } from "./lib/log"
 import dotenv from "dotenv"
+import { eventsScheduler } from "./schedulers/eventsScheduler"
 
 dotenv.config()
 
 setInterval(minerInfosUpdaterScheduler.work, 1000)
 setInterval(notificationsScheduler.work, 10000)
+setInterval(eventsScheduler.work, 1000)
 
 const app = express()
 proxy.connect()

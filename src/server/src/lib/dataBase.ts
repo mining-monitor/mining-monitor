@@ -3,6 +3,11 @@ import * as CryptoJS from "crypto-js"
 import { v4 as uuidv4 } from "uuid"
 import * as os from "os"
 import * as fs from "fs"
+import { events } from "./events"
+
+export const dataBaseEventNames = {
+    get: (key: string) => `database-${key}`,
+}
 
 const localStorage = new LocalStorage("./.db")
 
@@ -31,6 +36,8 @@ const set = (key: string, item: any) => {
     const json = JSON.stringify(item)
     const encryptedJson = CryptoJS.AES.encrypt(json, getSecretKey()).toString()
     localStorage.setItem(key, encryptedJson)
+
+    events.addEvent(dataBaseEventNames.get(key))
 }
 
 // *** Secret key ***

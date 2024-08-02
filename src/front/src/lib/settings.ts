@@ -12,9 +12,13 @@ export interface SettingsProps {
 }
 
 const defaultSettings: Settings = { miners: [], notifications: {} }
+let saveTimeout: NodeJS.Timeout | null = null 
 
 export const SettingsContainer = {
-    save: async (settings: Settings) => await set(settingsKey, settings),
+    save: async (settings: Settings) => {
+        clearTimeout(saveTimeout)
+        saveTimeout = setTimeout(() => set(settingsKey, settings), 1000)
+    },
     get: async (): Promise<Settings> => {
         try {
             const [isOk, settings] = await get(settingsKey)
