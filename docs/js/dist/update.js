@@ -1,19 +1,12 @@
 let mainJsVersion = null
 
-const start = "src=\"/main.js?"
-const end = "\""
-
 const checkVersion = async () => {
-    const result = await fetch(`/?v=${new Date().getTime()}`)
-    const html = await result.text()
-   
-    if (!result.ok || html.indexOf(start) === -1) {
+    const result = await fetch(`https://mining-monitor.github.io/mining-monitor/js/dist/main.js.VERSION.txt?v=${new Date().getTime()}`)
+    if (!result.ok) {
         return
     }
 
-    let newMainJsVersion = html.substring(html.indexOf(start) + start.length)
-    newMainJsVersion = newMainJsVersion.substring(0, newMainJsVersion.indexOf(end))
-
+    const newMainJsVersion = (await result.text()).trim()
     console.log(`Check update version. Current version ${mainJsVersion}. New version ${newMainJsVersion}`)
 
     if (!mainJsVersion) {
@@ -33,6 +26,6 @@ const checkVersion = async () => {
 
 setInterval(async () => {
     await checkVersion()
-}, 60000)
+}, 5000)
 
 checkVersion()
