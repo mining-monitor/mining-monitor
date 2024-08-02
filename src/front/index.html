@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/x-icon" href="<%= htmlWebpackPlugin.options.path %>favicon.ico">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
@@ -23,8 +24,8 @@
   <script src="https://cdn.jsdelivr.net/npm/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin></script>
 
   <!-- Main -->
-  <script src="/<%= htmlWebpackPlugin.files.js[0] %>"></script>
-  <script src="/update.js?v=<%= htmlWebpackPlugin.files.js[0] %>"></script>
+  <script src="<%= htmlWebpackPlugin.options.path %><%= htmlWebpackPlugin.files.js[0] %>"></script>
+  <script src="<%= htmlWebpackPlugin.options.path %>update.js?v=<%= htmlWebpackPlugin.files.js[0] %>"></script>
 
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">

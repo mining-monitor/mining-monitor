@@ -9,7 +9,10 @@ module.exports = (env, argv) => {
         mode: argv.mode
     }
 
-    if (config.mode === modeDevelopment) {
+    const isDevelopment = config.mode === modeDevelopment
+    const isProduction = config.mode === modeProduction
+
+    if (isDevelopment) {
         config.devtool = "source-map"
     }
 
@@ -19,7 +22,7 @@ module.exports = (env, argv) => {
 
     config.entry = "./src/index.tsx"
 
-    const outputDirecory = config.mode === modeDevelopment ? "../server/dist" : "../../docs/js/dist"
+    const outputDirecory = isDevelopment ? "../server/dist" : "../../docs/js/dist"
     config.output = {
         path: path.resolve(__dirname, outputDirecory),
         filename: "main.js",
@@ -54,6 +57,7 @@ module.exports = (env, argv) => {
             template: "index.html",
             hash: true,
             inject: false,
+            path: isDevelopment ? "/" : "https://mining-monitor.github.io/mining-monitor/js/dist/"
         })
     ]
 
