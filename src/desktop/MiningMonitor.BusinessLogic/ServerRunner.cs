@@ -16,7 +16,6 @@ namespace MiningMonitor.BusinessLogic
         private static bool _isOpen;
 
         private static string _serverJsVersion = "";
-        private static string _mainJsVersion = "";
         private static DateTime _lastCheckUpdate = DateTime.MinValue;
         private static Process? _runningTask;
 
@@ -194,24 +193,14 @@ namespace MiningMonitor.BusinessLogic
                     "https://mining-monitor.github.io/mining-monitor/js/server.js.VERSION.txt",
                     "web-server/server.js.VERSION.txt"
                 );
-                LoadFile(
-                    "https://mining-monitor.github.io/mining-monitor/js/dist/main.js.VERSION.txt",
-                    "web-server/dist/main.js.VERSION.txt"
-                );
 
                 var serverJsVersion = File.ReadAllText(
                     Path.Combine(CommandLine.GetWorkDirectory("web-server"), "server.js.VERSION.txt")
                 ).Trim();
 
-                var mainJsVersion = File.ReadAllText(
-                    Path.Combine(CommandLine.GetWorkDirectory("web-server", "dist"), "main.js.VERSION.txt")
-                ).Trim();
-
-                var needUpdate = _serverJsVersion != serverJsVersion || _mainJsVersion != mainJsVersion;
+                var needUpdate = _serverJsVersion != serverJsVersion;
 
                 _serverJsVersion = serverJsVersion;
-                _mainJsVersion = mainJsVersion;
-
                 return needUpdate;
             }
 
@@ -221,11 +210,6 @@ namespace MiningMonitor.BusinessLogic
                 {
                     Directory.CreateDirectory(CommandLine.GetWorkDirectory("web-server"));
                 }
-
-                if (!Directory.Exists(CommandLine.GetWorkDirectory("web-server", "dist")))
-                {
-                    Directory.CreateDirectory(CommandLine.GetWorkDirectory("web-server", "dist"));
-                }
             }
 
             void Update()
@@ -233,22 +217,6 @@ namespace MiningMonitor.BusinessLogic
                 LoadFile(
                     "https://mining-monitor.github.io/mining-monitor/js/server.js",
                     "web-server/server.js"
-                );
-                LoadFile(
-                    "https://mining-monitor.github.io/mining-monitor/js/dist/favicon.ico",
-                    "web-server/dist/favicon.ico"
-                );
-                LoadFile(
-                    "https://mining-monitor.github.io/mining-monitor/js/dist/index.html",
-                    "web-server/dist/index.html"
-                );
-                LoadFile(
-                    "https://mining-monitor.github.io/mining-monitor/js/dist/main.js",
-                    "web-server/dist/main.js"
-                );
-                LoadFile(
-                    "https://mining-monitor.github.io/mining-monitor/js/dist/update.js",
-                    "web-server/dist/update.js"
                 );
             }
 
