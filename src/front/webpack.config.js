@@ -57,7 +57,8 @@ module.exports = (env, argv) => {
             template: "index.html",
             hash: true,
             inject: false,
-            path: isDevelopment ? "/" : "https://mining-monitor.github.io/mining-monitor/js/dist/"
+            path: isDevelopment ? "/" : "https://mining-monitor.github.io/mining-monitor/js/dist/",
+            staticPath: "https://mining-monitor.github.io/mining-monitor/js/dist/",
         })
     ]
 
