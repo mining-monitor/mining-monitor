@@ -21357,8 +21357,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.auth = void 0;
 exports.auth = {
     getAuthorization: () => getAuthorization(),
-    isAccountCreated: () => __awaiter(void 0, void 0, void 0, function* () { return yield send("has", {}); }),
-    isAuth: () => __awaiter(void 0, void 0, void 0, function* () { return yield send("check", getAuthorization()); }),
+    isAccountCreated: () => __awaiter(void 0, void 0, void 0, function* () { return yield get("has", {}); }),
+    isAuth: () => __awaiter(void 0, void 0, void 0, function* () { return yield get("check", getAuthorization()); }),
     createAccount: (login, password) => __awaiter(void 0, void 0, void 0, function* () {
         if (!isValidCredentials(login, password)) {
             return false;
@@ -21391,6 +21391,15 @@ const send = (url, headers) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield fetch(`/auth/${url}`, {
         method: "POST",
         headers: Object.assign(Object.assign({}, headers), { "Content-Type": "application/json;charset=utf-8" }),
+    });
+    if (result.status === 408 || result.status === 402) {
+        throw new Error("Код ответа не успешный");
+    }
+    return result.ok;
+});
+const get = (url, headers) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield fetch(`/auth/${url}`, {
+        headers: Object.assign({}, headers),
     });
     if (result.status === 408 || result.status === 402) {
         throw new Error("Код ответа не успешный");

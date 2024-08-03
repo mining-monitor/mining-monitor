@@ -42,8 +42,8 @@ serverConfig.post("/data", dataController.post)
 
 serverConfig.get("/miners/info", minersController.getInfo)
 
-serverConfig.post("/auth/has", authController.has)
-serverConfig.post("/auth/check", authController.check)
+serverConfig.get("/auth/has", authController.has)
+serverConfig.get("/auth/check", authController.check)
 serverConfig.post("/auth/login", authController.login)
 serverConfig.post("/auth/register", authController.register)
 serverConfig.post("/auth/remove", authController.remove)

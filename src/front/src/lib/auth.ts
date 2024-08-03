@@ -1,9 +1,9 @@
 export const auth = {
     getAuthorization: () => getAuthorization(),
 
-    isAccountCreated: async () => await send("has", {}),
+    isAccountCreated: async () => await get("has", {}),
 
-    isAuth: async () => await send("check", getAuthorization()),
+    isAuth: async () => await get("check", getAuthorization()),
 
     createAccount: async (login: string, password: string) => {
         if (!isValidCredentials(login, password)) {
@@ -46,6 +46,20 @@ const send = async (url: string, headers: any) => {
         headers: {
             ...headers,
             "Content-Type": "application/json;charset=utf-8"
+        },
+    })
+
+    if (result.status === 408 || result.status === 402) {
+        throw new Error("Код ответа не успешный")
+    }
+
+    return result.ok
+}
+
+const get = async (url: string, headers: any) => {
+    const result = await fetch(`/auth/${url}`, {
+        headers: {
+            ...headers,
         },
     })
 
