@@ -49,6 +49,10 @@ const send = async (url: string, headers: any) => {
         },
     })
 
+    if (result.status === 408 || result.status === 402) {
+        throw new Error("Код ответа не успешный")
+    }
+
     return result.ok
 }
 

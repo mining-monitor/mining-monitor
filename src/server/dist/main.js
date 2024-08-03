@@ -21392,6 +21392,9 @@ const send = (url, headers) => __awaiter(void 0, void 0, void 0, function* () {
         method: "POST",
         headers: Object.assign(Object.assign({}, headers), { "Content-Type": "application/json;charset=utf-8" }),
     });
+    if (result.status === 408 || result.status === 402) {
+        throw new Error("Код ответа не успешный");
+    }
     return result.ok;
 });
 const sendToken = (url, headers) => __awaiter(void 0, void 0, void 0, function* () {
