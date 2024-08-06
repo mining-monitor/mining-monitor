@@ -3,58 +3,62 @@ import { MinerSettings } from "../../../lib/settings"
 import { minerInfos } from "../lib/miners/minerInfos"
 import { miners } from "../lib/miners/miners"
 import { settings } from "../lib/settings"
-import { sleep } from "../lib/utils"
+import { safeExecute, safeExecuteSync, sleep } from "../lib/utils"
 
 const schedulers = new Map<string, NodeJS.Timeout>()
 
 export const minerInfosUpdaterScheduler = {
     work: () => {
-        const currentSettings = settings.get()
+        safeExecuteSync(() => {
+            const currentSettings = settings.get()
 
-        currentSettings.miners.forEach(x => {
-            if (schedulers.has(x.ip)) {
-                return
-            }
+            currentSettings.miners.forEach(x => {
+                if (schedulers.has(x.ip)) {
+                    return
+                }
 
-            const id = setInterval(() => { updateMinerInfo(x) }, getUpdateInterval())
-            schedulers.set(x.ip, id)
+                const id = setInterval(() => { updateMinerInfo(x) }, getUpdateInterval())
+                schedulers.set(x.ip, id)
 
-            updateMinerInfo(x)
-        })
+                updateMinerInfo(x)
+            })
 
-        const ips = currentSettings.miners.map(x => x.ip)
-        Array.from(schedulers.keys()).forEach(x => {
-            if (ips.indexOf(x) !== -1) {
-                return
-            }
+            const ips = currentSettings.miners.map(x => x.ip)
+            Array.from(schedulers.keys()).forEach(x => {
+                if (ips.indexOf(x) !== -1) {
+                    return
+                }
 
-            clearInterval(schedulers.get(x))
-            schedulers.delete(x)
-            minerInfos.delete(x)
+                clearInterval(schedulers.get(x))
+                schedulers.delete(x)
+                minerInfos.delete(x)
+            })
         })
     }
 }
 
 const updateMinerInfo = async (minerSettings: MinerSettings) => {
-    let minerInfo: MinerInfo | null = null
+    await safeExecute(async () => {
+        let minerInfo: MinerInfo | null = null
 
-    for (let i = 0; i < 5; i++) {
-        try {
-            minerInfo = await miners
-                .get(minerSettings.name)!
-                .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
-        } catch (error) {
-            console.error(error)
+        for (let i = 0; i < 5; i++) {
+            try {
+                minerInfo = await miners
+                    .get(minerSettings.name)!
+                    .getInfo(minerSettings.ip, minerSettings.credentials.login, minerSettings.credentials.password)
+            } catch (error) {
+                console.error(error)
+            }
+
+            if (minerInfo !== null) {
+                break
+            }
+
+            await sleep(500)
         }
 
-        if (minerInfo !== null) {
-            break
-        }
-
-        await sleep(500)
-    }
-
-    minerInfos.set(minerSettings.ip, minerInfo)
+        minerInfos.set(minerSettings.ip, minerInfo)
+    })
 }
 
 const getUpdateInterval = () => {
