@@ -55,7 +55,7 @@ export const notificationsScheduler = {
                 : Number.MAX_VALUE
 
             const fromTurnOff = new Date().getTime() - value.turnOffDate.getTime()
-            if (fromTurnOff > 300000 && fromLastNotify > 900000) {
+            if (fromTurnOff > 5 * 60 * 1000 && fromLastNotify > 15 * 60 * 1000) {
                 await notify(key, value.turnOffDate, currentSettings)
                 lastNotify = new Date()
             }
