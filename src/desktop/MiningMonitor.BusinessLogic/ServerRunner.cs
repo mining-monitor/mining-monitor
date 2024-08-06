@@ -235,7 +235,7 @@ namespace MiningMonitor.BusinessLogic
 
             Log.Add("Запускаем приложение");
 
-            _runningTask = CommandLine.Run("supervisor server.js", "web-server");
+            _runningTask = CommandLine.Run("supervisor -w server.js server.js", "web-server");
 
             Task.Delay(TimeSpan.FromSeconds(1)).GetAwaiter().GetResult(); // Ждем запуска веб сервера
             Log.Add("Приложение успешно запущено");
