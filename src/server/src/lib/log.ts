@@ -1,7 +1,7 @@
 import { environment } from "./environment"
 import winston from "winston"
 
-environment.createDirectory("logs")
+environment.createDirectory(".logs")
 
 const fileFormat = winston.format.printf(({ level, message, timestamp }) => {
     return `${timestamp} - ${level}: ${message}`
@@ -11,7 +11,7 @@ const fileLogger = winston.createLogger({
     level: "debug",
     transports: [
         new winston.transports.File({
-            filename: environment.getPath("logs", "server-log.txt"),
+            filename: environment.getPath(".logs", "server-log.txt"),
             format: winston.format.combine(
                 winston.format.timestamp(),
                 fileFormat
